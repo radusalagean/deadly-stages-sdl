@@ -2,9 +2,18 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "prepare-env",
+            "type": "shell",
+            "command": "(mkdir bin || true) && psp-cmake -B bin .",
+            "problemMatcher": []
+        },
+        {
             "label": "build",
             "type": "shell",
             "command": "make",
+            "options": {
+                "cwd": "${workspaceFolder}/bin"
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -15,10 +24,15 @@
             "type": "shell",
             "command": "rm",
             "args": [
-                "-fv", "*.o", "*.PBP", "*.prx", "PARAM.SFO"
+                "-rfv",
+                "*.o",
+                "*.PBP",
+                "*.prx",
+                "DeadlyStagesDemo",
+                "PARAM.SFO"
             ],
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${workspaceFolder}/bin"
             },
             "problemMatcher": []
         },
@@ -31,7 +45,7 @@
             "dependsOrder": "sequence"
         },
         {
-            "label": "Print Environment Variables",
+            "label": "print-env-variables",
             "type": "shell",
             "command": "env",
             "group": {
