@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "PPSSPP Launch",
+            "type": "node",
+            "runtimeExecutable": "/mnt/d/ppsspp_win/PPSSPPWindows.exe",
+            "request": "launch",
+            "program": "${workspaceFolder}/EBOOT.PBP",
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "rebuild"
+        }
+    ]
+}
