@@ -6,8 +6,8 @@
             "type": "node",
             "runtimeExecutable": "/mnt/d/ppsspp_win/PPSSPPWindows.exe",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/EBOOT.PBP",
-            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/../../../bin/psp/EBOOT.PBP",
+            "cwd": "${workspaceFolder}/../../../bin/psp",
             "preLaunchTask": "rebuild"
         }
     ]

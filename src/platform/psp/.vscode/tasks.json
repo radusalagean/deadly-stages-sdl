@@ -4,7 +4,10 @@
         {
             "label": "prepare-env",
             "type": "shell",
-            "command": "(mkdir bin || true) && psp-cmake -B bin .",
+            "command": "(mkdir -p bin/psp || true) && psp-cmake -B bin/psp ${workspaceFolder}",
+            "options": {
+                "cwd": "${workspaceFolder}/../../.."
+            },
             "problemMatcher": []
         },
         {
@@ -12,7 +15,7 @@
             "type": "shell",
             "command": "make",
             "options": {
-                "cwd": "${workspaceFolder}/bin"
+                "cwd": "${workspaceFolder}/../../../bin/psp"
             },
             "group": {
                 "kind": "build",
@@ -32,7 +35,7 @@
                 "PARAM.SFO"
             ],
             "options": {
-                "cwd": "${workspaceFolder}/bin"
+                "cwd": "${workspaceFolder}/../../../bin/psp"
             },
             "problemMatcher": []
         },
