@@ -1,7 +1,7 @@
 #ifndef DEADLYSTAGES_MAIN_MENU_SCREEN_HPP
 #define DEADLYSTAGES_MAIN_MENU_SCREEN_HPP
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "../screen.hpp"
 
 class MainMenuScreen : public Screen

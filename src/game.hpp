@@ -1,7 +1,7 @@
 #ifndef DEADLYSTAGES_GAME_HPP
 #define DEADLYSTAGES_GAME_HPP
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "screen/screen.hpp"
 #include "screen/main_menu/main_menu_screen.hpp"
 

@@ -3,7 +3,6 @@
         {
             "name": "PSP",
             "includePath": [
-                // "${workspaceFolder}",
                 "${workspaceFolder}/../../**",
                 "/usr/local/pspdev/psp/sdk/include/**",
                 "/usr/local/pspdev/psp/include/**"

@@ -1,7 +1,7 @@
 #ifndef DEADLYSTAGES_SCREEN_HPP
 #define DEADLYSTAGES_SCREEN_HPP
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 class Screen
 {
