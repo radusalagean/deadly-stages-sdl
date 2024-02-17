@@ -2,7 +2,14 @@ cmake_minimum_required(VERSION 3.0)
 
 project(DeadlyStagesDemo)
 
-add_executable(${PROJECT_NAME} main.cpp)
+set(SOURCE_FILES
+    main.cpp
+    ../../game.cpp
+    ../../screen/screen.cpp
+    ../../screen/main_menu/main_menu_screen.cpp
+)
+
+add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 find_package(SDL2 REQUIRED)
 
