@@ -1,4 +1,4 @@
-#include "game.hpp"
+#include "Game.hpp"
 
 namespace Game
 {
@@ -10,8 +10,13 @@ namespace Game
 
     Screen* screen;
 
+    SDL_GameController* gameController;
+
     void init()
     {
+        // Init Logger
+        Logger::init();
+
         // Init SDL
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
         window = SDL_CreateWindow(
@@ -25,8 +30,11 @@ namespace Game
         renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
         // Init Screen
-        screen = new MainMenuScreen(renderer);
+        screen = new MainMenuScreen();
         screen->init();
+
+        // Init Game Controller
+        gameController = SDL_GameControllerOpen(0);
     }
 
     void loop()
@@ -40,19 +48,23 @@ namespace Game
                         isRunning = 0;
                         break;
                     case SDL_CONTROLLERDEVICEADDED:
-                        SDL_GameControllerOpen(event.cdevice.which);
+                        gameController = SDL_GameControllerOpen(event.cdevice.which);
                         break;
                     case SDL_CONTROLLERBUTTONDOWN:
                         if(event.cbutton.button == SDL_CONTROLLER_BUTTON_START)
                             isRunning = 0;
+                        if (event.cbutton.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER)
+                            Logger::showingDebugConsole = !Logger::showingDebugConsole;
                         break;
                 }
             }
 
             // Update Screen
-            if (screen != NULL)
-                if (screen->update())
-                    screen->render();
+            if (!Logger::showingDebugConsole)
+                if (screen != NULL)
+                    if (screen->update())
+                        screen->render();
+            
         }
     }
 
@@ -60,4 +72,4 @@ namespace Game
     {
 
     }
-} // namespace Game
+}

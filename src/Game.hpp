@@ -2,10 +2,11 @@
 #define DEADLYSTAGES_GAME_HPP
 
 #include <SDL2/SDL.h>
-#include "screen/screen.hpp"
-#include "screen/main_menu/main_menu_screen.hpp"
+#include "Screen/Screen.hpp"
+#include "Screen/MainMenu/MainMenuScreen.hpp"
+#include "Debug/Logger.hpp"
 
-namespace Game
+namespace Game 
 {
     // Flags
     extern bool isRunning;
@@ -17,6 +18,9 @@ namespace Game
 
     // Screen
     extern Screen* screen;
+
+    // Game controller
+    extern SDL_GameController* gameController;
 
     void init();
     void loop();

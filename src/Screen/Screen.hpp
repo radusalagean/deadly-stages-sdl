@@ -7,8 +7,7 @@ class Screen
 {
 private:
 protected:
-    SDL_Renderer* renderer = NULL;
-    Screen(SDL_Renderer* renderer);
+    Screen();
 public:
     virtual void init();
     virtual bool update();

@@ -1,8 +1,8 @@
-#include "screen.hpp"
+#include "Screen.hpp"
 
-Screen::Screen(SDL_Renderer* renderer)
+Screen::Screen()
 {
-    this->renderer = renderer;
+    
 }
 
 void Screen::init()
