@@ -12,6 +12,17 @@
             "problemMatcher": []
         },
 
+        // Copy assets
+        {
+            "label": "copy-assets",
+            "type": "shell",
+            "command": "mkdir -p bin/psp/res && cp -rv res/* bin/psp/res",
+            "options": {
+                "cwd": "${workspaceFolder}/../../.."
+            },
+            "problemMatcher": []
+        },
+
         // Build tasks
         {
             "label": "cmake",
