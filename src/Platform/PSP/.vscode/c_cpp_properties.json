@@ -2,6 +2,13 @@
     "configurations": [
         {
             "name": "PSP",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/../..",
+                    "/usr/local/pspdev/psp/sdk/include",
+                    "/usr/local/pspdev/psp/include"
+                ]
+            },
             "includePath": [
                 "${workspaceFolder}/../../**",
                 "/usr/local/pspdev/psp/sdk/include/**",

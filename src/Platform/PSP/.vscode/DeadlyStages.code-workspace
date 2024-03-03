@@ -10,7 +10,9 @@
 	"settings": {
 		"files.associations": {
 			"*.tcc": "cpp",
-			"format": "cpp"
+			"format": "cpp",
+			"cstring": "cpp",
+			"system_error": "cpp"
 		}
 	}
 }

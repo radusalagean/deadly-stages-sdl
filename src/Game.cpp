@@ -1,5 +1,9 @@
 #include "Game.hpp"
 
+#define GAME_NAME "DeadlyStagesDemo"
+#define WIDTH 480
+#define HEIGHT 272
+
 namespace Game
 {
     bool isRunning = true;
@@ -7,6 +11,8 @@ namespace Game
     SDL_Window* window;
     SDL_Renderer* renderer;
     SDL_Event event;
+
+    int windowWidth, windowHeight;
 
     Screen* screen;
 
@@ -20,14 +26,16 @@ namespace Game
         // Init SDL
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
         window = SDL_CreateWindow(
-            "window",
+            GAME_NAME,
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
-            480,
-            272,
-            0
+            WIDTH,
+            HEIGHT,
+            SDL_WINDOW_SHOWN
         );
-        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+        SDL_GetWindowSize(window, &windowWidth, &windowHeight);
 
         // Init Screen
         screen = new MainMenuScreen();
@@ -53,17 +61,14 @@ namespace Game
                     case SDL_CONTROLLERBUTTONDOWN:
                         if(event.cbutton.button == SDL_CONTROLLER_BUTTON_START)
                             isRunning = 0;
-                        if (event.cbutton.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER)
-                            Logger::showingDebugConsole = !Logger::showingDebugConsole;
                         break;
                 }
             }
 
             // Update Screen
-            if (!Logger::showingDebugConsole)
-                if (screen != NULL)
-                    if (screen->update())
-                        screen->render();
+            if (screen != NULL)
+                if (screen->update())
+                    screen->render();
             
         }
     }

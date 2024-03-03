@@ -27,7 +27,7 @@
         {
             "label": "cmake",
             "type": "shell",
-            "command": "psp-cmake -B bin/psp ${workspaceFolder}",
+            "command": "psp-cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_PRX=1 -B bin/psp ${workspaceFolder}",
             "options": {
                 "cwd": "${workspaceFolder}/../../.."
             },

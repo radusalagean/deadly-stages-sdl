@@ -2,18 +2,20 @@
 
 MainMenuScreen::MainMenuScreen() : Screen::Screen()
 {
-    
+    titleScreenImageAsset = new ImageAsset("res/image/title_screen.png",
+        SDL_Rect { 0, 0, 20, 20 });
 }
 
 void MainMenuScreen::init()
 {
     IMG_Init(IMG_INIT_PNG);
-    gScreenSurface = SDL_GetWindowSurface(Game::window);
-    SDL_Surface* imageSurface = SDL_LoadBMP("res/image/title_screen.bmp");
-    logd(SDL_GetError());
-    texture = SDL_CreateTextureFromSurface(Game::renderer, imageSurface);
-    SDL_FreeSurface(imageSurface);
-    // logd(SDL_GetError());
+    screenSurface = SDL_GetWindowSurface(Game::window);
+    loadAssets();
+}
+
+void MainMenuScreen::loadAssets()
+{
+    titleScreenImageAsset->load();
 }
 
 bool MainMenuScreen::update()
@@ -24,7 +26,7 @@ bool MainMenuScreen::update()
 void MainMenuScreen::render()
 {
     SDL_RenderClear(Game::renderer);
-    SDL_RenderCopy(Game::renderer, texture, NULL, NULL);
+    titleScreenImageAsset->render();
     SDL_RenderPresent(Game::renderer);
 }
 

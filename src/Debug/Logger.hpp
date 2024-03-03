@@ -1,17 +1,17 @@
 #ifndef DEADLYSTAGES_LOGGER_H
 #define DEADLYSTAGES_LOGGER_H
 
-#include <pspkernel.h>
-#include <pspdebug.h>
+#include <stdio.h>
+#include <stdarg.h>
+#include <string.h>
+#include <cstdlib>
 
 #define logd Logger::logDebug
 
 namespace Logger
 {
-    extern bool showingDebugConsole;
-
     void init();
-    char* getWrappedLog(const char* format, ...);
+    char* formatString(const char* format, va_list args);
     void logDebug(const char* message, ...);
     void clear();
 }

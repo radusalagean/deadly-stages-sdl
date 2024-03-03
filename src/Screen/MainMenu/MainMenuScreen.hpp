@@ -3,15 +3,20 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "../../Core/ImageAsset.hpp"
 #include "../Screen.hpp"
 #include "../../Game.hpp"
 
 class MainMenuScreen : public Screen
 {
 private:
-    SDL_Rect square;
-    SDL_Surface* gScreenSurface;
-    SDL_Texture* texture;
+    SDL_Surface* screenSurface;
+    
+    #pragma region Image Assets
+    ImageAsset* titleScreenImageAsset;
+    #pragma endregion
+
+    void loadAssets();
 protected:
 public:
     MainMenuScreen();
