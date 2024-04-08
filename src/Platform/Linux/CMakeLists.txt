@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.22.1)
 project(DeadlyStagesDemo)
 
 set(SOURCES
-    "${CMAKE_SOURCE_DIR}/../../Platform/PSP/main.cpp"
+    "${CMAKE_SOURCE_DIR}/../../Platform/Linux/main.cpp"
     "${CMAKE_SOURCE_DIR}/../../Game.cpp"
     "${CMAKE_SOURCE_DIR}/../../Core/ImageAsset.cpp"
     "${CMAKE_SOURCE_DIR}/../../Debug/Logger.cpp"
@@ -19,15 +19,5 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
 target_include_directories(${PROJECT_NAME} PRIVATE /usr/local/pspdev/psp/sdk/include/)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    ${SDL2_LIBRARIES} SDL2_image jpeg png16 z pspdebug
+    ${SDL2_LIBRARIES} SDL2_image
 )
-
-if(PSP)
-    create_pbp_file(
-        TARGET ${PROJECT_NAME}
-        ICON_PATH NULL
-        BACKGROUND_PATH NULL
-        PREVIEW_PATH NULL
-        TITLE ${PROJECT_NAME}
-    )
-endif()
