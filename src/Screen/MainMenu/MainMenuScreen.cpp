@@ -3,7 +3,7 @@
 MainMenuScreen::MainMenuScreen() : Screen::Screen()
 {
     titleScreenImageAsset = new ImageAsset("res/image/title_screen.png",
-        SDL_Rect { 0, 0, 20, 20 });
+        SDL_Rect { 0, 0, 640, 480 });
 }
 
 void MainMenuScreen::init()
