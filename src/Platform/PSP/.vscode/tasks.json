@@ -1,118 +1,35 @@
 {
     "version": "2.0.0",
     "tasks": [
-        // Prepare Environment
+        // Setup
         {
-            "label": "prepare-env",
+            "label": "setup-env-debug",
             "type": "shell",
-            "command": "mkdir -p bin/psp",
-            "options": {
-                "cwd": "${workspaceFolder}/../../.."
-            },
+            "command": "${workspaceFolder:PSP}/scripts/setup-env-debug.sh",
             "problemMatcher": []
         },
-
-        // Copy assets
+        // Copy res
         {
-            "label": "copy-assets",
+            "label": "copy-res-debug",
             "type": "shell",
-            "command": "mkdir -p bin/psp/res && cp -rv res/* bin/psp/res",
-            "options": {
-                "cwd": "${workspaceFolder}/../../.."
-            },
+            "command": "${workspaceFolder:PSP}/scripts/copy-res-debug.sh",
             "problemMatcher": []
         },
-
-        // Build tasks
+        // Compile
         {
-            "label": "cmake",
+            "label": "compile-debug",
             "type": "shell",
-            "command": "psp-cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_PRX=1 -B bin/psp ${workspaceFolder}",
-            "options": {
-                "cwd": "${workspaceFolder}/../../.."
-            },
+            "command": "${workspaceFolder:PSP}/scripts/compile-debug.sh",
             "group": "build",
             "problemMatcher": []
         },
+        // Clean
         {
-            "label": "make",
+            "label": "clean-debug",
             "type": "shell",
-            "command": "make",
-            "options": {
-                "cwd": "${workspaceFolder}/../../../bin/psp"
-            },
-            "group": "build",
+            "command": "${workspaceFolder:PSP}/scripts/clean-debug.sh",
             "problemMatcher": []
         },
-        {
-            "label": "build",
-            "dependsOn": [
-                "cmake",
-                "make"
-            ],
-            "dependsOrder": "sequence",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": []
-        },
-
-        // Clean tasks
-        {
-            "label": "clean-cmake-output",
-            "type": "shell",
-            "command": "rm",
-            "args": [
-                "-rfv",
-                "*CMakeFiles/",
-                "cmake_install.cmake",
-                "*CMakeCache.txt",
-                "Makefile"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}/../../../bin/psp"
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "clean-make-output",
-            "type": "shell",
-            "command": "rm",
-            "args": [
-                "-rfv",
-                "*.o",
-                "*.PBP",
-                "*.prx",
-                "DeadlyStagesDemo",
-                "PARAM.SFO"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}/../../../bin/psp"
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "clean",
-            "dependsOn": [
-                "clean-cmake-output",
-                "clean-make-output"
-            ],
-            "dependsOrder": "sequence",
-            "problemMatcher": []
-        },
-
-        // Rebuild
-        {
-            "label": "rebuild",
-            "dependsOn": [
-                "clean",
-                "build"
-            ],
-            "dependsOrder": "sequence",
-            "problemMatcher": []
-        },
-        
         // Debug
         {
             "label": "print-env-variables",

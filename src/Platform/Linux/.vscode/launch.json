@@ -3,11 +3,25 @@
     "configurations": [
         {
             "name": "Linux Launch",
-            "type": "node",
-            "runtimeExecutable": "${workspaceFolder}/../../../bin/linux/DeadlyStagesDemo",
+            "type": "cppdbg",
+            "program": "${workspaceFolder:Linux}/../../../build/linux-x86_64-debug/DeadlyStagesDemo",
             "request": "launch",
-            "cwd": "${workspaceFolder}/../../../bin/linux",
-            "preLaunchTask": "rebuild"
+            "cwd": "${workspaceFolder:Linux}/../../../build/linux-x86_64-debug",
+            "MIMode": "gdb",
+            "preLaunchTask": "compile-debug",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for GDB",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "environment": [
+                {
+                    "name": "SDL_VIDEODRIVER",
+                    "value": "wayland"
+                }
+            ]
         }
     ]
 }

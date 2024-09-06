@@ -2,23 +2,17 @@
     "configurations": [
         {
             "name": "PSP",
-            "browse": {
-                "path": [
-                    "${workspaceFolder}/../..",
-                    "/usr/local/pspdev/psp/sdk/include",
-                    "/usr/local/pspdev/psp/include"
-                ]
-            },
             "includePath": [
-                "${workspaceFolder}/../../**",
-                "/usr/local/pspdev/psp/sdk/include/**",
-                "/usr/local/pspdev/psp/include/**"
+                "${workspaceFolder:PSP}/../../**",
+                "~/pspdev/psp/sdk/include/**"
             ],
-            "defines": [],
-            "compilerPath": "/usr/local/pspdev/bin/psp-gcc",
+            "defines": [
+                "__PSP__"
+            ],
+            "compilerPath": "~/pspdev/bin/psp-gcc",
             "cStandard": "c17",
             "cppStandard": "gnu++17",
-            "intelliSenseMode": "linux-gcc-x64"
+            "intelliSenseMode": "gcc-x64" // PSP uses a MIPS CPU, but this is the closest mode we can choose
         }
     ],
     "version": 4

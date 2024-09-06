@@ -4,11 +4,18 @@
         {
             "name": "PPSSPP Launch",
             "type": "node",
-            "runtimeExecutable": "/mnt/d/Emulators/PSP/ppsspp_win/PPSSPPWindows.exe",
+            "runtimeExecutable": "/var/lib/flatpak/app/org.ppsspp.PPSSPP/current/active/export/bin/org.ppsspp.PPSSPP",
             "request": "launch",
-            "program": "${workspaceFolder}/../../../bin/psp/EBOOT.PBP",
-            "cwd": "${workspaceFolder}/../../../bin/psp",
-            "preLaunchTask": "rebuild"
+            "program": "${workspaceFolder:PSP}/../../../build/psp-debug/EBOOT.PBP",
+            "cwd": "${workspaceFolder:PSP}/../../../build/psp-debug",
+            "preLaunchTask": "compile-debug"
+        },
+        {
+            "name": "PSPLink Launch",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "${workspaceFolder:PSP}/scripts/launch-psplink-debug.sh",
+            "preLaunchTask": "compile-debug"
         }
     ]
 }
