@@ -17,3 +17,8 @@ void ImageAsset::render()
 {
     SDL_RenderCopy(Game::renderer, texture, NULL, &dstRect);
 }
+
+void ImageAsset::dispose()
+{
+    SDL_DestroyTexture(texture);
+}

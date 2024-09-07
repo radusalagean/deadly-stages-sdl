@@ -1,5 +1,7 @@
 #include "Logger.hpp"
 
+#include <stdio.h>
+
 namespace Logger
 {
     void init()
@@ -50,10 +52,12 @@ namespace Logger
 
         va_end(args);
 
+        printf("%s", result);
+
         unsigned int length;
         FILE* pFile;
         length = strlen(result);
-        pFile = fopen("PSP_Log.txt", "a");
+        pFile = fopen("Log.txt", "a");
         fwrite(result, strlen(result), 1, pFile);
         fclose(pFile);
 

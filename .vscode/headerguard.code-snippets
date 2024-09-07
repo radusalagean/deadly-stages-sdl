@@ -1,0 +1,15 @@
+{
+    "Header Include Guard": {
+        "scope": "c,cpp",
+        "prefix": "headerguard",
+        "body": [
+            "#ifndef __${1:${RELATIVE_FILEPATH/([\\/.-])|(.)/${1:+_}${2:/upcase}/g}}__",
+            "#define __${1}__",
+            "",
+            "$0",
+            "",
+            "#endif // __${1}__",
+            ""
+        ]
+    }
+}

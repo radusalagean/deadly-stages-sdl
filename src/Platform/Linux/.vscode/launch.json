@@ -16,12 +16,12 @@
                     "ignoreFailures": true
                 }
             ],
-            "environment": [
-                {
-                    "name": "SDL_VIDEODRIVER",
-                    "value": "wayland"
-                }
-            ]
+            // "environment": [
+            //     {
+            //         "name": "SDL_VIDEODRIVER",
+            //         "value": "wayland"
+            //     }
+            // ]
         }
     ]
 }

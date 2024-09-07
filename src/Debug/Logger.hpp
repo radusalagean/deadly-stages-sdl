@@ -1,5 +1,5 @@
-#ifndef DEADLYSTAGES_LOGGER_H
-#define DEADLYSTAGES_LOGGER_H
+#ifndef __SRC_DEBUG_LOGGER_HPP__
+#define __SRC_DEBUG_LOGGER_HPP__
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -16,4 +16,4 @@ namespace Logger
     void clear();
 }
 
-#endif
+#endif // __SRC_DEBUG_LOGGER_HPP__

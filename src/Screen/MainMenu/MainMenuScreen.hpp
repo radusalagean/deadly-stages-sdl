@@ -1,5 +1,5 @@
-#ifndef DEADLYSTAGES_MAIN_MENU_SCREEN_HPP
-#define DEADLYSTAGES_MAIN_MENU_SCREEN_HPP
+#ifndef __SRC_SCREEN_MAINMENU_MAINMENUSCREEN_HPP__
+#define __SRC_SCREEN_MAINMENU_MAINMENUSCREEN_HPP__
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -10,10 +10,10 @@
 class MainMenuScreen : public Screen
 {
 private:
-    SDL_Surface* screenSurface;
+    SDL_Surface* screenSurface = nullptr;
     
     #pragma region Image Assets
-    ImageAsset* titleScreenImageAsset;
+    ImageAsset* titleScreenImageAsset = nullptr;
     #pragma endregion
 
     void loadAssets();
@@ -26,4 +26,4 @@ public:
     void dispose();
 };
 
-#endif
+#endif // __SRC_SCREEN_MAINMENU_MAINMENUSCREEN_HPP__

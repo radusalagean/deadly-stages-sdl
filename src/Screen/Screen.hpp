@@ -1,5 +1,5 @@
-#ifndef DEADLYSTAGES_SCREEN_HPP
-#define DEADLYSTAGES_SCREEN_HPP
+#ifndef __SRC_SCREEN_SCREEN_HPP__
+#define __SRC_SCREEN_SCREEN_HPP__
 
 #include <SDL2/SDL.h>
 
@@ -15,4 +15,4 @@ public:
     virtual void dispose();
 };
 
-#endif
+#endif // __SRC_SCREEN_SCREEN_HPP__

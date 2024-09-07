@@ -1,5 +1,5 @@
-#ifndef DEADLYSTAGES_IMAGE_ASSET_HPP
-#define DEADLYSTAGES_IMAGE_ASSET_HPP
+#ifndef __SRC_CORE_IMAGEASSET_HPP__
+#define __SRC_CORE_IMAGEASSET_HPP__
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -20,6 +20,7 @@ public:
     ImageAsset(const char* path, SDL_Rect dstRect);
     void load();
     void render();
+    void dispose();
 };
 
-#endif
+#endif // __SRC_CORE_IMAGEASSET_HPP__

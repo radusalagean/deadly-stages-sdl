@@ -8,8 +8,7 @@ MainMenuScreen::MainMenuScreen() : Screen::Screen()
 
 void MainMenuScreen::init()
 {
-    IMG_Init(IMG_INIT_PNG);
-    screenSurface = SDL_GetWindowSurface(Game::window);
+    
     loadAssets();
 }
 
@@ -32,5 +31,6 @@ void MainMenuScreen::render()
 
 void MainMenuScreen::dispose()
 {
-    
+    titleScreenImageAsset->dispose();
+    delete titleScreenImageAsset;
 }
