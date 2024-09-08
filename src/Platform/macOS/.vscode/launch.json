@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "macOS Launch",
+            "type": "cppdbg",
+            "program": "${workspaceFolder:macOS}/../../../build/macos-arm64-debug/DeadlyStagesDemo",
+            "request": "launch",
+            "cwd": "${workspaceFolder:macOS}/../../../build/macos-arm64-debug/",
+            "MIMode": "lldb",
+            "preLaunchTask": "compile-debug"
+        }
+    ]
+}

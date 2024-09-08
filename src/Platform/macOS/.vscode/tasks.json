@@ -1,0 +1,43 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        // Setup
+        {
+            "label": "setup-env-debug",
+            "type": "shell",
+            "command": "${workspaceFolder:macOS}/scripts/setup-env-debug.sh",
+            "problemMatcher": []
+        },
+
+        // Copy res
+        {
+            "label": "copy-res-debug",
+            "type": "shell",
+            "command": "${workspaceFolder:macOS}/scripts/copy-res-debug.sh",
+            "problemMatcher": []
+        },
+
+        // Compile
+        {
+            "label": "compile-debug",
+            "type": "shell",
+            "command": "${workspaceFolder:macOS}/scripts/compile-debug.sh",
+            "group": "build",
+            "problemMatcher": []
+        },
+        // Clean
+        {
+            "label": "clean-debug",
+            "type": "shell",
+            "command": "${workspaceFolder:macOS}/scripts/clean-debug.sh",
+            "problemMatcher": []
+        },
+        // Debug
+        {
+            "label": "print-env-variables",
+            "type": "shell",
+            "command": "env",
+            "problemMatcher": []
+        }
+    ]
+}

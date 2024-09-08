@@ -12,7 +12,7 @@
             "compilerPath": "~/pspdev/bin/psp-gcc",
             "cStandard": "c17",
             "cppStandard": "gnu++17",
-            "intelliSenseMode": "gcc-x64" // PSP uses a MIPS CPU, but this is the closest mode we can choose
+            "intelliSenseMode": "gcc-x64"
         }
     ],
     "version": 4

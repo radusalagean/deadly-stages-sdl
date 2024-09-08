@@ -1,6 +1,7 @@
 #include "Logger.hpp"
 
 #include <stdio.h>
+#include <SDL.h>
 
 namespace Logger
 {
@@ -19,13 +20,13 @@ namespace Logger
 
                 if (*format == 'd') {
                     int arg = va_arg(args, int);
-                    pos += sprintf(result + pos, "%d", arg);
+                    pos += snprintf(result + pos, sizeof(result) - pos, "%d", arg);
                 } else if (*format == 'f') {
                     double arg = va_arg(args, double);
-                    pos += sprintf(result + pos, "%f", arg);
+                    pos += snprintf(result + pos, sizeof(result) - pos, "%f", arg);
                 } else if (*format == 's') {
                     const char* arg = va_arg(args, const char*);
-                    pos += sprintf(result + pos, "%s", arg);
+                    pos += snprintf(result + pos, sizeof(result) - pos, "%s", arg);
                 } else {
                     // Unsupported placeholder, just append it
                     result[pos++] = '%';
@@ -54,14 +55,17 @@ namespace Logger
 
         printf("%s", result);
 
-        unsigned int length;
         FILE* pFile;
-        length = strlen(result);
         pFile = fopen("Log.txt", "a");
         fwrite(result, strlen(result), 1, pFile);
         fclose(pFile);
 
         free(result);
+    }
+
+    void logSDLError()
+    {
+        logDebug("SDL Error: %s", SDL_GetError());
     }
 
     void clear()

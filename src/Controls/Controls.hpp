@@ -1,7 +1,7 @@
 #ifndef __SRC_CONTROLS_CONTROLS_HPP__
 #define __SRC_CONTROLS_CONTROLS_HPP__
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 namespace Controls
 {

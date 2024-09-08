@@ -3,7 +3,7 @@
 
 #include <unordered_map>
 #include <string>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 enum LayoutType
 {

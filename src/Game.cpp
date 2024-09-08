@@ -2,7 +2,7 @@
 
 #include "Controls/Controls.hpp"
 #include "ScreenManager/ScreenManager.hpp"
-#include <SDL2/SDL_image.h>
+#include <SDL_image.h>
 
 #define GAME_NAME "DeadlyStagesDemo"
 #define WIDTH 480
@@ -14,6 +14,8 @@ namespace Game
 
     SDL_Window* window = nullptr;
     SDL_Renderer* renderer = nullptr;
+    int width = 0;
+    int height = 0;
     SDL_Surface* windowSurface = nullptr;
 
     void init()
@@ -37,8 +39,8 @@ namespace Game
         );
         renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-        windowSurface = SDL_GetWindowSurface(window);
-        logd("Window size on init: %dx%d", windowSurface->w, windowSurface->h);
+        SDL_GetRendererOutputSize(renderer, &width, &height);
+        logd("Renderer size on init: %dx%d", width, height);
 
         ScreenManager::getInstance().init();
     }
@@ -63,8 +65,8 @@ namespace Game
                 case SDL_WINDOWEVENT:
                     if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) 
                     {
-                        syncWindowSurface();
-                        logd("Window size changed to %dx%d", windowSurface->w, windowSurface->h);
+                        syncRendererOutputSize();
+                        logd("Renderer size changed to %dx%d", width, height);
                     }
                     break;
             }
@@ -87,8 +89,8 @@ namespace Game
         ScreenManager::getInstance().dispose();
     }
 
-    void syncWindowSurface()
+    void syncRendererOutputSize()
     {
-        windowSurface = SDL_GetWindowSurface(window);
+        SDL_GetRendererOutputSize(renderer, &width, &height);
     }
 }

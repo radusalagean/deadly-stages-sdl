@@ -1,8 +1,8 @@
 #ifndef __SRC_SCREEN_MAINMENU_MAINMENUSCREEN_HPP__
 #define __SRC_SCREEN_MAINMENU_MAINMENUSCREEN_HPP__
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 #include "../../Core/ImageAsset.hpp"
 #include "../Screen.hpp"
 #include "../../Game.hpp"

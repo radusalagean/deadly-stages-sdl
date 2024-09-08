@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../../.."
+		}
+	],
+	"settings": {
+		"C_Cpp.default.includePath": [
+			"${workspaceFolder:macOS}/../../**",
+			"/opt/homebrew/include/SDL2/*"
+		],
+		"C_Cpp.default.compilerPath": "/usr/bin/clang++",
+		"C_Cpp.default.cStandard": "c17",
+		"C_Cpp.default.cppStandard": "c++17"
+	}
+}
