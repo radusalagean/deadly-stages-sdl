@@ -21,6 +21,7 @@ namespace Game
     SDL_Surface* windowSurface = nullptr;
 
     FontManager fontManager;
+    ScreenManager screenManager;
 
     void init()
     {
@@ -51,7 +52,7 @@ namespace Game
         SDL_GetRendererOutputSize(renderer, &width, &height);
         logd("Renderer size on init: %dx%d", width, height);
 
-        ScreenManager::getInstance().init();
+        screenManager.init();
     }
 
     void loop()
@@ -81,22 +82,22 @@ namespace Game
             }
             Controls::handleEvent(event);
         }
-        ScreenManager::getInstance().handleEvents();
+        screenManager.handleEvents();
     }
 
     void update()
     {
-        ScreenManager::getInstance().update();
+        screenManager.update();
     }   
 
     void render()
     {
-        ScreenManager::getInstance().render();
+        screenManager.render();
     }
 
     void dispose()
     {
-        ScreenManager::getInstance().dispose();
+        screenManager.dispose();
         fontManager.dispose();
     }
 
@@ -108,7 +109,7 @@ namespace Game
         logd("Renderer size changed from %dx%d to %dx%d", oldWidth, oldHeight, width, height);
         if (width != oldWidth || height != oldHeight)
         {
-            ScreenManager::getInstance().onRendererOutputSizeChanged();
+            screenManager.onRendererOutputSizeChanged();
         }
     }
 }

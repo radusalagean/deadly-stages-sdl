@@ -3,8 +3,6 @@
 #include "../Screen/Screen.hpp"
 #include "../Screen/MainMenu/MainMenuScreen.hpp"
 
-ScreenManager* ScreenManager::instance = nullptr;
-
 void ScreenManager::pushScreen(Screen* screen) 
 {
     screensToAdd.push_back(screen);
