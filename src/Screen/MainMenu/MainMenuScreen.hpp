@@ -16,6 +16,7 @@ private:
     #pragma region Drawables
     ImageDrawable* titleScreenImageDrawable = nullptr;
     TextDrawable* demoLabelTextDrawable = nullptr;
+    TextDrawable* copyrightLabelTextDrawable = nullptr;
     #pragma endregion
 
     void loadAssets();

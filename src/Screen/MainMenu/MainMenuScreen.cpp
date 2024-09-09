@@ -10,6 +10,8 @@ MainMenuScreen::MainMenuScreen() : Screen::Screen()
     drawables.push_back(titleScreenImageDrawable);
     demoLabelTextDrawable = new TextDrawable("DEMO");
     drawables.push_back(demoLabelTextDrawable);
+    copyrightLabelTextDrawable = new TextDrawable("© 2015-2024 ShadowzGames");
+    drawables.push_back(copyrightLabelTextDrawable);
 }
 
 void MainMenuScreen::init()
@@ -74,6 +76,13 @@ void MainMenuScreen::layoutPass()
         int x = Constants::WINDOW_PADDING_PX;
         int y = Game::height - height - Constants::WINDOW_PADDING_PX;
         demoLabelTextDrawable->layout(x, y, width, height);
+    }
+    { // Copyright Label
+        int height = Game::height * 0.05;
+        int width = height * copyrightLabelTextDrawable->getAspectRatio();
+        int x = Game::width - width - Constants::WINDOW_PADDING_PX;
+        int y = Game::height - height - Constants::WINDOW_PADDING_PX;
+        copyrightLabelTextDrawable->layout(x, y, width, height);
     }
     layoutInvalidated = false;
 }
