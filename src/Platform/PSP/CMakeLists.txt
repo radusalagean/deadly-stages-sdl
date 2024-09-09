@@ -27,7 +27,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
 target_include_directories(${PROJECT_NAME} PRIVATE ~/pspdev/psp/sdk/include/)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    ${SDL2_LIBRARIES} SDL2_image jpeg png16 z pspdebug
+    ${SDL2_LIBRARIES} SDL2_image SDL2_ttf jpeg png16 z pspdebug
 )
 
 set(BUILD_PRX 1)

@@ -3,6 +3,8 @@
 #include "Controls/Controls.hpp"
 #include "ScreenManager/ScreenManager.hpp"
 #include <SDL_image.h>
+#include <SDL_ttf.h>
+#include "Core/FontManager.hpp"
 
 #define GAME_NAME "DeadlyStagesDemo"
 #define WIDTH 480
@@ -18,6 +20,8 @@ namespace Game
     int height = 0;
     SDL_Surface* windowSurface = nullptr;
 
+    FontManager fontManager;
+
     void init()
     {
         // Init Logger
@@ -29,6 +33,7 @@ namespace Game
         // Init SDL
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
         IMG_Init(IMG_INIT_PNG);
+        TTF_Init();
         window = SDL_CreateWindow(
             GAME_NAME,
             SDL_WINDOWPOS_UNDEFINED,
@@ -37,6 +42,10 @@ namespace Game
             HEIGHT,
             SDL_WINDOW_RESIZABLE
         );
+
+        // Set minimum window size
+        SDL_SetWindowMinimumSize(window, WIDTH, HEIGHT);
+
         renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
         SDL_GetRendererOutputSize(renderer, &width, &height);
@@ -88,6 +97,7 @@ namespace Game
     void dispose()
     {
         ScreenManager::getInstance().dispose();
+        fontManager.dispose();
     }
 
     void syncRendererOutputSize()

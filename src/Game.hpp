@@ -6,6 +6,8 @@
 #include "Screen/MainMenu/MainMenuScreen.hpp"
 #include "Debug/Logger.hpp"
 
+class FontManager;
+
 namespace Game 
 {
     // Flags
@@ -16,6 +18,9 @@ namespace Game
     extern SDL_Renderer* renderer;
     extern int width;
     extern int height;
+
+    // Managers
+    extern FontManager fontManager;
 
     void init();
 

@@ -10,4 +10,4 @@ clang++ --std=c++17 \
     $PLATFORM_SPECIFIC_SOURCES \
     -o build/macos-arm64-debug/DeadlyStagesDemo \
     -Wall -O0 -g \
-    `sdl2-config --cflags --libs` -lSDL2_image -lSDL2_mixer
+    `sdl2-config --cflags --libs` -lSDL2_image -lSDL2_mixer -lSDL2_ttf

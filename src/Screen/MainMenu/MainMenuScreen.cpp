@@ -2,11 +2,14 @@
 
 #include "../../Game.hpp"
 #include "../../Controls/Controls.hpp"
+#include "../../Core/Constants.hpp"
 
 MainMenuScreen::MainMenuScreen() : Screen::Screen()
 {
-    titleScreenImageAsset = new ImageAsset("res/image/title_screen.png");
-    drawables.push_back(titleScreenImageAsset);
+    titleScreenImageDrawable = new ImageDrawable("title_screen.png");
+    drawables.push_back(titleScreenImageDrawable);
+    demoLabelTextDrawable = new TextDrawable("DEMO");
+    drawables.push_back(demoLabelTextDrawable);
 }
 
 void MainMenuScreen::init()
@@ -61,9 +64,16 @@ void MainMenuScreen::layoutPass()
     { // Title Screen
         int y = Game::height * 0.1;
         int height = Game::height * 0.6;
-        int width = height * titleScreenImageAsset->getAspectRatio();
+        int width = height * titleScreenImageDrawable->getAspectRatio();
         int x = (Game::width - width) / 2;
-        titleScreenImageAsset->layout(x, y, width, height);
+        titleScreenImageDrawable->layout(x, y, width, height);
+    }
+    { // Demo Label
+        int height = Game::height * 0.05;
+        int width = height * demoLabelTextDrawable->getAspectRatio();
+        int x = Constants::WINDOW_PADDING_PX;
+        int y = Game::height - height - Constants::WINDOW_PADDING_PX;
+        demoLabelTextDrawable->layout(x, y, width, height);
     }
     layoutInvalidated = false;
 }

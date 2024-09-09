@@ -3,7 +3,9 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
-#include "../../Core/ImageAsset.hpp"
+#include <vector>
+#include "../../Drawable/ImageDrawable.hpp"
+#include "../../Drawable/TextDrawable.hpp"
 #include "../Screen.hpp"
 
 class MainMenuScreen : public Screen
@@ -11,8 +13,9 @@ class MainMenuScreen : public Screen
 private:
     std::vector<Drawable*> drawables{};
     
-    #pragma region Image Assets
-    ImageAsset* titleScreenImageAsset = nullptr;
+    #pragma region Drawables
+    ImageDrawable* titleScreenImageDrawable = nullptr;
+    TextDrawable* demoLabelTextDrawable = nullptr;
     #pragma endregion
 
     void loadAssets();
