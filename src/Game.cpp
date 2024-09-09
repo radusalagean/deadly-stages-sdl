@@ -92,6 +92,13 @@ namespace Game
 
     void syncRendererOutputSize()
     {
+        int oldWidth = width;
+        int oldHeight = height;
         SDL_GetRendererOutputSize(renderer, &width, &height);
+        logd("Renderer size changed from %dx%d to %dx%d", oldWidth, oldHeight, width, height);
+        if (width != oldWidth || height != oldHeight)
+        {
+            ScreenManager::getInstance().onRendererOutputSizeChanged();
+        }
     }
 }

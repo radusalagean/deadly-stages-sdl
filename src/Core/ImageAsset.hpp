@@ -11,6 +11,9 @@ class ImageAsset : public Drawable
 private:
     const char* path;
     SDL_Rect dstRect{0, 0, 0, 0};
+    int sourceWidth = 0;
+    int sourceHeight = 0;
+    float sourceAspectRatio = 0.0f;
 
 public:
     SDL_Texture* texture = nullptr;
@@ -21,6 +24,8 @@ public:
     void update();
     void draw();
     void dispose();
+
+    float getAspectRatio() const { return sourceAspectRatio; }
 };
 
 #endif // __SRC_CORE_IMAGEASSET_HPP__

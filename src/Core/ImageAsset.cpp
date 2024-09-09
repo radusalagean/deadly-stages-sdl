@@ -20,6 +20,9 @@ void ImageAsset::load()
     SDL_Surface* loadedSurface = IMG_Load(path);
     texture = SDL_CreateTextureFromSurface(Game::renderer, loadedSurface);
     SDL_FreeSurface(loadedSurface);
+
+    SDL_QueryTexture(texture, NULL, NULL, &sourceWidth, &sourceHeight);
+    sourceAspectRatio = (float)sourceWidth / (float)sourceHeight;
 }
 
 void ImageAsset::update()

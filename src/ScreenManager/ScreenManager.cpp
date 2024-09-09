@@ -41,7 +41,14 @@ void ScreenManager::handleEvents()
 void ScreenManager::update() 
 {
     if (!screens.empty())
-        screens.back()->update();
+    {
+        Screen* currentScreen = screens.back();
+        if (currentScreen->isLayoutInvalidated())
+        {
+            currentScreen->layoutPass();
+        }
+        currentScreen->update();
+    }
 
     handlePendingTransactions();
 }
@@ -93,4 +100,10 @@ void ScreenManager::handlePendingTransactions()
         screen->init();
     }
     screensToAdd.clear();
+}
+
+void ScreenManager::onRendererOutputSizeChanged()
+{
+    for (auto screen : screens)
+        screen->invalidateLayout();
 }

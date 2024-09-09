@@ -15,6 +15,11 @@ void Screen::handleEvents()
 
 }
 
+void Screen::layoutPass()
+{
+    
+}
+
 void Screen::update()
 {
     

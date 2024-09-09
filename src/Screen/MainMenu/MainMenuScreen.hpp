@@ -21,6 +21,7 @@ public:
     MainMenuScreen();
     void init();
     void handleEvents();
+    void layoutPass();
     void update();
     void render();
     void dispose();

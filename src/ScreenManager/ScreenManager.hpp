@@ -43,6 +43,8 @@ public:
     void update();
     void render();
     void dispose();
+
+    void onRendererOutputSizeChanged();
 };
 
 #endif // __SRC_SCREENMANAGER_SCREENMANAGER_HPP__

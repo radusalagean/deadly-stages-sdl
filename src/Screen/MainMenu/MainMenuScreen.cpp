@@ -12,7 +12,6 @@ MainMenuScreen::MainMenuScreen() : Screen::Screen()
 void MainMenuScreen::init()
 {
     loadAssets();
-    titleScreenImageAsset->layout(0, 0, 100, 100);
 }
 
 void MainMenuScreen::handleEvents()
@@ -55,4 +54,16 @@ void MainMenuScreen::dispose()
         delete drawable;
     }
     drawables.clear();
+}
+
+void MainMenuScreen::layoutPass()
+{
+    { // Title Screen
+        int y = Game::height * 0.1;
+        int height = Game::height * 0.6;
+        int width = height * titleScreenImageAsset->getAspectRatio();
+        int x = (Game::width - width) / 2;
+        titleScreenImageAsset->layout(x, y, width, height);
+    }
+    layoutInvalidated = false;
 }
