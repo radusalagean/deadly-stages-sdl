@@ -1,36 +1,58 @@
 #include "MainMenuScreen.hpp"
 
+#include "../../Game.hpp"
+#include "../../Controls/Controls.hpp"
+
 MainMenuScreen::MainMenuScreen() : Screen::Screen()
 {
-    titleScreenImageAsset = new ImageAsset("res/image/title_screen.png",
-        SDL_Rect { 0, 0, 640, 480 });
+    titleScreenImageAsset = new ImageAsset("res/image/title_screen.png");
+    drawables.push_back(titleScreenImageAsset);
 }
 
 void MainMenuScreen::init()
 {
-    
     loadAssets();
+    titleScreenImageAsset->layout(0, 0, 100, 100);
+}
+
+void MainMenuScreen::handleEvents()
+{
+    if (Controls::isKeyDown(SDL_SCANCODE_ESCAPE) || Controls::isGameControllerButtonDown(SDL_CONTROLLER_BUTTON_START))
+        Game::isRunning = false;
 }
 
 void MainMenuScreen::loadAssets()
 {
-    titleScreenImageAsset->load();
+    for (auto drawable : drawables)
+    {
+        drawable->load();
+    }
 }
 
-bool MainMenuScreen::update()
+void MainMenuScreen::update()
 {
-    return true;
+    for (auto drawable : drawables)
+    {
+        drawable->update();
+    }
 }
 
 void MainMenuScreen::render()
 {
     SDL_RenderClear(Game::renderer);
-    titleScreenImageAsset->render();
+    for (auto drawable : drawables)
+    {
+        drawable->draw();
+    }
     SDL_RenderPresent(Game::renderer);
 }
 
 void MainMenuScreen::dispose()
 {
-    titleScreenImageAsset->dispose();
-    delete titleScreenImageAsset;
+    for (auto drawable : drawables)
+    {
+        drawable->dispose();
+        delete drawable;
+    }
+    drawables.clear();
 }

@@ -2,17 +2,23 @@
 #define __SRC_SCREEN_SCREEN_HPP__
 
 #include <SDL.h>
+#include <vector>
+
+class Drawable;
 
 class Screen
 {
 private:
 protected:
     Screen();
+
+    std::vector<Drawable*> drawables{};
     
 public:
     virtual ~Screen() = default;
     virtual void init();
-    virtual bool update();
+    virtual void handleEvents();
+    virtual void update();
     virtual void render();
     virtual void dispose();
 };

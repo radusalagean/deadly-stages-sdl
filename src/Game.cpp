@@ -72,6 +72,7 @@ namespace Game
             }
             Controls::handleEvent(event);
         }
+        ScreenManager::getInstance().handleEvents();
     }
 
     void update()

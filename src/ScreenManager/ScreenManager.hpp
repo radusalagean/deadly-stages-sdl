@@ -39,6 +39,7 @@ public:
     Screen* getCurrentScreen();
 
     void init();
+    void handleEvents();
     void update();
     void render();
     void dispose();

@@ -10,9 +10,14 @@ void Screen::init()
 
 }
 
-bool Screen::update()
+void Screen::handleEvents()
 {
-    return true;
+
+}
+
+void Screen::update()
+{
+    
 }
 
 void Screen::render()

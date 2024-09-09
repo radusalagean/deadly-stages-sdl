@@ -1,9 +1,18 @@
 #include "ImageAsset.hpp"
 
-ImageAsset::ImageAsset(const char* path, SDL_Rect dstRect)
+#include "../Game.hpp"
+
+ImageAsset::ImageAsset(const char* path)
 {
     this->path = path;
-    this->dstRect = dstRect;
+}
+
+void ImageAsset::layout(int x, int y, int w, int h)
+{
+    dstRect.x = x;
+    dstRect.y = y;
+    dstRect.w = w;
+    dstRect.h = h;
 }
 
 void ImageAsset::load()
@@ -13,7 +22,12 @@ void ImageAsset::load()
     SDL_FreeSurface(loadedSurface);
 }
 
-void ImageAsset::render()
+void ImageAsset::update()
+{
+
+}
+
+void ImageAsset::draw()
 {
     SDL_RenderCopy(Game::renderer, texture, NULL, &dstRect);
 }

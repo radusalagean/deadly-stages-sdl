@@ -5,12 +5,11 @@
 #include <SDL_image.h>
 #include "../../Core/ImageAsset.hpp"
 #include "../Screen.hpp"
-#include "../../Game.hpp"
 
 class MainMenuScreen : public Screen
 {
 private:
-    SDL_Surface* screenSurface = nullptr;
+    std::vector<Drawable*> drawables{};
     
     #pragma region Image Assets
     ImageAsset* titleScreenImageAsset = nullptr;
@@ -21,7 +20,8 @@ protected:
 public:
     MainMenuScreen();
     void init();
-    bool update();
+    void handleEvents();
+    void update();
     void render();
     void dispose();
 };

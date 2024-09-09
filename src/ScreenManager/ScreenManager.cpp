@@ -32,6 +32,12 @@ void ScreenManager::init()
     pushScreen(new MainMenuScreen());
 }
 
+void ScreenManager::handleEvents() 
+{
+    if (!screens.empty())
+        screens.back()->handleEvents();
+}
+
 void ScreenManager::update() 
 {
     if (!screens.empty())

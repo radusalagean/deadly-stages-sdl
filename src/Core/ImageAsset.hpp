@@ -4,22 +4,22 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-class ImageAsset;
+#include "Drawable.hpp"
 
-#include "../Game.hpp"
-
-class ImageAsset
+class ImageAsset : public Drawable
 {
 private:
     const char* path;
-    SDL_Rect dstRect;
+    SDL_Rect dstRect{0, 0, 0, 0};
 
 public:
-    SDL_Texture* texture;
-    
-    ImageAsset(const char* path, SDL_Rect dstRect);
+    SDL_Texture* texture = nullptr;
+
+    ImageAsset(const char* path);
+    void layout(int x, int y, int w, int h);
     void load();
-    void render();
+    void update();
+    void draw();
     void dispose();
 };
 
