@@ -1,10 +1,11 @@
 #include "Game.hpp"
 
 #include "Controls/Controls.hpp"
-#include "ScreenManager/ScreenManager.hpp"
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include "Core/FontManager.hpp"
+#include "ScreenManager/ScreenManager.hpp"
+#include "Core/PrimitiveShapeHelper.hpp"
 
 #define GAME_NAME "DeadlyStagesDemo"
 #define WIDTH 480
@@ -22,6 +23,7 @@ namespace Game
 
     FontManager fontManager;
     ScreenManager screenManager;
+    PrimitiveShapeHelper primitiveShapeHelper;
 
     void init()
     {

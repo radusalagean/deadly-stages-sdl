@@ -7,6 +7,8 @@
 #include "Debug/Logger.hpp"
 
 class FontManager;
+class ScreenManager;
+class PrimitiveShapeHelper;
 
 namespace Game 
 {
@@ -21,6 +23,8 @@ namespace Game
 
     // Managers
     extern FontManager fontManager;
+    extern ScreenManager screenManager;
+    extern PrimitiveShapeHelper primitiveShapeHelper;
 
     void init();
 

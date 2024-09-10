@@ -6,6 +6,7 @@
 #include <vector>
 #include "../../Drawable/ImageDrawable.hpp"
 #include "../../Drawable/TextDrawable.hpp"
+#include "../../Drawable/MenuDrawable.hpp"
 #include "../Screen.hpp"
 
 class MainMenuScreen : public Screen
@@ -17,9 +18,11 @@ private:
     ImageDrawable* titleScreenImageDrawable = nullptr;
     TextDrawable* demoLabelTextDrawable = nullptr;
     TextDrawable* copyrightLabelTextDrawable = nullptr;
+    MenuDrawable* mainMenuDrawable = nullptr;
     #pragma endregion
 
     void loadAssets();
+    void loadMenuItems();
 protected:
 public:
     MainMenuScreen();

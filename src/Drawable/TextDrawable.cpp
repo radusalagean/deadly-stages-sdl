@@ -16,7 +16,7 @@ void TextDrawable::load()
     SDL_FreeSurface(surface);
 
     SDL_QueryTexture(texture, NULL, NULL, &sourceWidth, &sourceHeight);
-    sourceAspectRatio = (float)sourceWidth / (float)sourceHeight;
+    aspectRatio = (float)sourceWidth / (float)sourceHeight;
 }
 
 void TextDrawable::layout(int x, int y, int w, int h)
@@ -24,10 +24,7 @@ void TextDrawable::layout(int x, int y, int w, int h)
     // We won't stretch the text, so we'll use the height as the font size and re-create the texture
     font = Game::fontManager.getFont(fontFileName, h);
     load();
-    dstRect.x = x;
-    dstRect.y = y;
-    dstRect.w = w;
-    dstRect.h = h;
+    setDstRect(x, y, w, h);
 }
 
 void TextDrawable::update()

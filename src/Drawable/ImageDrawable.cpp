@@ -16,15 +16,12 @@ void ImageDrawable::load()
     SDL_FreeSurface(loadedSurface);
 
     SDL_QueryTexture(texture, NULL, NULL, &sourceWidth, &sourceHeight);
-    sourceAspectRatio = (float)sourceWidth / (float)sourceHeight;
+    aspectRatio = (float)sourceWidth / (float)sourceHeight;
 }
 
 void ImageDrawable::layout(int x, int y, int w, int h)
 {
-    dstRect.x = x;
-    dstRect.y = y;
-    dstRect.w = w;
-    dstRect.h = h;
+    setDstRect(x, y, w, h);
 }
 
 void ImageDrawable::update()
