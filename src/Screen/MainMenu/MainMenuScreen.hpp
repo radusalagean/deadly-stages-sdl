@@ -23,6 +23,11 @@ private:
 
     void loadAssets();
     void loadMenuItems();
+
+    void menuStartGame();
+    void menuOptions();
+    void menuCredits();
+    void menuExit();
 protected:
 public:
     MainMenuScreen();

@@ -3,11 +3,18 @@
 #include "../Game.hpp"
 #include "../Drawable/MenuItemDrawable.hpp"
 #include <algorithm>
+#include "../Controls/Controls.hpp"
+
+enum NavigationAction
+{
+    NAVIGATION_ACTION_PREVIOUS = 0,
+    NAVIGATION_ACTION_NEXT
+};
 
 void MenuDrawable::layout(int x, int y, int w, int h)
 {
-    int menuItemHeight = Game::height * 0.04;
-    int menuItemSpacing = menuItemHeight * 0.2;
+    int menuItemHeight = Game::height * 0.035;
+    int menuItemSpacing = menuItemHeight * 0.5;
     int currentY = y;
     int maxMenuItemWidth = 0;
     for (auto menuItem : menuItems)
@@ -74,4 +81,54 @@ void MenuDrawable::dispose()
 void MenuDrawable::setMenuItems(const std::vector<MenuItemDrawable*>& menuItems)
 {
     this->menuItems = menuItems;
+}
+
+void MenuDrawable::previousMenuItem()
+{
+    if (menuItems.empty()) return;
+    selectedIndex = (selectedIndex - 1 + menuItems.size()) % menuItems.size();
+}
+
+void MenuDrawable::nextMenuItem()
+{
+    if (menuItems.empty()) return;
+    selectedIndex = (selectedIndex + 1) % menuItems.size();
+}
+
+void MenuDrawable::selectCurrentMenuItem()
+{
+    if (menuItems.empty()) return;
+    menuItems[selectedIndex]->select();
+}
+
+void MenuDrawable::handleEvents()
+{
+    if (Game::controls.isActionDown(CA_UP))
+    {
+        if (navigationDebouncer.canPerformAction(NAVIGATION_ACTION_PREVIOUS))
+        {
+            previousMenuItem();
+        }
+    }
+    else if (Game::controls.isActionUp(CA_UP))
+    {
+        navigationDebouncer.resetAction(NAVIGATION_ACTION_PREVIOUS);
+    }
+
+    if (Game::controls.isActionDown(CA_DOWN))
+    {
+        if (navigationDebouncer.canPerformAction(NAVIGATION_ACTION_NEXT))
+        {
+            nextMenuItem();
+        }
+    }
+    else if (Game::controls.isActionUp(CA_DOWN))
+    {
+        navigationDebouncer.resetAction(NAVIGATION_ACTION_NEXT);
+    }
+
+    if (Game::controls.isActionDown(CA_SELECT))
+    {
+        selectCurrentMenuItem();
+    }
 }

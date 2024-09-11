@@ -63,7 +63,11 @@
 			"variant": "cpp",
 			"vector": "cpp",
 			"algorithm": "cpp",
-			"iostream": "cpp"
+			"iostream": "cpp",
+			"functional": "cpp",
+			"charconv": "cpp",
+			"__tree": "cpp",
+			"set": "cpp"
 		}
 	}
 }

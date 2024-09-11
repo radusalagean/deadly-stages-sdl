@@ -21,6 +21,7 @@ namespace Game
     int height = 0;
     SDL_Surface* windowSurface = nullptr;
 
+    Controls controls;
     FontManager fontManager;
     ScreenManager screenManager;
     PrimitiveShapeHelper primitiveShapeHelper;
@@ -31,7 +32,7 @@ namespace Game
         Logger::init();
 
         // Init Controls
-        Controls::init();
+        controls.init();
 
         // Init SDL
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
@@ -82,7 +83,7 @@ namespace Game
                     }
                     break;
             }
-            Controls::handleEvent(event);
+            controls.handleEvent(event);
         }
         screenManager.handleEvents();
     }

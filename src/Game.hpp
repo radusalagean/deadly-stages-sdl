@@ -5,6 +5,7 @@
 #include "Screen/Screen.hpp"
 #include "Screen/MainMenu/MainMenuScreen.hpp"
 #include "Debug/Logger.hpp"
+#include "Controls/Controls.hpp"
 
 class FontManager;
 class ScreenManager;
@@ -21,7 +22,8 @@ namespace Game
     extern int width;
     extern int height;
 
-    // Managers
+    // Modules
+    extern Controls controls;
     extern FontManager fontManager;
     extern ScreenManager screenManager;
     extern PrimitiveShapeHelper primitiveShapeHelper;

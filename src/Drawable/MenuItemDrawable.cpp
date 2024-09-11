@@ -8,7 +8,8 @@
 
 #define SELECTION_RECT_SPACING_FACTOR 0.5
 
-MenuItemDrawable::MenuItemDrawable(const std::string& text)
+MenuItemDrawable::MenuItemDrawable(const std::string& text, std::function<void()> callback) :
+    callback(callback)
 {
     textDrawable = new TextDrawable(text);
 }
@@ -51,4 +52,9 @@ void MenuItemDrawable::dispose()
 {
     textDrawable->dispose();
     delete textDrawable;
+}
+
+void MenuItemDrawable::select()
+{
+    callback();
 }

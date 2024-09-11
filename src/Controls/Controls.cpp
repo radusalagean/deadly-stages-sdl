@@ -2,79 +2,74 @@
 
 #include "../Game.hpp"
 
-namespace Controls
+
+void Controls::init()
 {
-    SDL_Event event;
-    const Uint8* keyboardState = nullptr;
-    SDL_GameController* gameController = nullptr;
-    std::vector<bool> gameControllerButtonStates{};
+    gameController = SDL_GameControllerOpen(0);
+}
 
-    void init()
+void Controls::handleEvent(SDL_Event& event)
+{
+    switch (event.type) 
     {
-        gameController = SDL_GameControllerOpen(0);
+    case SDL_KEYDOWN:
+        onKeyDown(event.key.keysym.scancode);
+        break;
+    
+    case SDL_KEYUP:
+        onKeyUp(event.key.keysym.scancode);
+        break;
+
+    case SDL_CONTROLLERDEVICEADDED:
+        gameController = SDL_GameControllerOpen(event.cdevice.which);
+        break;
+
+    case SDL_CONTROLLERBUTTONDOWN:
+        onControllerButtonDown(static_cast<SDL_GameControllerButton>(event.cbutton.button));
+        break;
+
+    case SDL_CONTROLLERBUTTONUP:
+        onControllerButtonUp(static_cast<SDL_GameControllerButton>(event.cbutton.button));
+        break;
     }
+}
 
-    void handleEvent(SDL_Event& event)
-    {
-        switch (event.type) 
-        {
-        case SDL_KEYDOWN:
-            onKeyDown();
-            break;
-        
-        case SDL_KEYUP:
-            onKeyUp();
-            break;
+#pragma region Actions
+bool Controls::isActionDown(int action)
+{
+    return std::find(pressedActions.begin(), pressedActions.end(), action) != pressedActions.end();
+}
 
-        case SDL_CONTROLLERDEVICEADDED:
-            gameController = SDL_GameControllerOpen(event.cdevice.which);
-            break;
-
-        case SDL_CONTROLLERBUTTONDOWN:
-            onControllerButtonDown(event.cbutton);
-            break;
-
-        case SDL_CONTROLLERBUTTONUP:
-            onControllerButtonUp(event.cbutton);
-            break;
-        }
-    }
+bool Controls::isActionUp(int action)
+{
+    return std::find(pressedActions.begin(), pressedActions.end(), action) == pressedActions.end();
+}
+#pragma endregion
 
 #pragma region Keyboard
-    bool isKeyDown(SDL_Scancode scancode)
-    {
-        if (keyboardState == nullptr)
-            return false;
-        return keyboardState[scancode];
-    }
+void Controls::onKeyDown(SDL_Scancode scancode)
+{
+    for (auto& action : keyboardMap[scancode])
+        pressedActions.insert(action);
+}
 
-    void onKeyDown()
-    {
-        keyboardState = SDL_GetKeyboardState(nullptr);
-    }
-
-    void onKeyUp()
-    {
-        keyboardState = SDL_GetKeyboardState(nullptr);
-    }
+void Controls::onKeyUp(SDL_Scancode scancode)
+{
+    for (auto& action : keyboardMap[scancode])
+        pressedActions.erase(action);
+}   
 #pragma endregion
 
 #pragma region Game Controller
-    bool isGameControllerButtonDown(SDL_GameControllerButton button)
-    {
-        if (gameController == nullptr)
-            return false;
-        return gameControllerButtonStates[button];
-    }
-
-    void onControllerButtonDown(SDL_ControllerButtonEvent& event)
-    {
-        gameControllerButtonStates[event.button] = true;
-    }
-
-    void onControllerButtonUp(SDL_ControllerButtonEvent& event)
-    {
-        gameControllerButtonStates[event.button] = false;
-    }
-#pragma endregion
+void Controls::onControllerButtonDown(SDL_GameControllerButton button)
+{
+    for (auto& action : gameControllerMap[button])
+        pressedActions.insert(action);
 }
+
+void Controls::onControllerButtonUp(SDL_GameControllerButton button)
+{
+    for (auto& action : gameControllerMap[button])
+        pressedActions.erase(action);
+}
+#pragma endregion

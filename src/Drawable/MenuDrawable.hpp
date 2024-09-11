@@ -3,6 +3,7 @@
 
 #include "Drawable.hpp"
 #include <vector>
+#include "../Core/Debouncer.hpp"
 
 class MenuItemDrawable;
 
@@ -17,9 +18,16 @@ public:
 
     void setMenuItems(const std::vector<MenuItemDrawable*>& menuItems);
 
+    void handleEvents();
+
 private:
     std::vector<MenuItemDrawable*> menuItems;
     int selectedIndex = 0;
+    Debouncer navigationDebouncer{500};
+
+    void previousMenuItem();
+    void nextMenuItem();
+    void selectCurrentMenuItem();
 };
 
 #endif // __SRC_DRAWABLE_MENUDRAWABLE_HPP__

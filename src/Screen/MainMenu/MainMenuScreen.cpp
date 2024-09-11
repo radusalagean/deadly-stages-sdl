@@ -25,8 +25,9 @@ void MainMenuScreen::init()
 
 void MainMenuScreen::handleEvents()
 {
-    if (Controls::isKeyDown(SDL_SCANCODE_ESCAPE) || Controls::isGameControllerButtonDown(SDL_CONTROLLER_BUTTON_START))
+    if (Game::controls.isActionDown(CA_ESCAPE))
         Game::isRunning = false;
+    mainMenuDrawable->handleEvents();
 }
 
 void MainMenuScreen::loadAssets()
@@ -40,11 +41,10 @@ void MainMenuScreen::loadAssets()
 void MainMenuScreen::loadMenuItems()
 {
     std::vector<MenuItemDrawable*> menuItems{
-        new MenuItemDrawable("START GAME"),
-        new MenuItemDrawable("COUCH COOP"),
-        new MenuItemDrawable("OPTIONS"),
-        new MenuItemDrawable("CREDITS"),
-        new MenuItemDrawable("EXIT")
+        new MenuItemDrawable("START GAME", std::bind(&MainMenuScreen::menuStartGame, this)),
+        new MenuItemDrawable("OPTIONS", std::bind(&MainMenuScreen::menuOptions, this)),
+        new MenuItemDrawable("CREDITS", std::bind(&MainMenuScreen::menuCredits, this)),
+        new MenuItemDrawable("EXIT", std::bind(&MainMenuScreen::menuExit, this))
     };
     mainMenuDrawable->setMenuItems(menuItems);
 }
@@ -90,7 +90,7 @@ void MainMenuScreen::layoutPass()
         int height = Game::height * 0.3;
         int width = Game::width * 0.5;
         int x = (Game::width - width) / 2;
-        int y = Game::height - height - (Game::height * 0.1) - Constants::WINDOW_PADDING_PX;
+        int y = Game::height - height - (Game::height * 0.05) - Constants::WINDOW_PADDING_PX;
         mainMenuDrawable->layout(x, y, width, height);
     }
     { // Demo Label
@@ -108,4 +108,24 @@ void MainMenuScreen::layoutPass()
         copyrightLabelTextDrawable->layout(x, y, width, height);
     }
     layoutInvalidated = false;
+}
+
+void MainMenuScreen::menuStartGame()
+{
+    logd("Start Game");
+}
+
+void MainMenuScreen::menuOptions()
+{
+    logd("Options");
+}
+
+void MainMenuScreen::menuCredits()
+{
+    logd("Credits");
+}
+
+void MainMenuScreen::menuExit()
+{
+   Game::isRunning = false;
 }
