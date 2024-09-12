@@ -3,14 +3,15 @@
 #include "../Game.hpp"
 #include <string>
 
-ImageDrawable::ImageDrawable(const std::string& fileName)
+ImageDrawable::ImageDrawable(const std::string& fileName, const std::string& parentDirectory)
 {
     this->fileName = fileName;
+    this->parentDirectory = parentDirectory;
 }
 
 void ImageDrawable::load()
 {
-    std::string path = "res/image/" + fileName;
+    std::string path = parentDirectory + fileName;
     SDL_Surface* loadedSurface = IMG_Load(path.c_str());
     texture = SDL_CreateTextureFromSurface(Game::renderer, loadedSurface);
     SDL_FreeSurface(loadedSurface);

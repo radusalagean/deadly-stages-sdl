@@ -5,12 +5,6 @@
 #include <algorithm>
 #include "../Controls/Controls.hpp"
 
-enum NavigationAction
-{
-    NAVIGATION_ACTION_PREVIOUS = 0,
-    NAVIGATION_ACTION_NEXT
-};
-
 void MenuDrawable::layout(int x, int y, int w, int h)
 {
     int menuItemHeight = Game::height * 0.035;
@@ -98,7 +92,7 @@ void MenuDrawable::nextMenuItem()
 void MenuDrawable::selectCurrentMenuItem()
 {
     if (menuItems.empty()) return;
-    menuItems[selectedIndex]->select();
+    menuItems[selectedIndex]->pick();
 }
 
 void MenuDrawable::handleEvents()

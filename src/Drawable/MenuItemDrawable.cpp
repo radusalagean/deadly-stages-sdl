@@ -54,7 +54,7 @@ void MenuItemDrawable::dispose()
     delete textDrawable;
 }
 
-void MenuItemDrawable::select()
+void MenuItemDrawable::pick()
 {
     callback();
 }

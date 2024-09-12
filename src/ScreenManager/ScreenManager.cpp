@@ -2,6 +2,8 @@
 #include <algorithm>
 #include "../Screen/Screen.hpp"
 #include "../Screen/MainMenu/MainMenuScreen.hpp"
+#include "../Controls/Controls.hpp"
+#include "../Game.hpp"
 
 void ScreenManager::pushScreen(Screen* screen) 
 {
@@ -87,6 +89,7 @@ void ScreenManager::handlePendingTransactions()
             screen->dispose();
             screens.erase(it);
             delete screen;
+            Game::controls.lock();
         }
     }
     screensToRemove.clear();
@@ -94,6 +97,7 @@ void ScreenManager::handlePendingTransactions()
     // Add new screens
     for (auto screen : screensToAdd) 
     {
+        Game::controls.lock();
         screens.push_back(screen);
         screen->init();
     }

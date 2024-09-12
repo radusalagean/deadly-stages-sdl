@@ -12,7 +12,7 @@ private:
     std::unordered_map<int, std::chrono::steady_clock::time_point> lastActionTimes;
 
 public:
-    Debouncer(int debounceTime) : 
+    Debouncer(int debounceTime = 500) : 
         debounceTime(debounceTime), 
         lastActionTimes() {}
 

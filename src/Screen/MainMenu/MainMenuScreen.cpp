@@ -1,9 +1,11 @@
 #include "MainMenuScreen.hpp"
 
 #include "../../Game.hpp"
+#include "../../ScreenManager/ScreenManager.hpp"
 #include "../../Controls/Controls.hpp"
 #include "../../Core/Constants.hpp"
 #include "../../Drawable/MenuItemDrawable.hpp"
+#include "../LevelSelect/LevelSelectScreen.hpp"
 
 MainMenuScreen::MainMenuScreen() : Screen::Screen()
 {
@@ -94,14 +96,14 @@ void MainMenuScreen::layoutPass()
         mainMenuDrawable->layout(x, y, width, height);
     }
     { // Demo Label
-        int height = Game::height * 0.045;
+        int height = Game::height * 0.04;
         int width = height * demoLabelTextDrawable->getAspectRatio();
         int x = Constants::WINDOW_PADDING_PX;
         int y = Game::height - height - Constants::WINDOW_PADDING_PX;
         demoLabelTextDrawable->layout(x, y, width, height);
     }
     { // Copyright Label
-        int height = Game::height * 0.045;
+        int height = Game::height * 0.04;
         int width = height * copyrightLabelTextDrawable->getAspectRatio();
         int x = Game::width - width - Constants::WINDOW_PADDING_PX;
         int y = Game::height - height - Constants::WINDOW_PADDING_PX;
@@ -112,7 +114,7 @@ void MainMenuScreen::layoutPass()
 
 void MainMenuScreen::menuStartGame()
 {
-    logd("Start Game");
+    Game::screenManager.pushScreen(new LevelSelectScreen());
 }
 
 void MainMenuScreen::menuOptions()

@@ -25,7 +25,7 @@ public:
     void update();
     void draw();
     void dispose();
-    void select();
+    void pick();
 };
     
 

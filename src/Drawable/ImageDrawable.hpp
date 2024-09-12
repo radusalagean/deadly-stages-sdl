@@ -11,10 +11,12 @@ class ImageDrawable : public Drawable
 {
 private:
     std::string fileName;
+    std::string parentDirectory;
     SDL_Texture* texture = nullptr;
 
 public:
-    ImageDrawable(const std::string& fileName);
+    ImageDrawable(const std::string& fileName, 
+        const std::string& parentDirectory = "res/image/");
     
     void layout(int x, int y, int w, int h);
     void load();

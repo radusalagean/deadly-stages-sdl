@@ -32,11 +32,14 @@ void Controls::handleEvent(SDL_Event& event)
         onControllerButtonUp(static_cast<SDL_GameControllerButton>(event.cbutton.button));
         break;
     }
+    unlockIfReleased();
 }
 
 #pragma region Actions
 bool Controls::isActionDown(int action)
 {
+    if (locked)
+        return false;
     return std::find(pressedActions.begin(), pressedActions.end(), action) != pressedActions.end();
 }
 

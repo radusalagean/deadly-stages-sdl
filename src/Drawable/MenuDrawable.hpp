@@ -21,9 +21,15 @@ public:
     void handleEvents();
 
 private:
+    enum NavigationAction
+    {
+        NAVIGATION_ACTION_PREVIOUS = 0,
+        NAVIGATION_ACTION_NEXT
+    };
+
     std::vector<MenuItemDrawable*> menuItems;
     int selectedIndex = 0;
-    Debouncer navigationDebouncer{500};
+    Debouncer navigationDebouncer;
 
     void previousMenuItem();
     void nextMenuItem();
