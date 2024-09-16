@@ -40,16 +40,19 @@ void LevelParser::parseTileset(std::string levelId, const char* tilesetFile, std
         const char* value = rootSubElement->Value();
         if (value == std::string("tile"))
         {
-            Tile tile;
-            tile.id = rootSubElement->IntAttribute("id");
+            int tileId = rootSubElement->IntAttribute("id");
+            std::string path = "";
+            int width = 0;
+            int height = 0;
+            bool collidable = false;
             for (tinyxml2::XMLElement* tileSubElement = rootSubElement->FirstChildElement(); tileSubElement != nullptr; tileSubElement = tileSubElement->NextSiblingElement())
             {
                 const char* value = tileSubElement->Value();
                 if (value == std::string("image"))
                 {
-                    tile.path = LEVEL_PATH + levelId + "/" + tileSubElement->Attribute("source");
-                    tile.width = tileSubElement->IntAttribute("width");
-                    tile.height = tileSubElement->IntAttribute("height");
+                    path = LEVEL_PATH + levelId + "/" + tileSubElement->Attribute("source");
+                    width = tileSubElement->IntAttribute("width");
+                    height = tileSubElement->IntAttribute("height");
                 }
                 else if (value == std::string("properties"))
                 {
@@ -59,12 +62,12 @@ void LevelParser::parseTileset(std::string levelId, const char* tilesetFile, std
                             continue;
                         if (propertySubElement->Attribute("name") == std::string("collidable"))
                         {
-                            tile.collidable = propertySubElement->BoolAttribute("value");
+                            collidable = propertySubElement->BoolAttribute("value");
                         }  
                     }
                 }
             }
-            tileset[tile.id] = tile;
+            tileset.emplace(tileId, Tile(tileId, path, width, height, collidable));
         }
     }
 }

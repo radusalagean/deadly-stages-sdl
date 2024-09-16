@@ -24,5 +24,5 @@ void Level::render(Camera& camera)
 
 void Level::dispose()
 {
-
+    tileset.clear();
 }

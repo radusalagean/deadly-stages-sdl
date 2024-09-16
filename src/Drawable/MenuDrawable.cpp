@@ -4,11 +4,12 @@
 #include "../Drawable/MenuItemDrawable.hpp"
 #include <algorithm>
 #include "../Controls/Controls.hpp"
+#include "../Core/Constants.hpp"
 
 void MenuDrawable::layout(int x, int y, int w, int h)
 {
-    int menuItemHeight = Game::height * 0.035;
-    int menuItemSpacing = menuItemHeight * 0.5;
+    int menuItemHeight = Game::height * 0.035 * Constants::UI_SCALE;
+    int menuItemSpacing = menuItemHeight * 0.5 * Constants::UI_SCALE;
     int currentY = y;
     int maxMenuItemWidth = 0;
     for (auto menuItem : menuItems)

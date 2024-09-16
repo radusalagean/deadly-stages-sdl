@@ -88,11 +88,11 @@ void LevelSelectScreen::nextLevel()
 
 void LevelSelectScreen::layoutPass()
 {
-    int textHeight = Game::height * 0.045;
-    int imageHeight = Game::height * 0.4;
-    int selectionRectOutlineThickness = Game::height * 0.02;
-    int selectionRectSpacing = Game::height * 0.02;
-    int textSpacing = Game::height * 0.025;
+    int textHeight = Game::height * 0.045 * Constants::UI_SCALE;
+    int imageHeight = Game::height * 0.4 * Constants::UI_SCALE;
+    int selectionRectOutlineThickness = Game::height * 0.02 * Constants::UI_SCALE;
+    int selectionRectSpacing = Game::height * 0.02 * Constants::UI_SCALE;
+    int textSpacing = Game::height * 0.025 * Constants::UI_SCALE;
     { // DevTest Level
         LevelPreview* levelPreview = levelPreviews[0];
         int imageWidth = imageHeight * levelPreview->imageDrawable->getAspectRatio();

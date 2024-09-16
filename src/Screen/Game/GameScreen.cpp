@@ -4,6 +4,8 @@
 #include "../../Game.hpp"
 #include <SDL.h>
 #include "../../Level/Level.hpp"
+#include "../../Screen/MainMenu/MainMenuScreen.hpp"
+#include "../../ScreenManager/ScreenManager.hpp"
 
 GameScreen::GameScreen(std::string levelId) : levelId(levelId)
 {
@@ -40,6 +42,11 @@ void GameScreen::handleEvents()
         velocity.setY(0);
     }
     camera.target += velocity;
+
+    if (Game::controls.isActionDown(CA_ESCAPE))
+    {
+        Game::screenManager.setScreen(new MainMenuScreen());
+    }
 }
 
 void GameScreen::layoutPass()
@@ -61,5 +68,5 @@ void GameScreen::render()
 
 void GameScreen::dispose()
 {
-
+    delete level;
 }

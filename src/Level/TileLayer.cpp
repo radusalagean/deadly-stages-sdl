@@ -11,7 +11,7 @@ void TileLayer::render(Camera& camera)
             Tile* tile = tileMap[y][x];
             if (tile != nullptr)
             {
-                tile->draw(x * tile->width, y * tile->height);
+                tile->draw(x * tile->getScaledWidth(), y * tile->getScaledHeight());
             }
         }
     }

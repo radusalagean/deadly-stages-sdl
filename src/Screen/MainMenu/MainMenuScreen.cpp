@@ -82,28 +82,28 @@ void MainMenuScreen::dispose()
 void MainMenuScreen::layoutPass()
 {
     { // Title Screen
-        int y = Game::height * 0.1;
-        int height = Game::height * 0.6;
+        int y = Game::height * 0.1 * Constants::UI_SCALE;
+        int height = Game::height * 0.6 * Constants::UI_SCALE;
         int width = height * titleScreenImageDrawable->getAspectRatio();
         int x = (Game::width - width) / 2;
         titleScreenImageDrawable->layout(x, y, width, height);
     }
     { // Main Menu
-        int height = Game::height * 0.3;
-        int width = Game::width * 0.5;
+        int height = Game::height * 0.3 * Constants::UI_SCALE;
+        int width = Game::width * 0.5 * Constants::UI_SCALE;
         int x = (Game::width - width) / 2;
-        int y = Game::height - height - (Game::height * 0.05) - Constants::WINDOW_PADDING_PX;
+        int y = Game::height - height - (Game::height * 0.05 * Constants::UI_SCALE) - Constants::WINDOW_PADDING_PX;
         mainMenuDrawable->layout(x, y, width, height);
     }
     { // Demo Label
-        int height = Game::height * 0.04;
+        int height = Game::height * 0.04 * Constants::UI_SCALE;
         int width = height * demoLabelTextDrawable->getAspectRatio();
         int x = Constants::WINDOW_PADDING_PX;
         int y = Game::height - height - Constants::WINDOW_PADDING_PX;
         demoLabelTextDrawable->layout(x, y, width, height);
     }
     { // Copyright Label
-        int height = Game::height * 0.04;
+        int height = Game::height * 0.04 * Constants::UI_SCALE;
         int width = height * copyrightLabelTextDrawable->getAspectRatio();
         int x = Game::width - width - Constants::WINDOW_PADDING_PX;
         int y = Game::height - height - Constants::WINDOW_PADDING_PX;
