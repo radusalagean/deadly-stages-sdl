@@ -28,6 +28,10 @@ private:
         {SDL_SCANCODE_DOWN, {CA_DOWN}},
         {SDL_SCANCODE_LEFT, {CA_LEFT}},
         {SDL_SCANCODE_RIGHT, {CA_RIGHT}},
+        {SDL_SCANCODE_W, {CA_UP}},
+        {SDL_SCANCODE_S, {CA_DOWN}},
+        {SDL_SCANCODE_A, {CA_LEFT}},
+        {SDL_SCANCODE_D, {CA_RIGHT}},
         {SDL_SCANCODE_RETURN, {CA_SELECT}},
         {SDL_SCANCODE_ESCAPE, {CA_ESCAPE}}
     }; // key: scancode, value: actions

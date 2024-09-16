@@ -1,5 +1,5 @@
-#ifndef __SRC_CORE_VECTOR2D_H__
-#define __SRC_CORE_VECTOR2D_H__
+#ifndef __SRC_CORE_VECTOR2D_HPP__
+#define __SRC_CORE_VECTOR2D_HPP__
 
 #include <math.h>
 
@@ -79,4 +79,4 @@ private:
     float y;
 };
 
-#endif // __SRC_CORE_VECTOR2D_H__
+#endif // __SRC_CORE_VECTOR2D_HPP__

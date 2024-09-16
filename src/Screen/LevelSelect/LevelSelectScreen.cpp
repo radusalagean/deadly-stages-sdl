@@ -6,6 +6,7 @@
 #include "../../Controls/Controls.hpp"
 #include "../../Core/Constants.hpp"
 #include "../../ScreenManager/ScreenManager.hpp"
+#include "../Game/GameScreen.hpp"
 #include <algorithm>
 
 LevelSelectScreen::LevelSelectScreen() : Screen()
@@ -68,6 +69,7 @@ void LevelSelectScreen::handleEvents()
 void LevelSelectScreen::selectLevel(const std::string& id)
 {
     logd("Selected level: %s", id.c_str());
+    Game::screenManager.setScreen(new GameScreen(id));
 }
 
 void LevelSelectScreen::previousLevel()
