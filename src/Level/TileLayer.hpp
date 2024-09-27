@@ -9,8 +9,8 @@ class Tile;
 class TileLayer
 {
 public:
-    int width = 0;
-    int height = 0;
+    int horizontalTilesCount = 0;
+    int verticalTilesCount = 0;
     std::vector<std::vector<Tile*>> tileMap{{}};
 
     void render(Camera& camera);

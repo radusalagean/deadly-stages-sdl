@@ -3,7 +3,6 @@
 
 #include "../Screen.hpp"
 #include "../../Level/LevelParser.hpp"
-#include "../../Level/Camera.hpp"
 
 class Level;
 
@@ -13,8 +12,6 @@ private:
     std::string levelId;
     Level* level;
     LevelParser levelParser;
-    Camera camera;
-    Vector2D velocity;
 
 public:
     GameScreen(std::string levelId);

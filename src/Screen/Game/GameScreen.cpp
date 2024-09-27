@@ -20,29 +20,7 @@ void GameScreen::init()
 
 void GameScreen::handleEvents()
 {
-    if (Game::controls.isActionDown(CA_UP))
-    {
-        velocity.setY(-1);
-    }
-    else if (Game::controls.isActionDown(CA_DOWN))
-    {
-        velocity.setY(1);
-    }
-    else if (Game::controls.isActionDown(CA_LEFT))
-    {
-        velocity.setX(-1);
-    }
-    else if (Game::controls.isActionDown(CA_RIGHT))
-    {
-        velocity.setX(1);
-    }
-    else
-    {
-        velocity.setX(0);
-        velocity.setY(0);
-    }
-    camera.target += velocity;
-
+    level->handleEvents();
     if (Game::controls.isActionDown(CA_ESCAPE))
     {
         Game::screenManager.setScreen(new MainMenuScreen());
@@ -56,13 +34,13 @@ void GameScreen::layoutPass()
 
 void GameScreen::update()
 {
-
+    level->update();
 }
 
 void GameScreen::render()
 {
     SDL_RenderClear(Game::renderer);
-    level->render(camera);
+    level->render();
     SDL_RenderPresent(Game::renderer);
 }
 

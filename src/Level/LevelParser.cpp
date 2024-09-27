@@ -14,8 +14,10 @@ Level* LevelParser::parseLevel(std::string levelId)
     Level* level = new Level();
     tinyxml2::XMLElement* root = levelDocument.RootElement();
 
-    level->width = root->IntAttribute("width");
-    level->height = root->IntAttribute("height");
+    level->horizontalTilesCount = root->IntAttribute("width");
+    level->verticalTilesCount = root->IntAttribute("height");
+    level->widthPx = level->horizontalTilesCount * root->IntAttribute("tilewidth");
+    level->heightPx = level->verticalTilesCount * root->IntAttribute("tileheight");
 
     for (tinyxml2::XMLElement* e = root->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
     {
@@ -24,6 +26,8 @@ Level* LevelParser::parseLevel(std::string levelId)
             parseTileset(levelId, e->Attribute("source"), level->tileset);
         else if (value == std::string("layer"))
             parseTileLayer(e, level->tileLayer, level->tileset);
+        else if (value == std::string("objectgroup"))
+            parseObjectLayer(e, *level);
     }
 
     return level;
@@ -77,8 +81,8 @@ void LevelParser::parseTileLayer(tinyxml2::XMLElement* layerElement, TileLayer& 
 {
     int width = layerElement->IntAttribute("width");
     int height = layerElement->IntAttribute("height");
-    tileLayer.width = width;
-    tileLayer.height = height;
+    tileLayer.horizontalTilesCount = width;
+    tileLayer.verticalTilesCount = height;
     // Parse the tiles from the data element
     std::vector<int> gids(width * height);
     int gidIndex = 0;
@@ -114,6 +118,31 @@ void LevelParser::parseTileLayer(tinyxml2::XMLElement* layerElement, TileLayer& 
             else
             {
                 tileLayer.tileMap[y][x] = nullptr;
+            }
+        }
+    }
+}
+
+void LevelParser::parseObjectLayer(tinyxml2::XMLElement* layerElement, Level& level)
+{
+    for (tinyxml2::XMLElement* e = layerElement->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
+    {
+        const char* value = e->Value();
+        if (value == std::string("object"))
+        {
+            // Player
+            if (e->Attribute("type") == std::string("Player"))
+            {
+                Player* player = new Player();
+                player->setPosition(Vector2D(e->IntAttribute("x"), e->IntAttribute("y")));
+                player->setSize(e->IntAttribute("width"), e->IntAttribute("height"));
+                tinyxml2::XMLElement* properties = e->FirstChildElement("properties");
+                for (tinyxml2::XMLElement* property = properties->FirstChildElement(); property != nullptr; property = property->NextSiblingElement())
+                {
+                    if (property->Attribute("name") == std::string("path"))
+                        player->texturePath = property->Attribute("value");
+                }
+                level.player = player;
             }
         }
     }
