@@ -22,24 +22,28 @@ void Level::handleEvents()
 {
     if (Game::controls.isActionDown(CA_UP))
     {
-        player->velocity.setY(-1);
+        player->velocity.setY(-player->speedPxPerSeconds * Game::latestLoopDeltaTimeSeconds);
     }
     else if (Game::controls.isActionDown(CA_DOWN))
     {
-        player->velocity.setY(1);
+        player->velocity.setY(player->speedPxPerSeconds * Game::latestLoopDeltaTimeSeconds);
     }
-    else if (Game::controls.isActionDown(CA_LEFT))
+    else
     {
-        player->velocity.setX(-1);
+        player->velocity.setY(0);
+    }
+
+    if (Game::controls.isActionDown(CA_LEFT))
+    {
+        player->velocity.setX(-player->speedPxPerSeconds * Game::latestLoopDeltaTimeSeconds);
     }
     else if (Game::controls.isActionDown(CA_RIGHT))
     {
-        player->velocity.setX(1);
+        player->velocity.setX(player->speedPxPerSeconds * Game::latestLoopDeltaTimeSeconds);
     }
     else
     {
         player->velocity.setX(0);
-        player->velocity.setY(0);
     }
 }
 

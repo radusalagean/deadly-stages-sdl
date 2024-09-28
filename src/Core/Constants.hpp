@@ -7,8 +7,8 @@ namespace Constants
     const float UI_SCALE = 0.8f;
     // const float GAMEPLAY_SCALE = 0.5f; // TODO
     const float GAMEPLAY_SCALE = 1.0f;
-    const int FPS = 60;
-    const int MILLIS_PER_FRAME = 1000 / FPS;
+    const int FPS_LIMIT = 60;
+    const int MIN_MILLIS_PER_FRAME = 1000 / FPS_LIMIT;
 }
 
 #endif // __SRC_CORE_CONSTANTS_HPP__

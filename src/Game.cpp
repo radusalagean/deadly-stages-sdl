@@ -27,6 +27,9 @@ namespace Game
     ScreenManager screenManager;
     PrimitiveShapeHelper primitiveShapeHelper;
 
+    float latestLoopDeltaTimeMs = 0;
+    float latestLoopDeltaTimeSeconds = 0;
+
     void init()
     {
         // Init Logger
@@ -67,11 +70,12 @@ namespace Game
         update();
         render();
 
-        Uint32 end = SDL_GetTicks();
-        Uint32 delta = end - start;
-        if (delta < Constants::MILLIS_PER_FRAME) {
-            SDL_Delay(Constants::MILLIS_PER_FRAME - delta);
+        Uint32 effectiveDeltaTimeMs = SDL_GetTicks() - start;
+        if (effectiveDeltaTimeMs < Constants::MIN_MILLIS_PER_FRAME) {
+            SDL_Delay(Constants::MIN_MILLIS_PER_FRAME - effectiveDeltaTimeMs);
         }
+        latestLoopDeltaTimeMs = SDL_GetTicks() - start;
+        latestLoopDeltaTimeSeconds = latestLoopDeltaTimeMs / 1000.0f;
     }
 
     void handleEvents()

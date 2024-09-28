@@ -8,6 +8,8 @@ class Player : public GameEntity
 public:
     Player();
     ~Player();
+
+    const float speedPxPerSeconds = 100.0f;
 };
 
 #endif // __SRC_GAMEENTITY_PLAYER_HPP__

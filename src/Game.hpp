@@ -28,6 +28,10 @@ namespace Game
     extern ScreenManager screenManager;
     extern PrimitiveShapeHelper primitiveShapeHelper;
 
+    // Time
+    extern float latestLoopDeltaTimeMs;
+    extern float latestLoopDeltaTimeSeconds;
+
     void init();
 
     void loop();
