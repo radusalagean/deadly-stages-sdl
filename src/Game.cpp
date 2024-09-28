@@ -6,6 +6,7 @@
 #include "Core/FontManager.hpp"
 #include "ScreenManager/ScreenManager.hpp"
 #include "Core/PrimitiveShapeHelper.hpp"
+#include "Core/Constants.hpp"
 
 #define GAME_NAME "DeadlyStagesDemo"
 #define WIDTH 480
@@ -60,9 +61,17 @@ namespace Game
 
     void loop()
     {
+        Uint32 start = SDL_GetTicks();
+
         handleEvents();
         update();
         render();
+
+        Uint32 end = SDL_GetTicks();
+        Uint32 delta = end - start;
+        if (delta < Constants::MILLIS_PER_FRAME) {
+            SDL_Delay(Constants::MILLIS_PER_FRAME - delta);
+        }
     }
 
     void handleEvents()
