@@ -18,6 +18,9 @@ public:
     std::string texturePath;
     Vector2D velocity;
 
+    int width;
+    int height;
+
     virtual void load(TexturePool& texturePool);
     virtual void update();
     virtual void draw(Camera& camera);
@@ -27,15 +30,11 @@ public:
 
     void setSize(int width, int height) { this->width = width; this->height = height; }
 
-    float getScaledWidth() const { return width * Constants::GAMEPLAY_SCALE; }
-    float getScaledHeight() const { return height * Constants::GAMEPLAY_SCALE; }
-
 protected:
     Vector2D position;
     SDL_Texture* texture = nullptr;
     SDL_Rect dstRect;
-    int width;
-    int height;
+    
 };
 
 

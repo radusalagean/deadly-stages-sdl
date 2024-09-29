@@ -12,8 +12,7 @@ class Tile
 private:
     int id;
     std::string path;
-    int width;
-    int height;
+    
     bool collidable;
     SDL_Texture* texture = nullptr;
     SDL_Rect dstRect;
@@ -22,11 +21,11 @@ public:
     Tile(int id, std::string path, int width, int height, bool collidable);
     ~Tile();
 
+    int width;
+    int height;
+
     void load();
     void draw(int x, int y);
-
-    float getScaledWidth() const { return width * Constants::GAMEPLAY_SCALE; }
-    float getScaledHeight() const { return height * Constants::GAMEPLAY_SCALE; }
 };
 
 #endif // __SRC_LEVEL_TILE_HPP_

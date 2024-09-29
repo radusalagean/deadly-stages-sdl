@@ -69,7 +69,8 @@
 			"charconv": "cpp",
 			"__tree": "cpp",
 			"set": "cpp",
-			"map": "cpp"
+			"map": "cpp",
+			"__memory": "cpp"
 		}
 	}
 }

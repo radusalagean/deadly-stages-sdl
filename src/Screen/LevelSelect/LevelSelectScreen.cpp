@@ -7,6 +7,7 @@
 #include "../../Core/Constants.hpp"
 #include "../../ScreenManager/ScreenManager.hpp"
 #include "../Game/GameScreen.hpp"
+#include "../../Core/Macros.hpp"
 #include <algorithm>
 
 LevelSelectScreen::LevelSelectScreen() : Screen()
@@ -88,11 +89,11 @@ void LevelSelectScreen::nextLevel()
 
 void LevelSelectScreen::layoutPass()
 {
-    int textHeight = Game::height * 0.045 * Constants::UI_SCALE;
-    int imageHeight = Game::height * 0.4 * Constants::UI_SCALE;
-    int selectionRectOutlineThickness = Game::height * 0.02 * Constants::UI_SCALE;
-    int selectionRectSpacing = Game::height * 0.02 * Constants::UI_SCALE;
-    int textSpacing = Game::height * 0.025 * Constants::UI_SCALE;
+    int textHeight = USCALE(Game::height * 0.045);
+    int imageHeight = USCALE(Game::height * 0.4);
+    int selectionRectOutlineThickness = USCALE(Game::height * 0.02);
+    int selectionRectSpacing = USCALE(Game::height * 0.02);
+    int textSpacing = USCALE(Game::height * 0.025);
     { // DevTest Level
         LevelPreview* levelPreview = levelPreviews[0];
         int imageWidth = imageHeight * levelPreview->imageDrawable->getAspectRatio();

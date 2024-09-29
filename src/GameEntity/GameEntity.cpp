@@ -1,6 +1,7 @@
 #include "GameEntity.hpp"
 
 #include "../Game.hpp"
+#include "../Core/Macros.hpp"
 
 GameEntity::GameEntity()
 {
@@ -24,10 +25,10 @@ void GameEntity::update()
 
 void GameEntity::draw(Camera& camera)
 {
-    dstRect.x = position.getX() - camera.position.getX();
-    dstRect.y = position.getY() - camera.position.getY();
-    dstRect.w = getScaledWidth();
-    dstRect.h = getScaledHeight();
+    dstRect.x = GSCALE(position.getX()) - camera.position.getX();
+    dstRect.y = GSCALE(position.getY()) - camera.position.getY();
+    dstRect.w = GSCALE(width);
+    dstRect.h = GSCALE(height);
     SDL_RenderCopy(Game::renderer, texture, NULL, &dstRect);
 }
 

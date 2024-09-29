@@ -1,7 +1,9 @@
 #include "Tile.hpp"
 
+#include "../Core/Macros.hpp"
+
 Tile::Tile(int id, std::string path, int width, int height, bool collidable)
-    : id(id), path(path), width(width), height(height), collidable(collidable)
+    : id(id), path(path), collidable(collidable), width(width), height(height)
 {
 
 }
@@ -22,7 +24,7 @@ void Tile::draw(int x, int y)
 {
     dstRect.x = x;
     dstRect.y = y;
-    dstRect.w = getScaledWidth();
-    dstRect.h = getScaledHeight();
+    dstRect.w = GSCALE(width);
+    dstRect.h = GSCALE(height);
     SDL_RenderCopy(Game::renderer, texture, NULL, &dstRect);
 }

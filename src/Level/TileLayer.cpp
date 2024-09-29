@@ -2,6 +2,7 @@
 
 #include "Tile.hpp"
 #include "Camera.hpp"
+#include "../Core/Macros.hpp"
 
 void TileLayer::render(Camera& camera)
 {
@@ -12,8 +13,8 @@ void TileLayer::render(Camera& camera)
             Tile* tile = tileMap[y][x];
             if (tile != nullptr)
             {
-                int drawX = (x * tile->getScaledWidth()) - camera.position.getX();
-                int drawY = (y * tile->getScaledHeight()) - camera.position.getY();
+                int drawX = (x * GSCALE(tile->width)) - camera.position.getX();
+                int drawY = (y * GSCALE(tile->height)) - camera.position.getY();
                 tile->draw(drawX, drawY);
             }
         }

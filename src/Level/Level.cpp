@@ -1,5 +1,7 @@
 #include "Level.hpp"
 
+#include "../Core/Macros.hpp"
+
 Level::Level()
 {
 
@@ -20,30 +22,21 @@ void Level::load()
 
 void Level::handleEvents()
 {
-    if (Game::controls.isActionDown(CA_UP))
+    // Movement
+    if (Game::controls.isActionDown(CA_UP) || Game::controls.isActionDown(CA_DOWN) || 
+        Game::controls.isActionDown(CA_LEFT) || Game::controls.isActionDown(CA_RIGHT))
     {
-        player->velocity.setY(-player->speedPxPerSeconds * Game::latestLoopDeltaTimeSeconds);
-    }
-    else if (Game::controls.isActionDown(CA_DOWN))
-    {
-        player->velocity.setY(player->speedPxPerSeconds * Game::latestLoopDeltaTimeSeconds);
-    }
-    else
-    {
-        player->velocity.setY(0);
-    }
+        float speedMultiplier = player->speedPxPerSeconds * Game::latestLoopDeltaTimeSeconds;
+        player->velocity.setY(Game::controls.isActionDown(CA_UP) ? -speedMultiplier :
+                              Game::controls.isActionDown(CA_DOWN) ? speedMultiplier : 0);
 
-    if (Game::controls.isActionDown(CA_LEFT))
-    {
-        player->velocity.setX(-player->speedPxPerSeconds * Game::latestLoopDeltaTimeSeconds);
-    }
-    else if (Game::controls.isActionDown(CA_RIGHT))
-    {
-        player->velocity.setX(player->speedPxPerSeconds * Game::latestLoopDeltaTimeSeconds);
+        player->velocity.setX(Game::controls.isActionDown(CA_LEFT) ? -speedMultiplier :
+                              Game::controls.isActionDown(CA_RIGHT) ? speedMultiplier : 0);
     }
     else
     {
         player->velocity.setX(0);
+        player->velocity.setY(0);
     }
 }
 
