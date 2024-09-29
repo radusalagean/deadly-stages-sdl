@@ -1,6 +1,7 @@
 #include "ImageDrawable.hpp"
 
 #include "../Game.hpp"
+#include "../Core/SDLUtils.hpp"
 #include <string>
 
 ImageDrawable::ImageDrawable(const std::string& fileName, const std::string& parentDirectory)
@@ -12,9 +13,7 @@ ImageDrawable::ImageDrawable(const std::string& fileName, const std::string& par
 void ImageDrawable::load()
 {
     std::string path = parentDirectory + fileName;
-    SDL_Surface* loadedSurface = IMG_Load(path.c_str());
-    texture = SDL_CreateTextureFromSurface(Game::renderer, loadedSurface);
-    SDL_FreeSurface(loadedSurface);
+    texture = SDLUtils::loadTexture(path);
 
     SDL_QueryTexture(texture, NULL, NULL, &sourceWidth, &sourceHeight);
     aspectRatio = (float)sourceWidth / (float)sourceHeight;

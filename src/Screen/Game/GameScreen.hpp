@@ -10,8 +10,12 @@ class GameScreen : public Screen
 {
 private:
     std::string levelId;
-    Level* level;
+    Level* level = nullptr;
     LevelParser levelParser;
+    SDL_Texture* cursorTexture = nullptr;
+    int cursorWidth = 0;
+    int cursorHeight = 0;
+    SDL_Rect cursorRect;
 
 public:
     GameScreen(std::string levelId);

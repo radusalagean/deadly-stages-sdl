@@ -1,6 +1,7 @@
 #include "TexturePool.hpp"
 
 #include "../Game.hpp"
+#include "SDLUtils.hpp"
 
 TexturePool::TexturePool()
 {
@@ -20,9 +21,7 @@ void TexturePool::load(const std::string& path)
     if (textures.find(path) != textures.end())
         return; // Texture already loaded
 
-    SDL_Surface* loadedSurface = IMG_Load(path.c_str());
-    textures[path] = SDL_CreateTextureFromSurface(Game::renderer, loadedSurface);
-    SDL_FreeSurface(loadedSurface);
+    textures[path] = SDLUtils::loadTexture(path);
 }
 
 SDL_Texture* TexturePool::get(const std::string& path)

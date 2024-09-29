@@ -1,6 +1,7 @@
 #include "Tile.hpp"
 
 #include "../Core/Macros.hpp"
+#include "../Core/SDLUtils.hpp"
 
 Tile::Tile(int id, std::string path, int width, int height, bool collidable)
     : id(id), path(path), collidable(collidable), width(width), height(height)
@@ -15,9 +16,7 @@ Tile::~Tile()
 
 void Tile::load()
 {
-    SDL_Surface* loadedSurface = IMG_Load(path.c_str());
-    texture = SDL_CreateTextureFromSurface(Game::renderer, loadedSurface);
-    SDL_FreeSurface(loadedSurface);
+    texture = SDLUtils::loadTexture(path);
 }
 
 void Tile::draw(int x, int y)
