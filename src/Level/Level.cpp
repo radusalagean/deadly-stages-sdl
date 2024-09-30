@@ -1,6 +1,7 @@
 #include "Level.hpp"
 
 #include "../Core/Macros.hpp"
+#include "../Core/CollisionManager.hpp"
 
 Level::Level()
 {
@@ -27,11 +28,15 @@ void Level::handleEvents()
         Game::controls.isActionDown(CA_LEFT) || Game::controls.isActionDown(CA_RIGHT))
     {
         float speedMultiplier = player->speedPxPerSeconds * Game::latestLoopDeltaTimeSeconds;
-        player->velocity.setY(Game::controls.isActionDown(CA_UP) ? -speedMultiplier :
+        Vector2D velocity;
+        velocity.setY(Game::controls.isActionDown(CA_UP) ? -speedMultiplier :
                               Game::controls.isActionDown(CA_DOWN) ? speedMultiplier : 0);
 
-        player->velocity.setX(Game::controls.isActionDown(CA_LEFT) ? -speedMultiplier :
+        velocity.setX(Game::controls.isActionDown(CA_LEFT) ? -speedMultiplier :
                               Game::controls.isActionDown(CA_RIGHT) ? speedMultiplier : 0);
+
+        CollisionManager::processMovement(*player, velocity, *this);
+        player->velocity = velocity;
     }
     else
     {
@@ -43,7 +48,7 @@ void Level::handleEvents()
 void Level::update()
 {
     camera.update();
-    player->update();
+    player->update(camera);
 }
 
 void Level::render()
@@ -60,4 +65,14 @@ void Level::dispose()
         delete player;
         player = nullptr;
     }
+}
+
+SDL_Rect& Level::buildTileRect(int column, int row) const
+{
+    SDL_Rect tileRect;
+    tileRect.x = column * tileWidthPx;
+    tileRect.y = row * tileHeightPx;
+    tileRect.w = tileWidthPx;
+    tileRect.h = tileHeightPx;
+    return tileRect;
 }

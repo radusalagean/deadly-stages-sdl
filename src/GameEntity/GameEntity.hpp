@@ -20,6 +20,13 @@ public:
 
     int width;
     int height;
+    double rotation = 0;
+
+    SDL_Rect collisionRect;
+
+    Vector2D position;
+    SDL_Texture* texture = nullptr;
+    SDL_Rect dstRect;
 
     virtual void load(TexturePool& texturePool);
     virtual void update();
@@ -29,12 +36,6 @@ public:
     void setPosition(Vector2D position);
 
     void setSize(int width, int height) { this->width = width; this->height = height; }
-
-protected:
-    Vector2D position;
-    SDL_Texture* texture = nullptr;
-    SDL_Rect dstRect;
-    
 };
 
 

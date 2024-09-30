@@ -16,8 +16,10 @@ Level* LevelParser::parseLevel(std::string levelId)
 
     level->horizontalTilesCount = root->IntAttribute("width");
     level->verticalTilesCount = root->IntAttribute("height");
-    level->widthPx = level->horizontalTilesCount * root->IntAttribute("tilewidth");
-    level->heightPx = level->verticalTilesCount * root->IntAttribute("tileheight");
+    level->tileWidthPx = root->IntAttribute("tilewidth");
+    level->tileHeightPx = root->IntAttribute("tileheight");
+    level->widthPx = level->horizontalTilesCount * level->tileWidthPx;
+    level->heightPx = level->verticalTilesCount * level->tileHeightPx;
 
     for (tinyxml2::XMLElement* e = root->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
     {
@@ -136,6 +138,12 @@ void LevelParser::parseObjectLayer(tinyxml2::XMLElement* layerElement, Level& le
                 Player* player = new Player();
                 player->setPosition(Vector2D(e->IntAttribute("x"), e->IntAttribute("y")));
                 player->setSize(e->IntAttribute("width"), e->IntAttribute("height"));
+                player->collisionRect = { // TODO Adjust the collision rect to the player's texture (exclude the black space)
+                    0, 
+                    0,
+                    player->width,
+                    player->height
+                };
                 tinyxml2::XMLElement* properties = e->FirstChildElement("properties");
                 for (tinyxml2::XMLElement* property = properties->FirstChildElement(); property != nullptr; property = property->NextSiblingElement())
                 {

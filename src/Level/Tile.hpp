@@ -26,6 +26,8 @@ public:
 
     void load();
     void draw(int x, int y);
+
+    bool isCollidable() const { return collidable; }
 };
 
 #endif // __SRC_LEVEL_TILE_HPP_

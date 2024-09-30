@@ -28,8 +28,12 @@ public:
 
     int horizontalTilesCount = 0;
     int verticalTilesCount = 0;
+    int tileWidthPx = 0;
+    int tileHeightPx = 0;
     int widthPx = 0;
     int heightPx = 0;
+
+    SDL_Rect& buildTileRect(int x, int y) const;
 };
 
 #endif // __SRC_LEVEL_LEVEL_HPP_
