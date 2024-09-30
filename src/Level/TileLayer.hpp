@@ -2,6 +2,7 @@
 #define __SRC_LEVEL_TILELAYER_HPP_
 
 #include <vector>
+#include <utility>
 
 class Camera;
 class Tile;
@@ -12,6 +13,7 @@ public:
     int horizontalTilesCount = 0;
     int verticalTilesCount = 0;
     std::vector<std::vector<Tile*>> tileMap{{}};
+    std::vector<std::pair<int, int>> collidedTiles{}; // For debugging purposes
 
     void render(Camera& camera);
 };

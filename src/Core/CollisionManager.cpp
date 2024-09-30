@@ -6,6 +6,8 @@
 #include <sstream>
 #include <algorithm>
 #include <functional>
+#include <vector>
+#include <utility>
 
 // Guide: https://youtu.be/8JJ-4JgR7Dg?si=SL0lkRx7hiA5B_GT
 namespace CollisionManager
@@ -119,7 +121,7 @@ namespace CollisionManager
         return false;
     }
 
-    void processMovement(const GameEntity& subjectEntity, Vector2D& proposedVelocity, const Level& level)
+    void processMovement(const GameEntity& subjectEntity, Vector2D& proposedVelocity, Level& level)
     {
 
         Vector2D intersectionPoint;
@@ -167,6 +169,8 @@ namespace CollisionManager
         ss << "End: " << endX << ", " << endY << std::endl;
         logd(ss.str().c_str());
 
+        bool foundIntersection = false;
+
         // Check only the relevant tiles
         for (int y = startY; y <= endY; ++y) 
         {
@@ -178,8 +182,14 @@ namespace CollisionManager
                     SDL_Rect tileRect = level.buildTileRect(x, y);
                     if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, tileRect, intersectionPoint, intersectionNormal, contactTime)) 
                     {
+                        if (!foundIntersection)
+                        {
+                            level.tileLayer.collidedTiles.clear();
+                            foundIntersection = true;
+                        }
                         Vector2D tileCoords = Vector2D(x, y);
                         std::pair<Vector2D, float> intersection = std::make_pair(tileCoords, contactTime);
+                        level.tileLayer.collidedTiles.push_back(std::make_pair(x, y));
                         sortedIntersections.push_back(intersection);
                     }
                 }

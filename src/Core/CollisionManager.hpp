@@ -13,7 +13,7 @@ namespace CollisionManager
     bool dynamicRectVsRect(const SDL_Rect& dynamicRect, const Vector2D& proposedVelocity, const SDL_Rect& staticRect,
         Vector2D& intersectionPoint, Vector2D& intersectionNormal, float& contactTime);
     bool resolveDynamicRectVsRect(const SDL_Rect& dynamicRect, Vector2D& proposedVelocity, const SDL_Rect& staticRect);
-    void processMovement(const GameEntity& subjectEntity, Vector2D& proposedVelocity, const Level& level);
+    void processMovement(const GameEntity& subjectEntity, Vector2D& proposedVelocity, Level& level);
 }
 
 #endif // __SRC_CORE_COLLISIONMANAGER_HPP__
