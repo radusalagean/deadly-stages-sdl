@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <utility>
+#include <SDL.h>
 #include "../Core/Config.hpp"
 
 class Camera;
@@ -16,6 +17,8 @@ public:
     std::vector<std::vector<Tile*>> tileMap{{}};
     #ifdef DEBUG_DRAW_COLLISION_RECTS
     std::vector<std::pair<int, int>> collidedTiles{};
+    SDL_Rect checkAreaRect;
+    SDL_Rect checkAreaTileIndices;
     #endif
 
     void render(Camera& camera);

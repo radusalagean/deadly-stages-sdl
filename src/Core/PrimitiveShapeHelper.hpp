@@ -10,6 +10,7 @@ public:
         const SDL_Color& color);
     void drawRectOutline(SDL_Renderer* renderer, const SDL_Rect& rect, 
         const SDL_Color& color, int borderWidth);
+    SDL_Rect wrapRects(const SDL_Rect& rect1, const SDL_Rect& rect2);
 };
 
 #endif // __SRC_CORE_PRIMITIVESHAPEHELPER_HPP__

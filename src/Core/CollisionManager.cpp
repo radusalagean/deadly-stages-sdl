@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include "../Level/Tile.hpp"
 #include "../Level/TileLayer.hpp"
+#include "../Core/PrimitiveShapeHelper.hpp"
 #include <sstream>
 #include <algorithm>
 #include <functional>
@@ -150,29 +151,33 @@ namespace CollisionManager
             subjectBoundsRect.h
         };
 
-        // Calculate the tile indices for the proposed rectangle
-        int startX = proposedRect.x / level.tileWidthPx;
-        int startY = proposedRect.y / level.tileHeightPx;
-        int endX = (proposedRect.x + proposedRect.w) / level.tileWidthPx;
-        int endY = (proposedRect.y + proposedRect.h) / level.tileHeightPx;
+        SDL_Rect checkAreaRect = Game::primitiveShapeHelper.wrapRects(subjectBoundsRect, proposedRect);
 
-        // TODO
-        startX = 0;
-        startY = 0;
-        endX = 1000;
-        endY = 1000;
+        #ifdef DEBUG_DRAW_COLLISION_RECTS
+        level.tileLayer.checkAreaRect = checkAreaRect;
+        #endif
 
+        // Calculate the tile indices for the check area rectangle
+        int startX = (checkAreaRect.x / level.tileWidthPx) - 1;
+        int startY = (checkAreaRect.y / level.tileHeightPx) - 1;
+        int endX = (checkAreaRect.x + checkAreaRect.w) / level.tileWidthPx + 1;
+        int endY = (checkAreaRect.y + checkAreaRect.h) / level.tileHeightPx + 1;
+        
         // Clamp indices to level bounds
         startX = std::max(0, startX);
         startY = std::max(0, startY);
         endX = std::min(level.horizontalTilesCount - 1, endX);
         endY = std::min(level.verticalTilesCount - 1, endY);
 
-        // std::stringstream ss;
-        // ss << "Proposed rect: " << proposedRect.x << ", " << proposedRect.y << ", " << proposedRect.w << ", " << proposedRect.h << std::endl;
-        // ss << "Start: " << startX << ", " << startY << std::endl;
-        // ss << "End: " << endX << ", " << endY << std::endl;
-        // logd(ss.str().c_str());
+        #ifdef DEBUG_DRAW_COLLISION_RECTS
+        level.tileLayer.checkAreaTileIndices = 
+        {
+            level.tileWidthPx * startX, 
+            level.tileHeightPx * startY, 
+            level.tileWidthPx * (endX - startX + 1), 
+            level.tileHeightPx * (endY - startY + 1)
+        };
+        #endif
 
         #ifdef DEBUG_DRAW_COLLISION_RECTS
         bool foundIntersection = false;
@@ -207,36 +212,15 @@ namespace CollisionManager
             }
         }
 
-        // if (!sortedIntersections.empty())
-        // {
-        //     logd("Found %d intersections", sortedIntersections.size());
-        //     for (const auto& intersection : sortedIntersections) 
-        //     {
-        //         logd("Intersection: %f, %f, %f", intersection.first.getX(), intersection.first.getY(), intersection.second);
-        //     }
-        //     logd("=== End of unsorted intersections ===");
-        // }
-
         // Sort intersections by contact time
         std::sort(sortedIntersections.begin(), sortedIntersections.end(), [](const std::pair<Vector2D, float>& a, const std::pair<Vector2D, float>& b) {
             return a.second < b.second;
         });
 
-        // if (!sortedIntersections.empty())
-        // {
-        //     logd("After sorting:");
-        //     for (const auto& intersection : sortedIntersections) 
-        //     {
-        //         logd("Intersection: %f, %f, %f", intersection.first.getX(), intersection.first.getY(), intersection.second);
-        //     }
-        //     logd("=== End of sorted intersections ===");
-        // }
-
         // Resolve collisions
         for (const auto& intersection : sortedIntersections) 
         {
             SDL_Rect tileRect = level.buildTileRect(intersection.first.getX(), intersection.first.getY());
-            // logd("Resolving intersection: x = %d, y = %d, w = %d, h = %d", tileRect.x, tileRect.y, tileRect.w, tileRect.h);
             resolveDynamicRectVsRect(subjectBoundsRect, proposedVelocity, tileRect);
         }
     }
