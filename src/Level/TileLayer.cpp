@@ -3,6 +3,8 @@
 #include "Tile.hpp"
 #include "Camera.hpp"
 #include "../Core/Macros.hpp"
+#include "../Game.hpp"
+#include "../Core/PrimitiveShapeHelper.hpp"
 
 void TileLayer::render(Camera& camera)
 {
@@ -20,18 +22,16 @@ void TileLayer::render(Camera& camera)
         }
     }
 
-    // Debug collisions
+    #ifdef DEBUG_DRAW_COLLISION_RECTS
     for (const auto& collidedTileCoords : collidedTiles)
     {
-        logd("Collided tile: x=%d, y=%d", collidedTileCoords.first, collidedTileCoords.second);
         Tile* tile = tileMap[collidedTileCoords.second][collidedTileCoords.first];
         int drawX = (collidedTileCoords.first * GSCALE(tile->width)) - camera.position.getX();
         int drawY = (collidedTileCoords.second * GSCALE(tile->height)) - camera.position.getY();
-        // Draw a red rectangle over the tile
         int tileWidth = GSCALE(tile->width);
         int tileHeight = GSCALE(tile->height);
         SDL_Rect rect = { drawX, drawY, tileWidth, tileHeight };
-        SDL_SetRenderDrawColor(Game::renderer, 255, 0, 0, 255);
-        SDL_RenderFillRect(Game::renderer, &rect);
+        Game::primitiveShapeHelper.drawRectOutline(Game::renderer, rect, {255, 0, 0, 255}, 2);
     }
+    #endif
 }

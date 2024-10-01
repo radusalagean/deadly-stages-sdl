@@ -1,7 +1,10 @@
 #include "Player.hpp"
 
 #include "../Core/Macros.hpp"
+#include "../Game.hpp"
+#include "../Core/PrimitiveShapeHelper.hpp"
 #include <math.h>
+#include "../Core/Config.hpp"
 
 Player::Player() : GameEntity()
 {
@@ -29,4 +32,18 @@ void Player::update(Camera& camera)
 
     // Set the rotation of the player
     rotation = angle - 180;
+}
+
+void Player::draw(Camera& camera)
+{
+    GameEntity::draw(camera);
+
+    #ifdef DEBUG_DRAW_COLLISION_RECTS
+    SDL_Rect debugRect;
+    debugRect.x = GSCALE(position.getX()) + GSCALE(collisionRect.x) - camera.position.getX();
+    debugRect.y = GSCALE(position.getY()) + GSCALE(collisionRect.y) - camera.position.getY();
+    debugRect.w = GSCALE(collisionRect.w);
+    debugRect.h = GSCALE(collisionRect.h);
+    Game::primitiveShapeHelper.drawRectOutline(Game::renderer, debugRect, {0, 0, 255, 255}, 2);
+    #endif
 }

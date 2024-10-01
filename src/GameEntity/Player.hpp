@@ -9,10 +9,10 @@ public:
     Player();
     ~Player();
 
-    // const float speedPxPerSeconds = 100.0f;
-    const float speedPxPerSeconds = 300.0f;
+    const float speedPxPerSeconds = 100.0f;
 
     void update(Camera& camera);
+    void draw(Camera& camera);
 };
 
 #endif // __SRC_GAMEENTITY_PLAYER_HPP__

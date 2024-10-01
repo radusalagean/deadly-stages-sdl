@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <utility>
+#include "../Core/Config.hpp"
 
 class Camera;
 class Tile;
@@ -13,7 +14,9 @@ public:
     int horizontalTilesCount = 0;
     int verticalTilesCount = 0;
     std::vector<std::vector<Tile*>> tileMap{{}};
-    std::vector<std::pair<int, int>> collidedTiles{}; // For debugging purposes
+    #ifdef DEBUG_DRAW_COLLISION_RECTS
+    std::vector<std::pair<int, int>> collidedTiles{};
+    #endif
 
     void render(Camera& camera);
 };

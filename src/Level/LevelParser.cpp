@@ -138,7 +138,7 @@ void LevelParser::parseObjectLayer(tinyxml2::XMLElement* layerElement, Level& le
                 Player* player = new Player();
                 player->setPosition(Vector2D(e->IntAttribute("x"), e->IntAttribute("y")));
                 player->setSize(e->IntAttribute("width"), e->IntAttribute("height"));
-                player->collisionRect = { // TODO Adjust the collision rect to the player's texture (exclude the black space)
+                player->collisionRect = {
                     0, 
                     0,
                     player->width,

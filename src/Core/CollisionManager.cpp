@@ -8,6 +8,8 @@
 #include <functional>
 #include <vector>
 #include <utility>
+#include <cmath>
+#include "Config.hpp"
 
 // Guide: https://youtu.be/8JJ-4JgR7Dg?si=SL0lkRx7hiA5B_GT
 namespace CollisionManager
@@ -32,6 +34,9 @@ namespace CollisionManager
         // Calculate the entry and exit distances
         Vector2D tNear = (targetPos - rayOrigin) * invRayDirection;
         Vector2D tFar = (targetPos + targetSize - rayOrigin) * invRayDirection;
+
+        if (std::isnan(tFar.getX()) || std::isnan(tFar.getY())) return false;
+        if (std::isnan(tNear.getX()) || std::isnan(tNear.getY())) return false;
 
         // Sort the entry and exit distances
         if (tNear.getX() > tFar.getX()) std::swap(tNear.getX(), tFar.getX());
@@ -163,13 +168,15 @@ namespace CollisionManager
         endX = std::min(level.horizontalTilesCount - 1, endX);
         endY = std::min(level.verticalTilesCount - 1, endY);
 
-        std::stringstream ss;
-        ss << "Proposed rect: " << proposedRect.x << ", " << proposedRect.y << ", " << proposedRect.w << ", " << proposedRect.h << std::endl;
-        ss << "Start: " << startX << ", " << startY << std::endl;
-        ss << "End: " << endX << ", " << endY << std::endl;
-        logd(ss.str().c_str());
+        // std::stringstream ss;
+        // ss << "Proposed rect: " << proposedRect.x << ", " << proposedRect.y << ", " << proposedRect.w << ", " << proposedRect.h << std::endl;
+        // ss << "Start: " << startX << ", " << startY << std::endl;
+        // ss << "End: " << endX << ", " << endY << std::endl;
+        // logd(ss.str().c_str());
 
+        #ifdef DEBUG_DRAW_COLLISION_RECTS
         bool foundIntersection = false;
+        #endif
 
         // Check only the relevant tiles
         for (int y = startY; y <= endY; ++y) 
@@ -182,50 +189,54 @@ namespace CollisionManager
                     SDL_Rect tileRect = level.buildTileRect(x, y);
                     if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, tileRect, intersectionPoint, intersectionNormal, contactTime)) 
                     {
+                        #ifdef DEBUG_DRAW_COLLISION_RECTS
                         if (!foundIntersection)
                         {
                             level.tileLayer.collidedTiles.clear();
                             foundIntersection = true;
                         }
+                        #endif
                         Vector2D tileCoords = Vector2D(x, y);
                         std::pair<Vector2D, float> intersection = std::make_pair(tileCoords, contactTime);
+                        #ifdef DEBUG_DRAW_COLLISION_RECTS
                         level.tileLayer.collidedTiles.push_back(std::make_pair(x, y));
+                        #endif
                         sortedIntersections.push_back(intersection);
                     }
                 }
             }
         }
 
-        if (!sortedIntersections.empty())
-        {
-            logd("Found %d intersections", sortedIntersections.size());
-            for (const auto& intersection : sortedIntersections) 
-            {
-                logd("Intersection: %f, %f, %f", intersection.first.getX(), intersection.first.getY(), intersection.second);
-            }
-            logd("=== End of unsorted intersections ===");
-        }
+        // if (!sortedIntersections.empty())
+        // {
+        //     logd("Found %d intersections", sortedIntersections.size());
+        //     for (const auto& intersection : sortedIntersections) 
+        //     {
+        //         logd("Intersection: %f, %f, %f", intersection.first.getX(), intersection.first.getY(), intersection.second);
+        //     }
+        //     logd("=== End of unsorted intersections ===");
+        // }
 
         // Sort intersections by contact time
         std::sort(sortedIntersections.begin(), sortedIntersections.end(), [](const std::pair<Vector2D, float>& a, const std::pair<Vector2D, float>& b) {
             return a.second < b.second;
         });
 
-        if (!sortedIntersections.empty())
-        {
-            logd("After sorting:");
-            for (const auto& intersection : sortedIntersections) 
-            {
-                logd("Intersection: %f, %f, %f", intersection.first.getX(), intersection.first.getY(), intersection.second);
-            }
-            logd("=== End of sorted intersections ===");
-        }
+        // if (!sortedIntersections.empty())
+        // {
+        //     logd("After sorting:");
+        //     for (const auto& intersection : sortedIntersections) 
+        //     {
+        //         logd("Intersection: %f, %f, %f", intersection.first.getX(), intersection.first.getY(), intersection.second);
+        //     }
+        //     logd("=== End of sorted intersections ===");
+        // }
 
         // Resolve collisions
         for (const auto& intersection : sortedIntersections) 
         {
             SDL_Rect tileRect = level.buildTileRect(intersection.first.getX(), intersection.first.getY());
-            logd("Resolving intersection: x%d, %d, %d, %d", tileRect.x, tileRect.y, tileRect.w, tileRect.h);
+            // logd("Resolving intersection: x = %d, y = %d, w = %d, h = %d", tileRect.x, tileRect.y, tileRect.w, tileRect.h);
             resolveDynamicRectVsRect(subjectBoundsRect, proposedVelocity, tileRect);
         }
     }
