@@ -1,6 +1,5 @@
 #include "Game.hpp"
 
-#include "Controls/Controls.hpp"
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include "Core/FontManager.hpp"
@@ -22,7 +21,7 @@ namespace Game
     int height = 0;
     SDL_Surface* windowSurface = nullptr;
 
-    Controls controls;
+    Control control;
     FontManager fontManager;
     ScreenManager screenManager;
     PrimitiveShapeHelper primitiveShapeHelper;
@@ -35,8 +34,8 @@ namespace Game
         // Init Logger
         Logger::init();
 
-        // Init Controls
-        controls.init();
+        // Init Control
+        control.init();
 
         // Init SDL
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
@@ -96,7 +95,7 @@ namespace Game
                     }
                     break;
             }
-            controls.handleEvent(event);
+            control.handleEvent(event);
         }
         screenManager.handleEvents();
     }

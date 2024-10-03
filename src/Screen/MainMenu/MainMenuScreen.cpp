@@ -2,7 +2,7 @@
 
 #include "../../Game.hpp"
 #include "../../ScreenManager/ScreenManager.hpp"
-#include "../../Controls/Controls.hpp"
+#include "../../Control/Control.hpp"
 #include "../../Core/Constants.hpp"
 #include "../../Drawable/MenuItemDrawable.hpp"
 #include "../LevelSelect/LevelSelectScreen.hpp"
@@ -28,7 +28,7 @@ void MainMenuScreen::init()
 
 void MainMenuScreen::handleEvents()
 {
-    if (Game::controls.isActionDown(CA_ESCAPE))
+    if (Game::control.isActionDown(CA_ESCAPE))
         Game::isRunning = false;
     mainMenuDrawable->handleEvents();
 }

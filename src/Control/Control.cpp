@@ -1,14 +1,14 @@
-#include "Controls.hpp"
+#include "Control.hpp"
 
 #include "../Game.hpp"
 
 
-void Controls::init()
+void Control::init()
 {
     gameController = SDL_GameControllerOpen(0);
 }
 
-void Controls::handleEvent(SDL_Event& event)
+void Control::handleEvent(SDL_Event& event)
 {
     switch (event.type) 
     {
@@ -36,27 +36,27 @@ void Controls::handleEvent(SDL_Event& event)
 }
 
 #pragma region Actions
-bool Controls::isActionDown(int action)
+bool Control::isActionDown(int action)
 {
     if (locked)
         return false;
     return std::find(pressedActions.begin(), pressedActions.end(), action) != pressedActions.end();
 }
 
-bool Controls::isActionUp(int action)
+bool Control::isActionUp(int action)
 {
     return std::find(pressedActions.begin(), pressedActions.end(), action) == pressedActions.end();
 }
 #pragma endregion
 
 #pragma region Keyboard
-void Controls::onKeyDown(SDL_Scancode scancode)
+void Control::onKeyDown(SDL_Scancode scancode)
 {
     for (auto& action : keyboardMap[scancode])
         pressedActions.insert(action);
 }
 
-void Controls::onKeyUp(SDL_Scancode scancode)
+void Control::onKeyUp(SDL_Scancode scancode)
 {
     for (auto& action : keyboardMap[scancode])
         pressedActions.erase(action);
@@ -64,13 +64,13 @@ void Controls::onKeyUp(SDL_Scancode scancode)
 #pragma endregion
 
 #pragma region Game Controller
-void Controls::onControllerButtonDown(SDL_GameControllerButton button)
+void Control::onControllerButtonDown(SDL_GameControllerButton button)
 {
     for (auto& action : gameControllerMap[button])
         pressedActions.insert(action);
 }
 
-void Controls::onControllerButtonUp(SDL_GameControllerButton button)
+void Control::onControllerButtonUp(SDL_GameControllerButton button)
 {
     for (auto& action : gameControllerMap[button])
         pressedActions.erase(action);

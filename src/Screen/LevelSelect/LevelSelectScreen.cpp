@@ -3,7 +3,7 @@
 #include "../../Debug/Logger.hpp"
 #include "LevelPreview.hpp"
 #include "../../Game.hpp"
-#include "../../Controls/Controls.hpp"
+#include "../../Control/Control.hpp"
 #include "../../Core/Constants.hpp"
 #include "../../ScreenManager/ScreenManager.hpp"
 #include "../Game/GameScreen.hpp"
@@ -39,29 +39,29 @@ void LevelSelectScreen::loadLevelPreviews()
 
 void LevelSelectScreen::handleEvents()
 {
-    if (Game::controls.isActionDown(CA_ESCAPE))
+    if (Game::control.isActionDown(CA_ESCAPE))
     {
         Game::screenManager.popScreen();
     }
 
-    if (Game::controls.isActionDown(CA_LEFT) && navigationDebouncer.canPerformAction(NAVIGATION_ACTION_PREVIOUS))
+    if (Game::control.isActionDown(CA_LEFT) && navigationDebouncer.canPerformAction(NAVIGATION_ACTION_PREVIOUS))
     {
         previousLevel();
     }
-    else if (Game::controls.isActionUp(CA_LEFT))
+    else if (Game::control.isActionUp(CA_LEFT))
     {
         navigationDebouncer.resetAction(NAVIGATION_ACTION_PREVIOUS);
     }
 
-    if (Game::controls.isActionDown(CA_RIGHT) && navigationDebouncer.canPerformAction(NAVIGATION_ACTION_NEXT))
+    if (Game::control.isActionDown(CA_RIGHT) && navigationDebouncer.canPerformAction(NAVIGATION_ACTION_NEXT))
     {
         nextLevel();
     }
-    else if (Game::controls.isActionUp(CA_RIGHT))
+    else if (Game::control.isActionUp(CA_RIGHT))
     {
         navigationDebouncer.resetAction(NAVIGATION_ACTION_NEXT);
     }
-    if (Game::controls.isActionDown(CA_SELECT))
+    if (Game::control.isActionDown(CA_SELECT))
     {
         levelPreviews[selectedIndex]->pick();
     }

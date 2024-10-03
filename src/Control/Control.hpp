@@ -1,5 +1,5 @@
-#ifndef __SRC_CONTROLS_CONTROLS_HPP__
-#define __SRC_CONTROLS_CONTROLS_HPP__
+#ifndef __SRC_CONTROL_CONTROL_HPP__
+#define __SRC_CONTROL_CONTROL_HPP__
 
 #include <SDL.h>
 #include <vector>
@@ -15,7 +15,7 @@ enum ControlAction
     CA_ESCAPE
 };
 
-class Controls
+class Control
 {
 private:
     bool locked = false;
@@ -70,4 +70,4 @@ public:
     inline void lock() { locked = true; }
 };
 
-#endif // __SRC_CONTROLS_CONTROLS_HPP__
+#endif // __SRC_CONTROL_CONTROL_HPP__

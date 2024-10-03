@@ -3,7 +3,7 @@
 #include "../Game.hpp"
 #include "../Drawable/MenuItemDrawable.hpp"
 #include <algorithm>
-#include "../Controls/Controls.hpp"
+#include "../Control/Control.hpp"
 #include "../Core/Constants.hpp"
 #include "../Core/Macros.hpp"
 
@@ -99,31 +99,31 @@ void MenuDrawable::selectCurrentMenuItem()
 
 void MenuDrawable::handleEvents()
 {
-    if (Game::controls.isActionDown(CA_UP))
+    if (Game::control.isActionDown(CA_UP))
     {
         if (navigationDebouncer.canPerformAction(NAVIGATION_ACTION_PREVIOUS))
         {
             previousMenuItem();
         }
     }
-    else if (Game::controls.isActionUp(CA_UP))
+    else if (Game::control.isActionUp(CA_UP))
     {
         navigationDebouncer.resetAction(NAVIGATION_ACTION_PREVIOUS);
     }
 
-    if (Game::controls.isActionDown(CA_DOWN))
+    if (Game::control.isActionDown(CA_DOWN))
     {
         if (navigationDebouncer.canPerformAction(NAVIGATION_ACTION_NEXT))
         {
             nextMenuItem();
         }
     }
-    else if (Game::controls.isActionUp(CA_DOWN))
+    else if (Game::control.isActionUp(CA_DOWN))
     {
         navigationDebouncer.resetAction(NAVIGATION_ACTION_NEXT);
     }
 
-    if (Game::controls.isActionDown(CA_SELECT))
+    if (Game::control.isActionDown(CA_SELECT))
     {
         selectCurrentMenuItem();
     }

@@ -27,7 +27,7 @@ void GameScreen::init()
 void GameScreen::handleEvents()
 {
     level->handleEvents();
-    if (Game::controls.isActionDown(CA_ESCAPE))
+    if (Game::control.isActionDown(CA_ESCAPE))
     {
         Game::screenManager.setScreen(new MainMenuScreen());
     }

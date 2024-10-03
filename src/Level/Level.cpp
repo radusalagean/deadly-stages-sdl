@@ -24,16 +24,16 @@ void Level::load()
 void Level::handleEvents()
 {
     // Movement
-    if (Game::controls.isActionDown(CA_UP) || Game::controls.isActionDown(CA_DOWN) || 
-        Game::controls.isActionDown(CA_LEFT) || Game::controls.isActionDown(CA_RIGHT))
+    if (Game::control.isActionDown(CA_UP) || Game::control.isActionDown(CA_DOWN) || 
+        Game::control.isActionDown(CA_LEFT) || Game::control.isActionDown(CA_RIGHT))
     {
         float speedMultiplier = player->speedPxPerSeconds * Game::latestLoopDeltaTimeSeconds;
         Vector2D velocity;
-        velocity.setY(Game::controls.isActionDown(CA_UP) ? -speedMultiplier :
-                              Game::controls.isActionDown(CA_DOWN) ? speedMultiplier : 0);
+        velocity.setY(Game::control.isActionDown(CA_UP) ? -speedMultiplier :
+                              Game::control.isActionDown(CA_DOWN) ? speedMultiplier : 0);
 
-        velocity.setX(Game::controls.isActionDown(CA_LEFT) ? -speedMultiplier :
-                              Game::controls.isActionDown(CA_RIGHT) ? speedMultiplier : 0);
+        velocity.setX(Game::control.isActionDown(CA_LEFT) ? -speedMultiplier :
+                              Game::control.isActionDown(CA_RIGHT) ? speedMultiplier : 0);
 
         CollisionManager::processMovement(*player, velocity, *this);
         player->velocity = velocity;
