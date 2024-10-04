@@ -24,8 +24,8 @@ void Player::update(Camera& camera)
     int mouseX, mouseY;
     SDL_GetMouseState(&mouseX, &mouseY);
 
-    // Calculate the angle between the player and the mouse relative to the camera position
-    float angle = atan2(mouseY - GSCALE(position.getY()) + camera.position.getY(), mouseX - GSCALE(position.getX()) + camera.position.getX());
+    // Calculate the angle between the player center point and the mouse relative to the camera position
+    float angle = atan2(mouseY - GSCALE(position.getY() + center.getY()) + camera.position.getY(), mouseX - GSCALE(position.getX() + center.getX()) + camera.position.getX());
 
     // Convert the angle from radians to degrees
     angle = angle * (180 / M_PI);

@@ -7,6 +7,8 @@
 #include "../Core/TexturePool.hpp"
 #include "../GameEntity/Player.hpp"
 #include "Camera.hpp"
+#include "../GameEntity/Weapon.hpp"
+#include "../GameEntity/Bullet.hpp"
 
 class Level 
 {
@@ -25,6 +27,8 @@ public:
     TexturePool texturePool;
     Player* player = nullptr;
     Camera camera;
+    Weapon* playerWeapon = nullptr;
+    std::vector<Bullet*> bullets{};
 
     int horizontalTilesCount = 0;
     int verticalTilesCount = 0;
@@ -34,6 +38,8 @@ public:
     int heightPx = 0;
 
     SDL_Rect& buildTileRect(int x, int y) const;
+
+    void assignWeaponToPlayer(int weaponId);
 };
 
 #endif // __SRC_LEVEL_LEVEL_HPP_

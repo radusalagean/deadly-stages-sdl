@@ -32,11 +32,6 @@ void GameEntity::draw(Camera& camera)
     SDL_RenderCopyEx(Game::renderer, texture, NULL, &dstRect, rotation, NULL, SDL_FLIP_NONE);
 }
 
-Vector2D* GameEntity::getPosition()
-{
-    return &position;
-}
-
 void GameEntity::setPosition(Vector2D position)
 {
     this->position = position;

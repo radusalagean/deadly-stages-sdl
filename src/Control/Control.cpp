@@ -20,6 +20,14 @@ void Control::handleEvent(SDL_Event& event)
         onKeyUp(event.key.keysym.scancode);
         break;
 
+    case SDL_MOUSEBUTTONDOWN:
+        onMouseButtonDown(event.button.button);
+        break;
+
+    case SDL_MOUSEBUTTONUP:
+        onMouseButtonUp(event.button.button);
+        break;
+
     case SDL_CONTROLLERDEVICEADDED:
         gameController = SDL_GameControllerOpen(event.cdevice.which);
         break;
@@ -59,8 +67,23 @@ void Control::onKeyDown(SDL_Scancode scancode)
 void Control::onKeyUp(SDL_Scancode scancode)
 {
     for (auto& action : keyboardMap[scancode])
+
         pressedActions.erase(action);
 }   
+#pragma endregion
+
+#pragma region Mouse
+void Control::onMouseButtonDown(Uint8 button)
+{
+    for (auto& action : mouseMap[button])
+        pressedActions.insert(action);
+}
+
+void Control::onMouseButtonUp(Uint8 button)
+{
+    for (auto& action : mouseMap[button])
+        pressedActions.erase(action);
+}
 #pragma endregion
 
 #pragma region Game Controller

@@ -18,13 +18,14 @@ public:
     std::string texturePath;
     Vector2D velocity;
 
-    int width;
-    int height;
+    int width = 0;
+    int height = 0;
     double rotation = 0;
 
     SDL_Rect collisionRect;
 
     Vector2D position;
+    Vector2D center;
     SDL_Texture* texture = nullptr;
     SDL_Rect dstRect;
 
@@ -32,10 +33,13 @@ public:
     virtual void update();
     virtual void draw(Camera& camera);
 
-    Vector2D* getPosition();
     void setPosition(Vector2D position);
 
-    void setSize(int width, int height) { this->width = width; this->height = height; }
+    void setSize(int width, int height) { 
+        this->width = width; 
+        this->height = height; 
+        this->center = Vector2D(width / 2, height / 2);
+    }
 };
 
 

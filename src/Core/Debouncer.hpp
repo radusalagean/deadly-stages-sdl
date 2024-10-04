@@ -26,7 +26,7 @@ public:
         return false;
     }
 
-    void resetAction(int action)
+    void resetAction(int action = -1)
     {
         lastActionTimes.erase(action);
     }

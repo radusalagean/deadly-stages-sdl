@@ -12,7 +12,8 @@ enum ControlAction
     CA_LEFT,
     CA_RIGHT,
     CA_SELECT,
-    CA_ESCAPE
+    CA_ESCAPE,
+    CA_FIRE
 };
 
 class Control
@@ -35,12 +36,18 @@ private:
         {SDL_SCANCODE_RETURN, {CA_SELECT}},
         {SDL_SCANCODE_ESCAPE, {CA_ESCAPE}}
     }; // key: scancode, value: actions
+
+    std::unordered_map<int, std::set<int>> mouseMap{
+        {SDL_BUTTON_LEFT, {CA_FIRE}}
+    }; // key: button, value: actions
+
     std::unordered_map<SDL_GameControllerButton, std::set<int>> gameControllerMap{
         {SDL_CONTROLLER_BUTTON_DPAD_UP, {CA_UP}},
         {SDL_CONTROLLER_BUTTON_DPAD_DOWN, {CA_DOWN}},
         {SDL_CONTROLLER_BUTTON_DPAD_LEFT, {CA_LEFT}},
         {SDL_CONTROLLER_BUTTON_DPAD_RIGHT, {CA_RIGHT}},
-        {SDL_CONTROLLER_BUTTON_A, {CA_SELECT}}
+        {SDL_CONTROLLER_BUTTON_A, {CA_SELECT}},
+        {SDL_CONTROLLER_BUTTON_B, {CA_FIRE}}
     }; // key: button, value: actions
 
     inline void unlockIfReleased()
@@ -62,6 +69,10 @@ public:
     // Keyboard
     void onKeyDown(SDL_Scancode scancode);
     void onKeyUp(SDL_Scancode scancode);
+
+    // Mouse
+    void onMouseButtonDown(Uint8 button);
+    void onMouseButtonUp(Uint8 button);
 
     // Game Controller
     void onControllerButtonDown(SDL_GameControllerButton button);

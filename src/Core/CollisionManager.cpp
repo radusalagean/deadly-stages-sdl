@@ -22,10 +22,16 @@ namespace CollisionManager
     }
 
     bool rayVsRect(const Vector2D& rayOrigin, const Vector2D& rayDirection, const SDL_Rect& targetRect, 
-        Vector2D& intersectionPoint, Vector2D& intersectionNormal, float& tHitNear)
+        Vector2D* intersectionPoint, Vector2D* intersectionNormal, float& tHitNear)
     {
-        intersectionPoint.reset();
-        intersectionNormal.reset();
+        if (intersectionPoint != nullptr)
+        {
+            intersectionPoint->reset();
+        }
+        if (intersectionNormal != nullptr)
+        {
+            intersectionNormal->reset();
+        }
 
         Vector2D invRayDirection = rayDirection.getInverse();
 
@@ -56,27 +62,34 @@ namespace CollisionManager
             return false; // Ray direction is opposite of the target
         }
 
-        intersectionPoint = rayOrigin + rayDirection * tHitNear;
-        if (tNear.getX() > tNear.getY())
+        if (intersectionPoint != nullptr)
         {
-            if (rayDirection.getX() < 0)
-            {
-                intersectionNormal = Vector2D(1, 0);
-            }
-            else
-            {
-                intersectionNormal = Vector2D(-1, 0);
-            }
+            *intersectionPoint = rayOrigin + rayDirection * tHitNear;
         }
-        else if (tNear.getX() < tNear.getY())
+
+        if (intersectionNormal != nullptr)
         {
-            if (invRayDirection.getY() < 0)
+            if (tNear.getX() > tNear.getY())
             {
-                intersectionNormal = Vector2D(0, 1);
+                if (rayDirection.getX() < 0)
+                {
+                    *intersectionNormal = Vector2D(1, 0);
+                }
+                else
+                {
+                    *intersectionNormal = Vector2D(-1, 0);
+                }
             }
-            else
+            else if (tNear.getX() < tNear.getY())
             {
-                intersectionNormal = Vector2D(0, -1);
+                if (invRayDirection.getY() < 0)
+                {
+                    *intersectionNormal = Vector2D(0, 1);
+                }
+                else
+                {
+                    *intersectionNormal = Vector2D(0, -1);
+                }
             }
         }
         
@@ -88,7 +101,7 @@ namespace CollisionManager
     }
 
     bool dynamicRectVsRect(const SDL_Rect& dynamicRect, const Vector2D& proposedVelocity, const SDL_Rect& staticRect,
-        Vector2D& intersectionPoint, Vector2D& intersectionNormal, float& contactTime)
+        Vector2D* intersectionPoint, Vector2D* intersectionNormal, float& contactTime)
     {
         if (proposedVelocity.getX() == 0 && proposedVelocity.getY() == 0)
         {
@@ -113,13 +126,19 @@ namespace CollisionManager
         return false;
     }
 
+    bool dynamicRectVsRect(const SDL_Rect& dynamicRect, const Vector2D& proposedVelocity, const SDL_Rect& staticRect)
+    {
+        float contactTime = 0;
+        return dynamicRectVsRect(dynamicRect, proposedVelocity, staticRect, nullptr, nullptr, contactTime);
+    }
+
     bool resolveDynamicRectVsRect(const SDL_Rect& dynamicRect, Vector2D& proposedVelocity, const SDL_Rect& staticRect)
     {
         Vector2D intersectionPoint;
         Vector2D intersectionNormal;
         float contactTime = 0;
 
-        if (dynamicRectVsRect(dynamicRect, proposedVelocity, staticRect, intersectionPoint, intersectionNormal, contactTime))
+        if (dynamicRectVsRect(dynamicRect, proposedVelocity, staticRect, &intersectionPoint, &intersectionNormal, contactTime))
         {
             proposedVelocity += intersectionNormal * Vector2D(std::abs(proposedVelocity.getX()), std::abs(proposedVelocity.getY())) * (1 - contactTime);
             return true;
@@ -133,7 +152,6 @@ namespace CollisionManager
         Vector2D intersectionPoint;
         Vector2D intersectionNormal;
         float contactTime = 0;
-        float minimumContactTime = INFINITY;
         std::vector<std::pair<Vector2D, float>> sortedIntersections; // Key: Tile coordinates, Value: contactTime
 
         SDL_Rect subjectBoundsRect = 
@@ -192,7 +210,7 @@ namespace CollisionManager
                 if (tile->isCollidable()) 
                 {
                     SDL_Rect tileRect = level.buildTileRect(x, y);
-                    if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, tileRect, intersectionPoint, intersectionNormal, contactTime)) 
+                    if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, tileRect, &intersectionPoint, &intersectionNormal, contactTime)) 
                     {
                         #ifdef DEBUG_DRAW_COLLISION_RECTS
                         if (!foundIntersection)

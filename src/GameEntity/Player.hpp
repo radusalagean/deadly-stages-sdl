@@ -9,7 +9,7 @@ public:
     Player();
     ~Player();
 
-    const float speedPxPerSeconds = 100.0f;
+    const float speedPxPerSecond = 100.0f;
 
     void update(Camera& camera);
     void draw(Camera& camera);
