@@ -11,7 +11,7 @@ Level* LevelParser::parseLevel(std::string levelId)
     tinyxml2::XMLDocument levelDocument;
     levelDocument.LoadFile((LEVEL_PATH + levelId + "/map.tmx").c_str());
 
-    Level* level = new Level();
+    Level* level = new Level(levelId);
     tinyxml2::XMLElement* root = levelDocument.RootElement();
 
     level->horizontalTilesCount = root->IntAttribute("width");
@@ -138,12 +138,6 @@ void LevelParser::parseObjectLayer(tinyxml2::XMLElement* layerElement, Level& le
                 Player* player = new Player();
                 player->setPosition(Vector2D(e->IntAttribute("x"), e->IntAttribute("y")));
                 player->setSize(e->IntAttribute("width"), e->IntAttribute("height"));
-                player->collisionRect = {
-                    0, 
-                    0,
-                    player->width,
-                    player->height
-                };
                 tinyxml2::XMLElement* properties = e->FirstChildElement("properties");
                 for (tinyxml2::XMLElement* property = properties->FirstChildElement(); property != nullptr; property = property->NextSiblingElement())
                 {
@@ -151,6 +145,12 @@ void LevelParser::parseObjectLayer(tinyxml2::XMLElement* layerElement, Level& le
                         player->texturePath = property->Attribute("value");
                 }
                 level.player = player;
+            }
+            // SpawnPoint
+            else if (e->Attribute("type") == std::string("SpawnPoint"))
+            {
+                Vector2D* spawnPoint = new Vector2D(e->IntAttribute("x"), e->IntAttribute("y"));
+                level.spawnPoints.push_back(spawnPoint);
             }
         }
     }

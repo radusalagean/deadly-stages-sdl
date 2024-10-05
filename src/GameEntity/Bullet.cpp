@@ -9,7 +9,6 @@ Bullet::Bullet(Vector2D weaponPosition, float rotation, TexturePool& texturePool
     this->position = weaponPosition - this->center;
     this->rotation = rotation;
     this->texturePath = "res/game_entity/bullet.png";
-    this->collisionRect = {0, 0, this->width, this->height};
     this->load(texturePool);
 }
 

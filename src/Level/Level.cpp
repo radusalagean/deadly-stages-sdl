@@ -3,9 +3,9 @@
 #include "../Core/Macros.hpp"
 #include "../Core/CollisionManager.hpp"
 
-Level::Level()
+Level::Level(std::string id)
 {
-
+    this->id = id;
 }
 
 void Level::load()
@@ -18,7 +18,7 @@ void Level::load()
     player->load(texturePool);
 
     camera.mapBounds = new Vector2D(widthPx, heightPx);
-    camera.target = &player->position; // The camera will follow the player
+    camera.target = &player->positionPlusCenter; // The camera will follow the player
 
     assignWeaponToPlayer(WEAPON_PISTOL);
 }
@@ -53,6 +53,15 @@ void Level::handleEvents()
         {
             Bullet* bullet = new Bullet(position, rotation, texturePool);
             bullets.push_back(bullet);
+
+            // Debug: Kill enemy
+            if (!enemies.empty())
+            {
+                auto enemy = enemies[0];
+                delete enemy;
+                enemies.erase(enemies.begin());
+                logd("Enemies left: %d", enemies.size());
+            }
         });
     }
 }
@@ -66,6 +75,12 @@ void Level::update()
     {
         bullet->update(camera);
     }
+    for (auto& enemy : enemies)
+    {
+        enemy->update(camera);
+    }
+    advanceWaveIfNeeded();
+    spawnEnemiesIfNeeded();
 }
 
 void Level::render()
@@ -75,6 +90,10 @@ void Level::render()
     for (auto& bullet : bullets)
     {
         bullet->draw(camera);
+    }
+    for (auto& enemy : enemies)
+    {
+        enemy->draw(camera);
     }
 }
 
@@ -99,6 +118,12 @@ void Level::dispose()
         delete bullet;
     }
     bullets.clear();
+
+    for (auto& enemy : enemies)
+    {
+        delete enemy;
+    }
+    enemies.clear();
 }
 
 SDL_Rect& Level::buildTileRect(int column, int row) const
@@ -121,3 +146,36 @@ void Level::assignWeaponToPlayer(int weaponId)
     playerWeapon->setOwner(*player);
 }
 
+void Level::advanceWaveIfNeeded()
+{
+    if (enemiesLeftToSpawn > 0 || !enemies.empty())
+        return;
+    wave++;
+    enemiesLeftToSpawn = wave * 6;
+    currentEnemySpeedMultiplier *= 1.05f;
+    logd("New wave: %d, enemies left to spawn: %d", wave, enemiesLeftToSpawn);
+}
+
+void Level::spawnEnemiesIfNeeded()
+{
+    if (enemiesLeftToSpawn <= 0)
+        return;
+    if (spawnEnemyDebouncer.canPerformAction())
+    {
+        for (auto& spawnPoint : spawnPoints)
+        {
+            if (enemiesLeftToSpawn <= 0)
+                break;
+
+            Enemy* enemy = new Enemy();
+            enemy->setPosition(*spawnPoint);
+            enemy->setSize(32, 32);
+            enemy->texturePath = "res/level/" + id + "/enemy.png";
+            enemy->target = &player->positionPlusCenter;
+            enemy->speedPxPerSecond *= currentEnemySpeedMultiplier;
+            enemies.push_back(enemy);
+            enemy->load(texturePool);
+            enemiesLeftToSpawn--;
+        }
+    }
+}

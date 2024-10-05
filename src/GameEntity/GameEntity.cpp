@@ -21,6 +21,7 @@ void GameEntity::load(TexturePool& texturePool)
 void GameEntity::update()
 {
     position += velocity;
+    positionPlusCenter = position + center;
 }
 
 void GameEntity::draw(Camera& camera)

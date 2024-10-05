@@ -26,6 +26,7 @@ public:
 
     Vector2D position;
     Vector2D center;
+    Vector2D positionPlusCenter;
     SDL_Texture* texture = nullptr;
     SDL_Rect dstRect;
 
@@ -39,6 +40,12 @@ public:
         this->width = width; 
         this->height = height; 
         this->center = Vector2D(width / 2, height / 2);
+        this->collisionRect = {
+            0,
+            0,
+            width,
+            height
+        };
     }
 };
 
