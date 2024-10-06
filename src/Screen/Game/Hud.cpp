@@ -2,6 +2,7 @@
 
 #include "../../Core/Constants.hpp"
 #include "../../Core/Macros.hpp"
+#include "HudHealthBar.hpp"
 
 Hud::Hud(int& score, int& wave, std::function<int()> getEnemiesLeft, const int& maxHealth, int& currentHealth) : 
     score(score), wave(wave), getEnemiesLeft(getEnemiesLeft), maxHealth(maxHealth), currentHealth(currentHealth)
@@ -12,6 +13,8 @@ Hud::Hud(int& score, int& wave, std::function<int()> getEnemiesLeft, const int& 
     drawables.push_back(waveTextDrawable);
     enemiesLeftTextDrawable = new TextDrawable(buildEnemiesLeftText());
     drawables.push_back(enemiesLeftTextDrawable);
+    healthBar = new HudHealthBar(maxHealth, currentHealth);
+    drawables.push_back(healthBar);
 }
 
 Hud::~Hud()
@@ -63,6 +66,14 @@ void Hud::layoutPass()
         int x = Game::width / 2 + midSeparation;
         int y = Constants::WINDOW_PADDING_PX;
         enemiesLeftTextDrawable->layout(x, y, width, textHeight);
+    }
+    { // Health Bar
+        Vector2D size = healthBar->computeSize();
+        int width = size.getX();
+        int height = size.getY();
+        int x = Game::width / 2 - width / 2;
+        int y = Game::height - height - Constants::WINDOW_PADDING_PX;
+        healthBar->layout(x, y, width, height);
     }
 }
 

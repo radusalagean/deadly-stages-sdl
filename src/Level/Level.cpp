@@ -67,6 +67,7 @@ void Level::handleEvents()
                 enemies.erase(enemies.begin());
                 logd("Enemies left: %d", enemies.size());
                 score++;
+                player->currentHealth--;
             }
         });
     }

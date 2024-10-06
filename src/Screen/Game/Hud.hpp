@@ -3,6 +3,8 @@
 
 #include "../../Game.hpp"
 
+class HudHealthBar;
+
 class Hud
 {
 public:
@@ -34,6 +36,7 @@ private:
     TextDrawable* scoreTextDrawable = nullptr;
     TextDrawable* waveTextDrawable = nullptr;
     TextDrawable* enemiesLeftTextDrawable = nullptr;
+    HudHealthBar* healthBar = nullptr;
 
     std::string buildScoreText();
     std::string buildWaveText();
