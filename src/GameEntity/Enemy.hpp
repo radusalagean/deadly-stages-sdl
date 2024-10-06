@@ -10,6 +10,7 @@ public:
     ~Enemy();
 
     float speedPxPerSecond = 100.0f;
+    int health = 5;
     Vector2D* target = nullptr;
 
     void update(Camera& camera);

@@ -1,5 +1,4 @@
 #include "Drawable.hpp"
-#include <cassert>
 
 void Drawable::setDstRect(int x, int y, int w, int h)
 {

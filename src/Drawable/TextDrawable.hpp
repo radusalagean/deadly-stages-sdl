@@ -16,6 +16,8 @@ private:
     TTF_Font* font = nullptr;
     SDL_Texture* texture = nullptr;
 
+    void refreshTexture();
+
 public:
     TextDrawable(const std::string& text, const SDL_Color& color = {255, 255, 255, 255}, 
         const std::string& fontFileName = "PressStart2P.ttf");
@@ -24,6 +26,7 @@ public:
     void update();
     void draw();
     void dispose();
+    void setText(const std::string& text);
 };
 
 #endif // __SRC_DRAWABLE_TEXTDRAWABLE_HPP__

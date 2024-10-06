@@ -8,6 +8,11 @@ Level::Level(std::string id)
     this->id = id;
 }
 
+Level::~Level()
+{
+    dispose();
+}
+
 void Level::load()
 {
     for (auto& [id, tile] : tileset) 
@@ -61,6 +66,7 @@ void Level::handleEvents()
                 delete enemy;
                 enemies.erase(enemies.begin());
                 logd("Enemies left: %d", enemies.size());
+                score++;
             }
         });
     }
@@ -178,4 +184,9 @@ void Level::spawnEnemiesIfNeeded()
             enemiesLeftToSpawn--;
         }
     }
+}
+
+int Level::getEnemiesLeft()
+{
+    return enemies.size();
 }

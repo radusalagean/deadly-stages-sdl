@@ -16,6 +16,7 @@ class Level
 {
 public:
     Level(std::string id);
+    ~Level();
 
     void load();
     void handleEvents();
@@ -43,8 +44,10 @@ public:
     int widthPx = 0;
     int heightPx = 0;
 
+    int score = 0;
     int wave = 0;
     int enemiesLeftToSpawn = 0;
+    int getEnemiesLeft();
     float currentEnemySpeedMultiplier = 1.00f;
     std::vector<Vector2D*> spawnPoints{};
     Debouncer spawnEnemyDebouncer = Debouncer(1000);

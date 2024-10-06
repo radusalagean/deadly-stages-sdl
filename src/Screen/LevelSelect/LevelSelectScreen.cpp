@@ -126,6 +126,7 @@ void LevelSelectScreen::layoutPass()
         int textY = levelPreview->selectionRect.y - textHeight - textSpacing;
         levelPreview->nameTextDrawable->layout(textX, textY, textWidth, textHeight);
     }
+    layoutInvalidated = false;
 }
 
 void LevelSelectScreen::update()

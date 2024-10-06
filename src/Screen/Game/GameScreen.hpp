@@ -3,6 +3,7 @@
 
 #include "../Screen.hpp"
 #include "../../Level/LevelParser.hpp"
+#include "Hud.hpp"
 
 class Level;
 
@@ -11,6 +12,7 @@ class GameScreen : public Screen
 private:
     std::string levelId;
     Level* level = nullptr;
+    Hud* hud = nullptr;
     LevelParser levelParser;
     SDL_Texture* cursorTexture = nullptr;
     int cursorWidth = 0;

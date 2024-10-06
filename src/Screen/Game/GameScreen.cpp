@@ -8,6 +8,7 @@
 #include "../../ScreenManager/ScreenManager.hpp"
 #include "../../Core/SDLUtils.hpp"
 #include "../../Core/Macros.hpp"
+
 GameScreen::GameScreen(std::string levelId) : levelId(levelId)
 {
 
@@ -17,7 +18,8 @@ void GameScreen::init()
 {
     level = levelParser.parseLevel(levelId);
     level->load();
-
+    hud = new Hud(level->score, level->wave, std::bind(&Level::getEnemiesLeft, level), level->player->maxHealth, level->player->currentHealth);
+    hud->load();
     // Custom cursor
     SDL_ShowCursor(SDL_DISABLE);
     cursorTexture = SDLUtils::loadTexture("res/image/cursor.png");
@@ -38,12 +40,14 @@ void GameScreen::handleEvents()
 
 void GameScreen::layoutPass()
 {
-
+    hud->layoutPass();
+    layoutInvalidated = false;
 }
 
 void GameScreen::update()
 {
     level->update();
+    hud->update();
 }
 
 void GameScreen::render()
@@ -61,11 +65,15 @@ void GameScreen::render()
     cursorRect.y = cursorRect.y - cursorRect.h / 2;
     SDL_RenderCopy(Game::renderer, cursorTexture, NULL, &cursorRect);
 
+    // HUD
+    hud->render();
+
     SDL_RenderPresent(Game::renderer);
 }
 
 void GameScreen::dispose()
 {
+    delete hud;
     delete level;
     SDL_ShowCursor(SDL_ENABLE);
 }
