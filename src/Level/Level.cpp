@@ -5,6 +5,7 @@
 #include "../GameEntity/Enemy.hpp"
 #include "../Game.hpp"
 #include "../Core/PrimitiveShapeHelper.hpp"
+#include "../Core/VectorUtils.hpp"
 
 Level::Level(std::string id)
 {
@@ -61,17 +62,6 @@ void Level::handleEvents()
         {
             Bullet* bullet = new Bullet(position, rotation, texturePool);
             bullets.push_back(bullet);
-
-            // Debug: Kill enemy
-            if (!enemies.empty())
-            {
-                auto enemy = enemies[0];
-                delete enemy;
-                enemies.erase(enemies.begin());
-                logd("Enemies left: %d", enemies.size());
-                score++;
-                player->currentHealth--;
-            }
         });
     }
 }
@@ -83,7 +73,7 @@ void Level::update()
     playerWeapon->update();
     for (auto& bullet : bullets)
     {
-        bullet->update(camera);
+        bullet->update(camera, *this);
     }
     for (auto& enemy : enemies)
     {
@@ -91,6 +81,7 @@ void Level::update()
     }
     advanceWaveIfNeeded();
     spawnEnemiesIfNeeded();
+    handleGameEntityPendingRemovals();
 }
 
 void Level::render()
@@ -242,3 +233,29 @@ void Level::renderDebugShapes(Camera& camera)
     checkAreaTileIndicesRects.clear();
 }
 #endif
+
+void Level::handleGameEntityPendingRemovals()
+{
+    VectorUtils::removeFromVectorIf(enemies, [](Enemy* enemy) {
+        if (enemy->pendingRemoval)
+        {
+            delete enemy;
+            return true;
+        }
+        return false;
+    });
+
+    VectorUtils::removeFromVectorIf(bullets, [](Bullet* bullet) {
+        if (bullet->pendingRemoval)
+        {
+            delete bullet;
+            return true;
+        }
+        return false;
+    });
+
+    if (player->pendingRemoval)
+    {
+        // TODO: Game Over Screen
+    }
+}

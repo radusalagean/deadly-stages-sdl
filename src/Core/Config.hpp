@@ -1,6 +1,6 @@
 #ifndef __SRC_CORE_CONFIG_HPP__
 #define __SRC_CORE_CONFIG_HPP__
 
-// #define DEBUG_DRAW_COLLISION_RECTS
+#define DEBUG_DRAW_COLLISION_RECTS
 
 #endif // __SRC_CORE_CONFIG_HPP__

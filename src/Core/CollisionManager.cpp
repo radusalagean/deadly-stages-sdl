@@ -147,13 +147,12 @@ namespace CollisionManager
         return false;
     }
 
-    void processMovement(const GameEntity& subjectEntity, Vector2D& proposedVelocity, Level& level)
+    void processMovement(GameEntity& subjectEntity, Vector2D& proposedVelocity, Level& level, GameEntity** firstCollidedEntity)
     {
-
         Vector2D intersectionPoint;
         Vector2D intersectionNormal;
         float contactTime = 0;
-        std::vector<std::pair<SDL_Rect, float>> sortedIntersections; // Key: Collided rect, Value: contactTime
+        std::vector<CollisionInfo> collisions;
 
         SDL_Rect subjectBoundsRect = 
         {
@@ -211,11 +210,11 @@ namespace CollisionManager
                     if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, tileRect, &intersectionPoint, &intersectionNormal, contactTime)) 
                     {
                         SDL_Rect collidedRect = level.buildTileRect(x, y);
-                        std::pair<SDL_Rect, float> intersection = std::make_pair(collidedRect, contactTime);
+                        CollisionInfo collision = {collidedRect, contactTime};
                         #ifdef DEBUG_DRAW_COLLISION_RECTS
                         level.collidedRects.push_back(collidedRect);
                         #endif
-                        sortedIntersections.push_back(intersection);
+                        collisions.push_back(collision);
                     }
                 }
             }
@@ -234,11 +233,11 @@ namespace CollisionManager
             };
             if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, playerRect, &intersectionPoint, &intersectionNormal, contactTime))
             {
-                std::pair<SDL_Rect, float> intersection = std::make_pair(playerRect, contactTime);
+                CollisionInfo collision = {playerRect, contactTime, player};
                 #ifdef DEBUG_DRAW_COLLISION_RECTS
                 level.collidedRects.push_back(playerRect);
                 #endif
-                sortedIntersections.push_back(intersection);
+                collisions.push_back(collision);
             }
         }
 
@@ -256,24 +255,36 @@ namespace CollisionManager
             };
             if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, enemyRect, &intersectionPoint, &intersectionNormal, contactTime))
             {
-                std::pair<SDL_Rect, float> intersection = std::make_pair(enemyRect, contactTime);
+                CollisionInfo collision = {enemyRect, contactTime, enemy};
                 #ifdef DEBUG_DRAW_COLLISION_RECTS
                 level.collidedRects.push_back(enemyRect);
                 #endif
-                sortedIntersections.push_back(intersection);
+                collisions.push_back(collision);
             }
         }
 
         // Sort intersections by contact time
-        std::sort(sortedIntersections.begin(), sortedIntersections.end(), [](const std::pair<SDL_Rect, float>& a, const std::pair<SDL_Rect, float>& b) {
-            return a.second < b.second;
+        std::sort(collisions.begin(), collisions.end(), [](const CollisionInfo& a, const CollisionInfo& b) {
+            return a.contactTime < b.contactTime;
         });
 
         // Resolve collisions
-        for (const auto& intersection : sortedIntersections) 
+        for (const auto& collision : collisions)
         {
-            SDL_Rect collidedRect = intersection.first;
-            resolveDynamicRectVsRect(subjectBoundsRect, proposedVelocity, collidedRect);
+            if (firstCollidedEntity != nullptr && *firstCollidedEntity == nullptr)
+            {
+                *firstCollidedEntity = collision.collidedEntity;
+            }
+            if (subjectEntity.getCollisionResolution() == CollisionManager::CollisionResolution::COLLISION_RESOLUTION_VANISH)
+            {
+                subjectEntity.pendingRemoval = true;
+                proposedVelocity.reset();
+                break;
+            }
+            else
+            {
+                resolveDynamicRectVsRect(subjectBoundsRect, proposedVelocity, collision.collidedRect);
+            }
         }
     }
 }

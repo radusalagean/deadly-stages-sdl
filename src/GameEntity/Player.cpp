@@ -8,7 +8,8 @@
 
 Player::Player() : GameEntity()
 {
-
+    maxHealth = 14;
+    currentHealth = maxHealth;
 }
 
 Player::~Player()

@@ -54,6 +54,7 @@ public:
     Debouncer spawnEnemyDebouncer = Debouncer(1000);
     void advanceWaveIfNeeded();
     void spawnEnemiesIfNeeded();
+    void handleGameEntityPendingRemovals();
 
     SDL_Rect& buildTileRect(int x, int y) const;
 

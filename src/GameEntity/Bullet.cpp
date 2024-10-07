@@ -10,6 +10,7 @@ Bullet::Bullet(Vector2D weaponPosition, float rotation, TexturePool& texturePool
     this->rotation = rotation;
     this->texturePath = "res/game_entity/bullet.png";
     this->load(texturePool);
+    this->damageAmount = 1;
 }
 
 Bullet::~Bullet()
@@ -17,14 +18,24 @@ Bullet::~Bullet()
 
 }
 
-void Bullet::update(Camera& camera)
+void Bullet::update(Camera& camera, Level& level)
 {
     this->velocity = Vector2D(cos((rotation - 90) * M_PI / 180.0f), sin((rotation - 90) * M_PI / 180.0f)) * speedPxPerSecond * Game::latestLoopDeltaTimeSeconds;
+    GameEntity* firstCollidedEntity = nullptr;
+    CollisionManager::processMovement(*this, velocity, level, &firstCollidedEntity);
+    if (firstCollidedEntity != nullptr)
+    {
+        sendDamage(firstCollidedEntity);
+    }
     GameEntity::update();
-
 }
 
 void Bullet::draw(Camera& camera)
 {
     GameEntity::draw(camera);
+}
+
+CollisionManager::CollisionResolution Bullet::getCollisionResolution()
+{
+    return CollisionManager::CollisionResolution::COLLISION_RESOLUTION_VANISH;
 }

@@ -3,6 +3,7 @@
 #include "../Game.hpp"
 #include "../Core/Macros.hpp"
 #include "../Core/PrimitiveShapeHelper.hpp"
+#include "../Core/CollisionManager.hpp"
 
 GameEntity::GameEntity()
 {
@@ -50,3 +51,22 @@ void GameEntity::drawCollisionRect(Camera& camera) // Draw collision rect with b
     Game::primitiveShapeHelper.drawRectOutline(Game::renderer, debugRect, {0, 0, 255, 255}, 2);
 }
 #endif
+
+CollisionManager::CollisionResolution GameEntity::getCollisionResolution()
+{
+    return CollisionManager::CollisionResolution::COLLISION_RESOLUTION_PUSH;
+}
+
+void GameEntity::sendDamage(GameEntity* targetEntity)
+{
+    targetEntity->receiveDamage(damageAmount);
+}
+
+void GameEntity::receiveDamage(const int amount)
+{
+    if (currentHealth <= 0)
+        return;
+    currentHealth = std::max(0, currentHealth - amount);
+    if (currentHealth == 0)
+        pendingRemoval = true;
+}

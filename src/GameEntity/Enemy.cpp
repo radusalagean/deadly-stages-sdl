@@ -6,7 +6,9 @@
 
 Enemy::Enemy() : GameEntity()
 {
-
+    damageAmount = 1;
+    maxHealth = 5;
+    currentHealth = maxHealth;
 }
 
 Enemy::~Enemy()

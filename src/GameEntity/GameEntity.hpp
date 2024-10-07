@@ -10,6 +10,10 @@
 #include "../Core/Constants.hpp"
 #include "../Core/Config.hpp"
 
+namespace CollisionManager {
+    enum class CollisionResolution;
+}
+
 class GameEntity
 {
 public:
@@ -22,6 +26,10 @@ public:
     int width = 0;
     int height = 0;
     double rotation = 0;
+
+    int damageAmount = -1;
+    int maxHealth = -1;
+    int currentHealth = -1;
 
     SDL_Rect collisionRect;
 
@@ -49,9 +57,15 @@ public:
         };
     }
 
+    virtual CollisionManager::CollisionResolution getCollisionResolution();
+
     #ifdef DEBUG_DRAW_COLLISION_RECTS
     void drawCollisionRect(Camera& camera);
     #endif
+
+    bool pendingRemoval = false;
+    void sendDamage(GameEntity* targetEntity);
+    void receiveDamage(const int amount);
 };
 
 

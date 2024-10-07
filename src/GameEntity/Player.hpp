@@ -10,8 +10,6 @@ public:
     ~Player();
 
     const float speedPxPerSecond = 100.0f;
-    const int maxHealth = 14;
-    int currentHealth = maxHealth;
 
     void update(Camera& camera);
     void draw(Camera& camera);
