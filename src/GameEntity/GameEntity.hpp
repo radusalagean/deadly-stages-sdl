@@ -8,6 +8,7 @@
 #include "../Core/TexturePool.hpp"
 #include "../Level/Camera.hpp"
 #include "../Core/Constants.hpp"
+#include "../Core/Config.hpp"
 
 class GameEntity
 {
@@ -47,6 +48,10 @@ public:
             height
         };
     }
+
+    #ifdef DEBUG_DRAW_COLLISION_RECTS
+    void drawCollisionRect(Camera& camera);
+    #endif
 };
 
 

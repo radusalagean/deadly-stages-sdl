@@ -2,6 +2,7 @@
 
 #include "../Core/Macros.hpp"
 #include "../Core/CollisionManager.hpp"
+#include "../GameEntity/Enemy.hpp"
 
 Level::Level(std::string id)
 {
@@ -84,7 +85,7 @@ void Level::update()
     }
     for (auto& enemy : enemies)
     {
-        enemy->update(camera);
+        enemy->update(camera, *this);
     }
     advanceWaveIfNeeded();
     spawnEnemiesIfNeeded();

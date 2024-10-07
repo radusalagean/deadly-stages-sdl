@@ -34,25 +34,34 @@ void TileLayer::render(Camera& camera)
         SDL_Rect tileRectDst = { drawX, drawY, tileWidth, tileHeight };
         Game::primitiveShapeHelper.drawRectOutline(Game::renderer, tileRectDst, {255, 0, 0, 255}, 2);
     }
+    collidedTiles.clear();
 
     // Check area: Green
-    SDL_Rect checkAreaRectDst = 
+    for (const auto& checkAreaRect : checkAreaRects)
     {
+        SDL_Rect checkAreaRectDst = 
+        {
         static_cast<int>(GSCALE(checkAreaRect.x) - camera.position.getX()),
         static_cast<int>(GSCALE(checkAreaRect.y) - camera.position.getY()),
         static_cast<int>(GSCALE(checkAreaRect.w)),
         static_cast<int>(GSCALE(checkAreaRect.h))
-    };
-    Game::primitiveShapeHelper.drawRectOutline(Game::renderer, checkAreaRectDst, {0, 255, 0, 255}, 1);
+        };
+        Game::primitiveShapeHelper.drawRectOutline(Game::renderer, checkAreaRectDst, {0, 255, 0, 255}, 1);
+    }
+    checkAreaRects.clear();
 
     // Tiles in the check area: Yellow
-    SDL_Rect checkAreaTileIndicesDst = 
+    for (const auto& checkAreaTileIndicesRect : checkAreaTileIndicesRects)
     {
-        static_cast<int>(GSCALE(checkAreaTileIndices.x) - camera.position.getX()),
-        static_cast<int>(GSCALE(checkAreaTileIndices.y) - camera.position.getY()),
-        static_cast<int>(GSCALE(checkAreaTileIndices.w)),
-        static_cast<int>(GSCALE(checkAreaTileIndices.h))
-    };
-    Game::primitiveShapeHelper.drawRectOutline(Game::renderer, checkAreaTileIndicesDst, {255, 255, 0, 255}, 2);
+        SDL_Rect checkAreaTileIndicesDst = 
+        {
+            static_cast<int>(GSCALE(checkAreaTileIndicesRect.x) - camera.position.getX()),
+            static_cast<int>(GSCALE(checkAreaTileIndicesRect.y) - camera.position.getY()),
+            static_cast<int>(GSCALE(checkAreaTileIndicesRect.w)),
+            static_cast<int>(GSCALE(checkAreaTileIndicesRect.h))
+        };
+        Game::primitiveShapeHelper.drawRectOutline(Game::renderer, checkAreaTileIndicesDst, {255, 255, 0, 255}, 2);
+    }
+    checkAreaTileIndicesRects.clear();
     #endif
 }

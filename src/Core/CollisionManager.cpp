@@ -172,7 +172,7 @@ namespace CollisionManager
         SDL_Rect checkAreaRect = Game::primitiveShapeHelper.wrapRects(subjectBoundsRect, proposedRect);
 
         #ifdef DEBUG_DRAW_COLLISION_RECTS
-        level.tileLayer.checkAreaRect = checkAreaRect;
+        level.tileLayer.checkAreaRects.push_back(checkAreaRect);
         #endif
 
         // Calculate the tile indices for the check area rectangle
@@ -188,17 +188,14 @@ namespace CollisionManager
         endY = std::min(level.verticalTilesCount - 1, endY);
 
         #ifdef DEBUG_DRAW_COLLISION_RECTS
-        level.tileLayer.checkAreaTileIndices = 
-        {
-            level.tileWidthPx * startX, 
-            level.tileHeightPx * startY, 
-            level.tileWidthPx * (endX - startX + 1), 
-            level.tileHeightPx * (endY - startY + 1)
-        };
-        #endif
-
-        #ifdef DEBUG_DRAW_COLLISION_RECTS
-        bool foundIntersection = false;
+        level.tileLayer.checkAreaTileIndicesRects.push_back(
+            {
+                level.tileWidthPx * startX, 
+                level.tileHeightPx * startY, 
+                level.tileWidthPx * (endX - startX + 1), 
+                level.tileHeightPx * (endY - startY + 1)
+            }
+        );
         #endif
 
         // Check only the relevant tiles
@@ -212,13 +209,6 @@ namespace CollisionManager
                     SDL_Rect tileRect = level.buildTileRect(x, y);
                     if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, tileRect, &intersectionPoint, &intersectionNormal, contactTime)) 
                     {
-                        #ifdef DEBUG_DRAW_COLLISION_RECTS
-                        if (!foundIntersection)
-                        {
-                            level.tileLayer.collidedTiles.clear();
-                            foundIntersection = true;
-                        }
-                        #endif
                         Vector2D tileCoords = Vector2D(x, y);
                         std::pair<Vector2D, float> intersection = std::make_pair(tileCoords, contactTime);
                         #ifdef DEBUG_DRAW_COLLISION_RECTS

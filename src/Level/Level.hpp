@@ -9,8 +9,9 @@
 #include "Camera.hpp"
 #include "../GameEntity/Weapon.hpp"
 #include "../GameEntity/Bullet.hpp"
-#include "../GameEntity/Enemy.hpp"
 #include "../Core/Debouncer.hpp"
+
+class Enemy;
 
 class Level 
 {

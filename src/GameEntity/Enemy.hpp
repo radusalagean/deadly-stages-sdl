@@ -2,7 +2,7 @@
 #define __SRC_GAMEENTITY_ENEMY_HPP__
 
 #include "GameEntity.hpp"
-
+#include "../Level/Level.hpp"
 class Enemy : public GameEntity
 {
 public:
@@ -13,7 +13,7 @@ public:
     int health = 5;
     Vector2D* target = nullptr;
 
-    void update(Camera& camera);
+    void update(Camera& camera, Level& level);
     void draw(Camera& camera);
 };
 
