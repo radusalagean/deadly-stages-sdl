@@ -58,6 +58,13 @@ public:
     SDL_Rect& buildTileRect(int x, int y) const;
 
     void assignWeaponToPlayer(int weaponId);
+
+    #ifdef DEBUG_DRAW_COLLISION_RECTS
+    std::vector<SDL_Rect> collidedRects{};
+    std::vector<SDL_Rect> checkAreaRects{};
+    std::vector<SDL_Rect> checkAreaTileIndicesRects{};
+    void renderDebugShapes(Camera& camera);
+    #endif
 };
 
 #endif // __SRC_LEVEL_LEVEL_HPP_

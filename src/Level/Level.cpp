@@ -3,6 +3,8 @@
 #include "../Core/Macros.hpp"
 #include "../Core/CollisionManager.hpp"
 #include "../GameEntity/Enemy.hpp"
+#include "../Game.hpp"
+#include "../Core/PrimitiveShapeHelper.hpp"
 
 Level::Level(std::string id)
 {
@@ -103,6 +105,9 @@ void Level::render()
     {
         enemy->draw(camera);
     }
+    #ifdef DEBUG_DRAW_COLLISION_RECTS
+    renderDebugShapes(camera);
+    #endif
 }
 
 void Level::dispose()
@@ -192,3 +197,48 @@ int Level::getEnemiesLeft()
 {
     return enemies.size();
 }
+
+#ifdef DEBUG_DRAW_COLLISION_RECTS
+void Level::renderDebugShapes(Camera& camera)
+{
+    // Collided rects: Red
+    for (const auto& collidedRect : collidedRects)
+    {
+        int x = GSCALE(collidedRect.x) - camera.position.getX();
+        int y = GSCALE(collidedRect.y) - camera.position.getY();
+        int w = GSCALE(collidedRect.w);
+        int h = GSCALE(collidedRect.h);
+        SDL_Rect collidedRectDst = { x, y, w, h };
+        Game::primitiveShapeHelper.drawRectOutline(Game::renderer, collidedRectDst, {255, 0, 0, 255}, 2);
+    }
+    collidedRects.clear();
+
+    // Check area: Green
+    for (const auto& checkAreaRect : checkAreaRects)
+    {
+        SDL_Rect checkAreaRectDst = 
+        {
+        static_cast<int>(GSCALE(checkAreaRect.x) - camera.position.getX()),
+        static_cast<int>(GSCALE(checkAreaRect.y) - camera.position.getY()),
+        static_cast<int>(GSCALE(checkAreaRect.w)),
+        static_cast<int>(GSCALE(checkAreaRect.h))
+        };
+        Game::primitiveShapeHelper.drawRectOutline(Game::renderer, checkAreaRectDst, {0, 255, 0, 255}, 1);
+    }
+    checkAreaRects.clear();
+
+    // Tiles in the check area: Yellow
+    for (const auto& checkAreaTileIndicesRect : checkAreaTileIndicesRects)
+    {
+        SDL_Rect checkAreaTileIndicesDst = 
+        {
+            static_cast<int>(GSCALE(checkAreaTileIndicesRect.x) - camera.position.getX()),
+            static_cast<int>(GSCALE(checkAreaTileIndicesRect.y) - camera.position.getY()),
+            static_cast<int>(GSCALE(checkAreaTileIndicesRect.w)),
+            static_cast<int>(GSCALE(checkAreaTileIndicesRect.h))
+        };
+        Game::primitiveShapeHelper.drawRectOutline(Game::renderer, checkAreaTileIndicesDst, {255, 255, 0, 255}, 2);
+    }
+    checkAreaTileIndicesRects.clear();
+}
+#endif

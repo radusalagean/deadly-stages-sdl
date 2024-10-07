@@ -4,6 +4,7 @@
 #include "../Level/Tile.hpp"
 #include "../Level/TileLayer.hpp"
 #include "../Core/PrimitiveShapeHelper.hpp"
+#include "../GameEntity/Enemy.hpp"
 #include <sstream>
 #include <algorithm>
 #include <functional>
@@ -152,7 +153,7 @@ namespace CollisionManager
         Vector2D intersectionPoint;
         Vector2D intersectionNormal;
         float contactTime = 0;
-        std::vector<std::pair<Vector2D, float>> sortedIntersections; // Key: Tile coordinates, Value: contactTime
+        std::vector<std::pair<SDL_Rect, float>> sortedIntersections; // Key: Collided rect, Value: contactTime
 
         SDL_Rect subjectBoundsRect = 
         {
@@ -172,7 +173,7 @@ namespace CollisionManager
         SDL_Rect checkAreaRect = Game::primitiveShapeHelper.wrapRects(subjectBoundsRect, proposedRect);
 
         #ifdef DEBUG_DRAW_COLLISION_RECTS
-        level.tileLayer.checkAreaRects.push_back(checkAreaRect);
+        level.checkAreaRects.push_back(checkAreaRect);
         #endif
 
         // Calculate the tile indices for the check area rectangle
@@ -188,7 +189,7 @@ namespace CollisionManager
         endY = std::min(level.verticalTilesCount - 1, endY);
 
         #ifdef DEBUG_DRAW_COLLISION_RECTS
-        level.tileLayer.checkAreaTileIndicesRects.push_back(
+        level.checkAreaTileIndicesRects.push_back(
             {
                 level.tileWidthPx * startX, 
                 level.tileHeightPx * startY, 
@@ -209,10 +210,10 @@ namespace CollisionManager
                     SDL_Rect tileRect = level.buildTileRect(x, y);
                     if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, tileRect, &intersectionPoint, &intersectionNormal, contactTime)) 
                     {
-                        Vector2D tileCoords = Vector2D(x, y);
-                        std::pair<Vector2D, float> intersection = std::make_pair(tileCoords, contactTime);
+                        SDL_Rect collidedRect = level.buildTileRect(x, y);
+                        std::pair<SDL_Rect, float> intersection = std::make_pair(collidedRect, contactTime);
                         #ifdef DEBUG_DRAW_COLLISION_RECTS
-                        level.tileLayer.collidedTiles.push_back(std::make_pair(x, y));
+                        level.collidedRects.push_back(collidedRect);
                         #endif
                         sortedIntersections.push_back(intersection);
                     }
@@ -220,16 +221,59 @@ namespace CollisionManager
             }
         }
 
+        // Check collisions with player
+        Player* player = level.player;
+        if (&subjectEntity != player) // TODO Check only in a restricted area
+        {
+            SDL_Rect playerRect = 
+            {
+                static_cast<int>(player->position.getX()) + player->collisionRect.x,
+                static_cast<int>(player->position.getY()) + player->collisionRect.y,
+                player->collisionRect.w,
+                player->collisionRect.h
+            };
+            if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, playerRect, &intersectionPoint, &intersectionNormal, contactTime))
+            {
+                std::pair<SDL_Rect, float> intersection = std::make_pair(playerRect, contactTime);
+                #ifdef DEBUG_DRAW_COLLISION_RECTS
+                level.collidedRects.push_back(playerRect);
+                #endif
+                sortedIntersections.push_back(intersection);
+            }
+        }
+
+        // Check collisions with enemies
+        for (Enemy* enemy : level.enemies)
+        {
+            if (&subjectEntity == enemy)
+                continue;
+            SDL_Rect enemyRect = 
+            {
+                static_cast<int>(enemy->position.getX()) + enemy->collisionRect.x,
+                static_cast<int>(enemy->position.getY()) + enemy->collisionRect.y,
+                enemy->collisionRect.w,
+                enemy->collisionRect.h
+            };
+            if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, enemyRect, &intersectionPoint, &intersectionNormal, contactTime))
+            {
+                std::pair<SDL_Rect, float> intersection = std::make_pair(enemyRect, contactTime);
+                #ifdef DEBUG_DRAW_COLLISION_RECTS
+                level.collidedRects.push_back(enemyRect);
+                #endif
+                sortedIntersections.push_back(intersection);
+            }
+        }
+
         // Sort intersections by contact time
-        std::sort(sortedIntersections.begin(), sortedIntersections.end(), [](const std::pair<Vector2D, float>& a, const std::pair<Vector2D, float>& b) {
+        std::sort(sortedIntersections.begin(), sortedIntersections.end(), [](const std::pair<SDL_Rect, float>& a, const std::pair<SDL_Rect, float>& b) {
             return a.second < b.second;
         });
 
         // Resolve collisions
         for (const auto& intersection : sortedIntersections) 
         {
-            SDL_Rect tileRect = level.buildTileRect(intersection.first.getX(), intersection.first.getY());
-            resolveDynamicRectVsRect(subjectBoundsRect, proposedVelocity, tileRect);
+            SDL_Rect collidedRect = intersection.first;
+            resolveDynamicRectVsRect(subjectBoundsRect, proposedVelocity, collidedRect);
         }
     }
 }
