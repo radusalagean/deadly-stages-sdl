@@ -60,7 +60,7 @@ public:
 
     bool pendingRemoval = false;
     void sendDamage(GameEntity* targetEntity);
-    void receiveDamage(const int amount);
+    virtual void receiveDamage(const int amount);
 };
 
 

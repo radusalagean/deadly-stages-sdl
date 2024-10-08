@@ -43,3 +43,10 @@ void Player::draw(Camera& camera)
     drawCollisionRect(camera);
     #endif
 }
+
+void Player::receiveDamage(const int amount)
+{
+    if (!hurtDebouncer.canPerformAction())
+        return;
+    GameEntity::receiveDamage(amount);
+}

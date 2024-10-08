@@ -25,7 +25,12 @@ void Enemy::update(Camera& camera, Level& level)
         rotation = angle - 180;
     }
     velocity = Vector2D(cos(rotation * M_PI / 180.0f), sin(rotation * M_PI / 180.0f)) * -speedPxPerSecond * Game::latestLoopDeltaTimeSeconds;
-    CollisionManager::processMovement(*this, velocity, level);
+    GameEntity* firstCollidedEntity = nullptr;
+    CollisionManager::processMovement(*this, velocity, level, &firstCollidedEntity);
+    if (firstCollidedEntity != nullptr && dynamic_cast<Player*>(firstCollidedEntity))
+    {
+        sendDamage(firstCollidedEntity);
+    }
     GameEntity::update();
 }
 
