@@ -18,6 +18,7 @@ GameScreen::~GameScreen()
 {
     delete hud;
     delete level;
+    SDL_DestroyTexture(cursorTexture);
     SDL_ShowCursor(SDL_ENABLE);
 }
 

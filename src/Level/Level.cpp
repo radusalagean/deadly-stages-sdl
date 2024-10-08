@@ -6,6 +6,8 @@
 #include "../Game.hpp"
 #include "../Core/PrimitiveShapeHelper.hpp"
 #include "../Core/VectorUtils.hpp"
+#include "../Screen/GameOver/GameOverScreen.hpp"
+#include "../ScreenManager/ScreenManager.hpp"
 
 Level::Level(std::string id)
 {
@@ -252,6 +254,6 @@ void Level::handleGameEntityPendingRemovals()
 
     if (player->pendingRemoval)
     {
-        // TODO: Game Over Screen
+        Game::screenManager.setScreen(new GameOverScreen(score, wave, id));
     }
 }
