@@ -9,12 +9,12 @@ void Camera::update()
     if (target != nullptr)
     {
         // Calculate new position
-        float newX = GSCALE(target->getX()) - Game::width / 2;
-        float newY = GSCALE(target->getY()) - Game::height / 2;
+        float newX = GSCALE(target->x) - Game::width / 2;
+        float newY = GSCALE(target->y) - Game::height / 2;
 
         // Map bounds
-        float mapWidth = GSCALE(mapBounds->getX());
-        float mapHeight = GSCALE(mapBounds->getY());
+        float mapWidth = GSCALE(mapBounds->x);
+        float mapHeight = GSCALE(mapBounds->y);
         float boundsX = std::max(0.0f, mapWidth - Game::width);
         float boundsY = std::max(0.0f, mapHeight - Game::height);
 
@@ -23,7 +23,7 @@ void Camera::update()
         newY = std::max(0.0f, std::min(newY, boundsY));
 
         // Update the camera position
-        position.setX(newX);
-        position.setY(newY);
+        position.x = newX;
+        position.y = newY;
     }
 }

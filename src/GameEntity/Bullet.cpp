@@ -18,7 +18,7 @@ Bullet::~Bullet()
 
 }
 
-void Bullet::update(Camera& camera, Level& level)
+void Bullet::update(Level& level)
 {
     this->velocity = Vector2D(cos((rotation - 90) * M_PI / 180.0f), sin((rotation - 90) * M_PI / 180.0f)) * speedPxPerSecond * Game::latestLoopDeltaTimeSeconds;
     GameEntity* firstCollidedEntity = nullptr;
@@ -27,7 +27,7 @@ void Bullet::update(Camera& camera, Level& level)
     {
         sendDamage(firstCollidedEntity);
     }
-    GameEntity::update();
+    GameEntity::update(level);
 }
 
 void Bullet::draw(Camera& camera)

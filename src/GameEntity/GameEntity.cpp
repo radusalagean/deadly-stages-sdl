@@ -4,6 +4,7 @@
 #include "../Core/Macros.hpp"
 #include "../Core/PrimitiveShapeHelper.hpp"
 #include "../Core/CollisionManager.hpp"
+#include "../Level/Level.hpp"
 
 GameEntity::GameEntity()
 {
@@ -20,7 +21,7 @@ void GameEntity::load(TexturePool& texturePool)
     texture = texturePool.get(texturePath);
 }
 
-void GameEntity::update()
+void GameEntity::update(Level& level)
 {
     position += velocity;
     positionPlusCenter = position + center;
@@ -28,8 +29,8 @@ void GameEntity::update()
 
 void GameEntity::draw(Camera& camera)
 {
-    dstRect.x = GSCALE(position.getX()) - camera.position.getX();
-    dstRect.y = GSCALE(position.getY()) - camera.position.getY();
+    dstRect.x = GSCALE(position.x) - camera.position.x;
+    dstRect.y = GSCALE(position.y) - camera.position.y;
     dstRect.w = GSCALE(width);
     dstRect.h = GSCALE(height);
     SDL_RenderCopyEx(Game::renderer, texture, NULL, &dstRect, rotation, NULL, SDL_FLIP_NONE);
@@ -44,8 +45,8 @@ void GameEntity::setPosition(Vector2D position)
 void GameEntity::drawCollisionRect(Camera& camera) // Draw collision rect with blue
 {
     SDL_Rect debugRect;
-    debugRect.x = GSCALE(position.getX()) + GSCALE(collisionRect.x) - camera.position.getX();
-    debugRect.y = GSCALE(position.getY()) + GSCALE(collisionRect.y) - camera.position.getY();
+    debugRect.x = GSCALE(position.x) + GSCALE(collisionRect.x) - camera.position.x;
+    debugRect.y = GSCALE(position.y) + GSCALE(collisionRect.y) - camera.position.y;
     debugRect.w = GSCALE(collisionRect.w);
     debugRect.h = GSCALE(collisionRect.h);
     Game::primitiveShapeHelper.drawRectOutline(Game::renderer, debugRect, {0, 0, 255, 255}, 2);

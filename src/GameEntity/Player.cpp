@@ -5,6 +5,7 @@
 #include "../Core/PrimitiveShapeHelper.hpp"
 #include <math.h>
 #include "../Core/Config.hpp"
+#include "../Level/Level.hpp"
 
 Player::Player() : GameEntity()
 {
@@ -17,16 +18,18 @@ Player::~Player()
 
 }
 
-void Player::update(Camera& camera)
+void Player::update(Level& level)
 {
-    GameEntity::update();
+    GameEntity::update(level);
+
+    Camera& camera = level.camera;
 
     // Get the position of the mouse
     int mouseX, mouseY;
     SDL_GetMouseState(&mouseX, &mouseY);
 
     // Calculate the angle between the player center point and the mouse relative to the camera position
-    float angle = atan2(mouseY - GSCALE(position.getY() + center.getY()) + camera.position.getY(), mouseX - GSCALE(position.getX() + center.getX()) + camera.position.getX());
+    float angle = atan2(mouseY - GSCALE(position.y + center.y) + camera.position.y, mouseX - GSCALE(position.x + center.x) + camera.position.x);
 
     // Convert the angle from radians to degrees
     angle = angle * (180 / M_PI);

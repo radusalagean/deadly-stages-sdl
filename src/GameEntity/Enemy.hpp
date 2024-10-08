@@ -14,7 +14,7 @@ public:
 
     Vector2D* target = nullptr;
 
-    void update(Camera& camera, Level& level);
+    void update(Level& level);
     void draw(Camera& camera);
 };
 

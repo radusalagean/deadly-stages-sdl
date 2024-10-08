@@ -11,7 +11,7 @@ public:
     Bullet(Vector2D weaponPosition, float rotation, TexturePool& texturePool);
     ~Bullet();
 
-    void update(Camera& camera, Level& level);
+    void update(Level& level);
     void draw(Camera& camera);
 
     int speedPxPerSecond = 600;

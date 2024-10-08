@@ -10,6 +10,8 @@
 #include "../Core/Constants.hpp"
 #include "../Core/Config.hpp"
 
+class Level;
+
 class GameEntity
 {
 public:
@@ -38,7 +40,7 @@ public:
     SDL_Rect dstRect;
 
     virtual void load(TexturePool& texturePool);
-    virtual void update();
+    virtual void update(Level& level);
     virtual void draw(Camera& camera);
 
     void setPosition(Vector2D position);

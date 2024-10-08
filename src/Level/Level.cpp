@@ -40,19 +40,18 @@ void Level::handleEvents()
     {
         float speedMultiplier = player->speedPxPerSecond * Game::latestLoopDeltaTimeSeconds;
         Vector2D velocity;
-        velocity.setY(Game::control.isActionDown(CA_UP) ? -speedMultiplier :
-                              Game::control.isActionDown(CA_DOWN) ? speedMultiplier : 0);
+        velocity.y = Game::control.isActionDown(CA_UP) ? -speedMultiplier :
+                              Game::control.isActionDown(CA_DOWN) ? speedMultiplier : 0;
 
-        velocity.setX(Game::control.isActionDown(CA_LEFT) ? -speedMultiplier :
-                              Game::control.isActionDown(CA_RIGHT) ? speedMultiplier : 0);
+        velocity.x = Game::control.isActionDown(CA_LEFT) ? -speedMultiplier :
+                              Game::control.isActionDown(CA_RIGHT) ? speedMultiplier : 0;
 
         CollisionManager::processMovement(*player, velocity, *this);
         player->velocity = velocity;
     }
     else
     {
-        player->velocity.setX(0);
-        player->velocity.setY(0);
+        player->velocity.reset();
     }
 
     // Fire
@@ -69,15 +68,15 @@ void Level::handleEvents()
 void Level::update()
 {
     camera.update();
-    player->update(camera);
-    playerWeapon->update();
+    player->update(*this);
+    playerWeapon->update(*this);
     for (auto& bullet : bullets)
     {
-        bullet->update(camera, *this);
+        bullet->update(*this);
     }
     for (auto& enemy : enemies)
     {
-        enemy->update(camera, *this);
+        enemy->update(*this);
     }
     advanceWaveIfNeeded();
     spawnEnemiesIfNeeded();
@@ -130,7 +129,7 @@ void Level::dispose()
     enemies.clear();
 }
 
-SDL_Rect& Level::buildTileRect(int column, int row) const
+SDL_Rect Level::buildTileRect(int column, int row) const
 {
     SDL_Rect tileRect;
     tileRect.x = column * tileWidthPx;
@@ -195,8 +194,8 @@ void Level::renderDebugShapes(Camera& camera)
     // Collided rects: Red
     for (const auto& collidedRect : collidedRects)
     {
-        int x = GSCALE(collidedRect.x) - camera.position.getX();
-        int y = GSCALE(collidedRect.y) - camera.position.getY();
+        int x = GSCALE(collidedRect.x) - camera.position.x;
+        int y = GSCALE(collidedRect.y) - camera.position.y;
         int w = GSCALE(collidedRect.w);
         int h = GSCALE(collidedRect.h);
         SDL_Rect collidedRectDst = { x, y, w, h };
@@ -209,8 +208,8 @@ void Level::renderDebugShapes(Camera& camera)
     {
         SDL_Rect checkAreaRectDst = 
         {
-        static_cast<int>(GSCALE(checkAreaRect.x) - camera.position.getX()),
-        static_cast<int>(GSCALE(checkAreaRect.y) - camera.position.getY()),
+        static_cast<int>(GSCALE(checkAreaRect.x) - camera.position.x),
+        static_cast<int>(GSCALE(checkAreaRect.y) - camera.position.y),
         static_cast<int>(GSCALE(checkAreaRect.w)),
         static_cast<int>(GSCALE(checkAreaRect.h))
         };
@@ -223,8 +222,8 @@ void Level::renderDebugShapes(Camera& camera)
     {
         SDL_Rect checkAreaTileIndicesDst = 
         {
-            static_cast<int>(GSCALE(checkAreaTileIndicesRect.x) - camera.position.getX()),
-            static_cast<int>(GSCALE(checkAreaTileIndicesRect.y) - camera.position.getY()),
+            static_cast<int>(GSCALE(checkAreaTileIndicesRect.x) - camera.position.x),
+            static_cast<int>(GSCALE(checkAreaTileIndicesRect.y) - camera.position.y),
             static_cast<int>(GSCALE(checkAreaTileIndicesRect.w)),
             static_cast<int>(GSCALE(checkAreaTileIndicesRect.h))
         };

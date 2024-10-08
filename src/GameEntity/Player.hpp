@@ -12,7 +12,7 @@ public:
 
     const float speedPxPerSecond = 100.0f;
 
-    void update(Camera& camera);
+    void update(Level& level);
     void draw(Camera& camera);
 
     Debouncer hurtDebouncer = Debouncer(500);

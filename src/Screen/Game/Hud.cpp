@@ -5,7 +5,7 @@
 #include "HudHealthBar.hpp"
 
 Hud::Hud(int& score, int& wave, std::function<int()> getEnemiesLeft, const int& maxHealth, int& currentHealth) : 
-    score(score), wave(wave), getEnemiesLeft(getEnemiesLeft), maxHealth(maxHealth), currentHealth(currentHealth)
+    score(score), wave(wave), getEnemiesLeft(getEnemiesLeft)
 {
     scoreTextDrawable = new TextDrawable(buildScoreText());
     drawables.push_back(scoreTextDrawable);
@@ -69,8 +69,8 @@ void Hud::layoutPass()
     }
     { // Health Bar
         Vector2D size = healthBar->computeSize();
-        int width = size.getX();
-        int height = size.getY();
+        int width = size.x;
+        int height = size.y;
         int x = Game::width / 2 - width / 2;
         int y = Game::height - height - Constants::WINDOW_PADDING_PX;
         healthBar->layout(x, y, width, height);

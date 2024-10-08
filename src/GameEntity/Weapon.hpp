@@ -11,7 +11,7 @@ public:
         int fireRateMillis, int bulletsPerShot, int spreadAngle);
     ~Weapon();
 
-    void update();
+    void update(Level& level);
     void fire(std::function<void(const Vector2D&, float)> bulletCreationCallback);
 
     int id = 0;

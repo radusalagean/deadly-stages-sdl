@@ -56,7 +56,7 @@ public:
     void spawnEnemiesIfNeeded();
     void handleGameEntityPendingRemovals();
 
-    SDL_Rect& buildTileRect(int x, int y) const;
+    SDL_Rect buildTileRect(int x, int y) const;
 
     void assignWeaponToPlayer(int weaponId);
 

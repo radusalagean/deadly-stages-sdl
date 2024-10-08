@@ -17,11 +17,11 @@ Enemy::~Enemy()
     
 }
 
-void Enemy::update(Camera& camera, Level& level)
+void Enemy::update(Level& level)
 {
     if (target != nullptr)
     {
-        float angle = atan2(target->getY() - positionPlusCenter.getY(), target->getX() - positionPlusCenter.getX());
+        float angle = atan2(target->y - positionPlusCenter.y, target->x - positionPlusCenter.x);
         angle = angle * (180 / M_PI);
         rotation = angle - 180;
     }
@@ -32,7 +32,7 @@ void Enemy::update(Camera& camera, Level& level)
     {
         sendDamage(firstCollidedEntity);
     }
-    GameEntity::update();
+    GameEntity::update(level);
 }
 
 void Enemy::draw(Camera& camera)

@@ -24,9 +24,6 @@ private:
     int lastProcessedWave = -1;
     std::function<int()> getEnemiesLeft;
     int lastProcessedEnemiesLeft = -1;
-    const int& maxHealth;
-    int& currentHealth;
-    int lastProcessedCurrentHealth = -1;
 
     const std::string scoreLabel = "Score: ";
     const std::string waveLabel = "Wave: ";

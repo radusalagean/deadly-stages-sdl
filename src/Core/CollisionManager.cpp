@@ -43,20 +43,20 @@ namespace CollisionManager
         Vector2D tNear = (targetPos - rayOrigin) * invRayDirection;
         Vector2D tFar = (targetPos + targetSize - rayOrigin) * invRayDirection;
 
-        if (std::isnan(tFar.getX()) || std::isnan(tFar.getY())) return false;
-        if (std::isnan(tNear.getX()) || std::isnan(tNear.getY())) return false;
+        if (std::isnan(tFar.x) || std::isnan(tFar.y)) return false;
+        if (std::isnan(tNear.x) || std::isnan(tNear.y)) return false;
 
         // Sort the entry and exit distances
-        if (tNear.getX() > tFar.getX()) std::swap(tNear.getX(), tFar.getX());
-        if (tNear.getY() > tFar.getY()) std::swap(tNear.getY(), tFar.getY());
+        if (tNear.x > tFar.x) std::swap(tNear.x, tFar.x);
+        if (tNear.y > tFar.y) std::swap(tNear.y, tFar.y);
 
-        if (tNear.getX() > tFar.getY() || tNear.getY() > tFar.getX())
+        if (tNear.x > tFar.y || tNear.y > tFar.x)
         {
             return false; // No intersection
         }
 
-        tHitNear = std::max(tNear.getX(), tNear.getY());
-        tHitFar = std::min(tFar.getX(), tFar.getY());
+        tHitNear = std::max(tNear.x, tNear.y);
+        tHitFar = std::min(tFar.x, tFar.y);
         
         if (tHitFar < 0)
         {
@@ -70,9 +70,9 @@ namespace CollisionManager
 
         if (intersectionNormal != nullptr)
         {
-            if (tNear.getX() > tNear.getY())
+            if (tNear.x > tNear.y)
             {
-                if (rayDirection.getX() < 0)
+                if (rayDirection.x < 0)
                 {
                     *intersectionNormal = Vector2D(1, 0);
                 }
@@ -81,9 +81,9 @@ namespace CollisionManager
                     *intersectionNormal = Vector2D(-1, 0);
                 }
             }
-            else if (tNear.getX() < tNear.getY())
+            else if (tNear.x < tNear.y)
             {
-                if (invRayDirection.getY() < 0)
+                if (invRayDirection.y < 0)
                 {
                     *intersectionNormal = Vector2D(0, 1);
                 }
@@ -104,7 +104,7 @@ namespace CollisionManager
     bool dynamicRectVsRect(const SDL_Rect& dynamicRect, const Vector2D& proposedVelocity, const SDL_Rect& staticRect,
         Vector2D* intersectionPoint, Vector2D* intersectionNormal, float& tHitNear, float& tHitFar, float& contactTime)
     {
-        if (proposedVelocity.getX() == 0 && proposedVelocity.getY() == 0)
+        if (proposedVelocity.x == 0 && proposedVelocity.y == 0)
         {
             return false;
         }
@@ -143,7 +143,7 @@ namespace CollisionManager
 
         if (dynamicRectVsRect(dynamicRect, proposedVelocity, staticRect, &intersectionPoint, &intersectionNormal, tHitNear, tHitFar, tHitNear))
         {
-            proposedVelocity += intersectionNormal * Vector2D(std::abs(proposedVelocity.getX()), std::abs(proposedVelocity.getY())) * (1 - tHitNear);
+            proposedVelocity += intersectionNormal * Vector2D(std::abs(proposedVelocity.x), std::abs(proposedVelocity.y)) * (1 - tHitNear);
             return true;
         }
         return false;
@@ -161,15 +161,15 @@ namespace CollisionManager
 
         SDL_Rect subjectBoundsRect = 
         {
-            static_cast<int>(subjectEntity.position.getX()) + subjectEntity.collisionRect.x,
-            static_cast<int>(subjectEntity.position.getY()) + subjectEntity.collisionRect.y,
+            static_cast<int>(subjectEntity.position.x) + subjectEntity.collisionRect.x,
+            static_cast<int>(subjectEntity.position.y) + subjectEntity.collisionRect.y,
             subjectEntity.collisionRect.w,
             subjectEntity.collisionRect.h
         };
         SDL_Rect proposedRect = 
         {
-            subjectBoundsRect.x + static_cast<int>(proposedVelocity.getX()),
-            subjectBoundsRect.y + static_cast<int>(proposedVelocity.getY()),
+            subjectBoundsRect.x + static_cast<int>(proposedVelocity.x),
+            subjectBoundsRect.y + static_cast<int>(proposedVelocity.y),
             subjectBoundsRect.w,
             subjectBoundsRect.h
         };
@@ -231,8 +231,8 @@ namespace CollisionManager
         {
             SDL_Rect playerRect = 
             {
-                static_cast<int>(player->position.getX()) + player->collisionRect.x,
-                static_cast<int>(player->position.getY()) + player->collisionRect.y,
+                static_cast<int>(player->position.x) + player->collisionRect.x,
+                static_cast<int>(player->position.y) + player->collisionRect.y,
                 player->collisionRect.w,
                 player->collisionRect.h
             };
@@ -253,8 +253,8 @@ namespace CollisionManager
                 continue;
             SDL_Rect enemyRect = 
             {
-                static_cast<int>(enemy->position.getX()) + enemy->collisionRect.x,
-                static_cast<int>(enemy->position.getY()) + enemy->collisionRect.y,
+                static_cast<int>(enemy->position.x) + enemy->collisionRect.x,
+                static_cast<int>(enemy->position.y) + enemy->collisionRect.y,
                 enemy->collisionRect.w,
                 enemy->collisionRect.h
             };

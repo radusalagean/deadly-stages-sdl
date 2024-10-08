@@ -14,12 +14,12 @@ Weapon::~Weapon()
 {
 }
 
-void Weapon::update()
+void Weapon::update(Level& level)
 {
     if (ownerPosition != nullptr)
     {
-        float offsetX = offset.getX() * sin(rotation * M_PI / 180.0f);
-        float offsetY = offset.getY() * cos(rotation * M_PI / 180.0f);
+        float offsetX = offset.x * sin(rotation * M_PI / 180.0f);
+        float offsetY = offset.y * cos(rotation * M_PI / 180.0f);
 
         position = *ownerPosition + *ownerCenter + Vector2D(offsetX, offsetY);
     }

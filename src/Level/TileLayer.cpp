@@ -15,8 +15,8 @@ void TileLayer::render(Camera& camera)
             Tile* tile = tileMap[y][x];
             if (tile != nullptr)
             {
-                int drawX = (x * GSCALE(tile->width)) - camera.position.getX();
-                int drawY = (y * GSCALE(tile->height)) - camera.position.getY();
+                int drawX = (x * GSCALE(tile->width)) - camera.position.x;
+                int drawY = (y * GSCALE(tile->height)) - camera.position.y;
                 tile->draw(drawX, drawY);
             }
         }
