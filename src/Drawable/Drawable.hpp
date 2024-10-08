@@ -16,9 +16,9 @@ public:
     float getAspectRatio() const { return aspectRatio; }
     int getSourceWidth() const { return sourceWidth; }
     int getSourceHeight() const { return sourceHeight; }
+    SDL_Rect dstRect{0, 0, 0, 0};
 
 protected:
-    SDL_Rect dstRect{0, 0, 0, 0};
     int sourceWidth = 0;
     int sourceHeight = 0;
     float aspectRatio = 0.0f;

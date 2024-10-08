@@ -6,6 +6,7 @@
 #include "../../Core/Constants.hpp"
 #include "../../Drawable/MenuItemDrawable.hpp"
 #include "../LevelSelect/LevelSelectScreen.hpp"
+#include "../Credits/CreditsScreen.hpp"
 #include "../../Core/Macros.hpp"
 
 MainMenuScreen::MainMenuScreen() : Screen::Screen()
@@ -124,7 +125,7 @@ void MainMenuScreen::menuOptions()
 
 void MainMenuScreen::menuCredits()
 {
-    logd("Credits");
+    Game::screenManager.pushScreen(new CreditsScreen());
 }
 
 void MainMenuScreen::menuExit()
