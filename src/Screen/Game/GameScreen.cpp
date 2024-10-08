@@ -14,6 +14,13 @@ GameScreen::GameScreen(std::string levelId) : levelId(levelId)
 
 }
 
+GameScreen::~GameScreen()
+{
+    delete hud;
+    delete level;
+    SDL_ShowCursor(SDL_ENABLE);
+}
+
 void GameScreen::init()
 {
     level = levelParser.parseLevel(levelId);
@@ -69,11 +76,4 @@ void GameScreen::render()
     hud->render();
 
     SDL_RenderPresent(Game::renderer);
-}
-
-void GameScreen::dispose()
-{
-    delete hud;
-    delete level;
-    SDL_ShowCursor(SDL_ENABLE);
 }

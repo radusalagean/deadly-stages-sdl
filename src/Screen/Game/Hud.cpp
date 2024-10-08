@@ -19,7 +19,11 @@ Hud::Hud(int& score, int& wave, std::function<int()> getEnemiesLeft, const int& 
 
 Hud::~Hud()
 {
-    dispose();
+    for (auto drawable : drawables)
+    {
+        delete drawable;
+    }
+    drawables.clear();
 }
 
 void Hud::load()
@@ -106,14 +110,4 @@ void Hud::render()
     {
         drawable->draw();
     }
-}
-
-void Hud::dispose()
-{
-    for (auto drawable : drawables)
-    {
-        drawable->dispose();
-        delete drawable;
-    }
-    drawables.clear();
 }

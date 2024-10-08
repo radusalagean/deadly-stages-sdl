@@ -17,12 +17,12 @@ private:
 public:
     ImageDrawable(const std::string& fileName, 
         const std::string& parentDirectory = "res/image/");
+    ~ImageDrawable();
     
     void layout(int x, int y, int w, int h);
     void load();
     void update();
     void draw();
-    void dispose();
 };
 
 #endif // __SRC_DRAWABLE_IMAGEDRAWABLE_HPP__

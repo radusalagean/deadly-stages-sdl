@@ -12,7 +12,6 @@ public:
     virtual void load() = 0;
     virtual void update() = 0;
     virtual void draw() = 0;
-    virtual void dispose() = 0;
 
     float getAspectRatio() const { return aspectRatio; }
     int getSourceWidth() const { return sourceWidth; }

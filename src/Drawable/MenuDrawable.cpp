@@ -7,6 +7,15 @@
 #include "../Core/Constants.hpp"
 #include "../Core/Macros.hpp"
 
+MenuDrawable::~MenuDrawable()
+{
+    for (auto menuItem : menuItems)
+    {
+        delete menuItem;
+    }
+    menuItems.clear();
+}
+
 void MenuDrawable::layout(int x, int y, int w, int h)
 {
     int menuItemHeight = USCALE(Game::height * 0.035);
@@ -62,16 +71,6 @@ void MenuDrawable::draw()
     {
         menuItem->draw();
     }
-}
-
-void MenuDrawable::dispose()
-{
-    for (auto menuItem : menuItems)
-    {
-        menuItem->dispose();
-        delete menuItem;
-    }
-    menuItems.clear();
 }
 
 void MenuDrawable::setMenuItems(const std::vector<MenuItemDrawable*>& menuItems)

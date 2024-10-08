@@ -31,12 +31,12 @@ private:
 protected:
 public:
     MainMenuScreen();
+    ~MainMenuScreen();
     void init();
     void handleEvents();
     void layoutPass();
     void update();
     void render();
-    void dispose();
 };
 
 #endif // __SRC_SCREEN_MAINMENU_MAINMENUSCREEN_HPP__

@@ -21,12 +21,13 @@ private:
 
 public:
     GameScreen(std::string levelId);
+    ~GameScreen();
+    
     void init();
     void handleEvents();
     void layoutPass();
     void update();
     void render();
-    void dispose();
 };
 
 #endif // __SRC_SCREEN_GAME_GAMESCREEN_HPP__

@@ -18,13 +18,14 @@ private:
     std::function<void()> callback;
 
 public:
+    ~MenuItemDrawable();
+
     bool selected = false;
     MenuItemDrawable(const std::string& text, std::function<void()> callback);
     void layout(int x, int y, int w, int h);
     void load();
     void update();
     void draw();
-    void dispose();
     void pick();
 };
     

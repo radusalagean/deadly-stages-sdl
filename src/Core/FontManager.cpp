@@ -3,6 +3,14 @@
 #include <string>
 #include <iostream>
 
+FontManager::~FontManager() {
+    for (auto& pair : fonts) {
+        TTF_CloseFont(pair.second);
+    }
+    fonts.clear();
+    TTF_Quit();
+}
+
 TTF_Font* FontManager::getFont(const std::string& fontFileName, int size) {
     std::string key = fontFileName + std::to_string(size);
     if (fonts.find(key) == fonts.end()) {
@@ -13,12 +21,4 @@ TTF_Font* FontManager::getFont(const std::string& fontFileName, int size) {
         }
     }
     return fonts[key];
-}
-
-void FontManager::dispose() {
-    for (auto& pair : fonts) {
-        TTF_CloseFont(pair.second);
-    }
-    fonts.clear();
-    TTF_Quit();
 }

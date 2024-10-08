@@ -29,8 +29,3 @@ void Screen::render()
 {
 
 }
-
-void Screen::dispose()
-{
-    
-}

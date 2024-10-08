@@ -20,10 +20,11 @@ public:
     int selectionRectOutlineThickness;
 
     LevelPreview(const std::string& id, const std::string& name, std::function<void()> callback);
+    ~LevelPreview();
+
     void load();
     void update();
     void draw();
-    void dispose();
     void pick();
 };
 

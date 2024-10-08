@@ -20,6 +20,15 @@ MainMenuScreen::MainMenuScreen() : Screen::Screen()
     drawables.push_back(mainMenuDrawable);
 }
 
+MainMenuScreen::~MainMenuScreen()
+{
+    for (auto drawable : drawables)
+    {
+        delete drawable;
+    }
+    drawables.clear();
+}
+
 void MainMenuScreen::init()
 {
     loadMenuItems();
@@ -68,16 +77,6 @@ void MainMenuScreen::render()
         drawable->draw();
     }
     SDL_RenderPresent(Game::renderer);
-}
-
-void MainMenuScreen::dispose()
-{
-    for (auto drawable : drawables)
-    {
-        drawable->dispose();
-        delete drawable;
-    }
-    drawables.clear();
 }
 
 void MainMenuScreen::layoutPass()

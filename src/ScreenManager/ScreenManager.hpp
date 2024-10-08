@@ -16,6 +16,8 @@ private:
     void handlePendingTransactions();
 
 public:
+    ~ScreenManager();
+
     void pushScreen(Screen* screen);
     void popScreen();
     void setScreen(Screen* screen);
@@ -25,7 +27,6 @@ public:
     void handleEvents();
     void update();
     void render();
-    void dispose();
 
     void onRendererOutputSizeChanged();
 };

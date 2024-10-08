@@ -112,8 +112,7 @@ namespace Game
 
     void dispose()
     {
-        screenManager.dispose();
-        fontManager.dispose();
+        
     }
 
     void syncRendererOutputSize()

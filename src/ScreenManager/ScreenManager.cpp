@@ -5,6 +5,15 @@
 #include "../Control/Control.hpp"
 #include "../Game.hpp"
 
+ScreenManager::~ScreenManager()
+{
+    for (auto screen : screens) 
+    {
+        delete screen;
+    }
+    screens.clear();
+}
+
 void ScreenManager::pushScreen(Screen* screen) 
 {
     screensToAdd.push_back(screen);
@@ -60,23 +69,12 @@ void ScreenManager::render()
     screens.back()->render();
 }
 
-void ScreenManager::dispose() 
-{
-    for (auto screen : screens) 
-    {
-        screen->dispose();
-        delete screen;
-    }
-    screens.clear();
-}
-
 void ScreenManager::handlePendingTransactions() 
 {
     if (clearAllScreens) 
     {
         for (auto screen : screens)
             screensToRemove.push_back(screen);
-        screens.clear();
         clearAllScreens = false;
     }
 
@@ -86,7 +84,6 @@ void ScreenManager::handlePendingTransactions()
         auto it = std::find(screens.begin(), screens.end(), screen);
         if (it != screens.end()) 
         {
-            screen->dispose();
             screens.erase(it);
             delete screen;
             Game::control.lock();

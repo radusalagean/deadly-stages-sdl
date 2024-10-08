@@ -44,11 +44,6 @@ void HudHealthBar::draw()
     }
 }
 
-void HudHealthBar::dispose()
-{
-
-}
-
 void HudHealthBar::drawCell(int x, int y, int w, int h, bool isFull)
 {
     SDL_Rect outerRect;

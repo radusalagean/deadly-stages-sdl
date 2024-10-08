@@ -14,7 +14,6 @@ public:
     void load();
     void update();
     void draw();
-    void dispose();
 
     Vector2D computeSize();
 

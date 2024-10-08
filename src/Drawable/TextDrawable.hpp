@@ -21,11 +21,12 @@ private:
 public:
     TextDrawable(const std::string& text, const SDL_Color& color = {255, 255, 255, 255}, 
         const std::string& fontFileName = "PressStart2P.ttf");
+    ~TextDrawable();
+
     void layout(int x, int y, int w, int h);
     void load();
     void update();
     void draw();
-    void dispose();
     void setText(const std::string& text);
 };
 

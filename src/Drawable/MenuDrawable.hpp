@@ -10,11 +10,12 @@ class MenuItemDrawable;
 class MenuDrawable : public Drawable
 {
 public:
+    ~MenuDrawable();
+
     void layout(int x, int y, int w, int h);
     void load();
     void update();
     void draw();
-    void dispose();
 
     void setMenuItems(const std::vector<MenuItemDrawable*>& menuItems);
 

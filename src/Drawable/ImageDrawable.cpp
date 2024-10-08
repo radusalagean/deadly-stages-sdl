@@ -10,6 +10,11 @@ ImageDrawable::ImageDrawable(const std::string& fileName, const std::string& par
     this->parentDirectory = parentDirectory;
 }
 
+ImageDrawable::~ImageDrawable()
+{
+    SDL_DestroyTexture(texture);
+}
+
 void ImageDrawable::load()
 {
     std::string path = parentDirectory + fileName;
@@ -32,9 +37,4 @@ void ImageDrawable::update()
 void ImageDrawable::draw()
 {
     SDL_RenderCopy(Game::renderer, texture, NULL, &dstRect);
-}
-
-void ImageDrawable::dispose()
-{
-    SDL_DestroyTexture(texture);
 }

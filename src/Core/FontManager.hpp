@@ -11,8 +11,8 @@ private:
     std::unordered_map<std::string, TTF_Font*> fonts;
 
 public:
+    ~FontManager();
     TTF_Font* getFont(const std::string& path, int size);
-    void dispose();
 };
 
 #endif // __SRC_CORE_FONTMANAGER_HPP__

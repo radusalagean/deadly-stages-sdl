@@ -22,7 +22,6 @@ public:
     virtual void layoutPass();
     virtual void update();
     virtual void render();
-    virtual void dispose();
 
     void invalidateLayout() { layoutInvalidated = true; }
     bool isLayoutInvalidated() const { return layoutInvalidated; }

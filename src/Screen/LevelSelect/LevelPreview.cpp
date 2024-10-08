@@ -10,6 +10,12 @@ LevelPreview::LevelPreview(const std::string& id, const std::string& name, std::
     this->nameTextDrawable = new TextDrawable(name);
 }
 
+LevelPreview::~LevelPreview()
+{
+    delete imageDrawable;
+    delete nameTextDrawable;
+}
+
 void LevelPreview::load()
 {
     imageDrawable->load();
@@ -31,14 +37,6 @@ void LevelPreview::draw()
     }
     imageDrawable->draw();
     nameTextDrawable->draw();
-}
-
-void LevelPreview::dispose()
-{
-    imageDrawable->dispose();
-    delete imageDrawable;
-    nameTextDrawable->dispose();
-    delete nameTextDrawable;
 }
 
 void LevelPreview::pick()

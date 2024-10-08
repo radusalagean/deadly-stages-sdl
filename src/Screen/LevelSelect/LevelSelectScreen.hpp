@@ -31,12 +31,13 @@ private:
 
 public:
     LevelSelectScreen();
+    ~LevelSelectScreen();
+    
     void init();
     void handleEvents();
     void layoutPass();
     void update();
     void render();
-    void dispose();
 };
 
 #endif // __SRC_SCREEN_LEVELSELECT_LEVELSELECTSCREEN_HPP__

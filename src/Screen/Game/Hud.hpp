@@ -15,7 +15,6 @@ public:
     void layoutPass();
     void update();
     void render();
-    void dispose();
 
 private:
     int& score;

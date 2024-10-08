@@ -24,6 +24,15 @@ LevelSelectScreen::LevelSelectScreen() : Screen()
     }
 }
 
+LevelSelectScreen::~LevelSelectScreen()
+{
+    for (auto levelPreview : levelPreviews)
+    {
+        delete levelPreview;
+    }
+    levelPreviews.clear();
+}
+
 void LevelSelectScreen::init()
 {
     loadLevelPreviews();
@@ -146,14 +155,4 @@ void LevelSelectScreen::render()
         levelPreview->draw();
     }
     SDL_RenderPresent(Game::renderer);
-}
-
-void LevelSelectScreen::dispose()
-{
-    for (auto levelPreview : levelPreviews)
-    {
-        levelPreview->dispose();
-        delete levelPreview;
-    }
-    levelPreviews.clear();
 }

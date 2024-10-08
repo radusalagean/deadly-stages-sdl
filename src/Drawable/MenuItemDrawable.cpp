@@ -8,6 +8,11 @@
 
 #define SELECTION_RECT_SPACING_FACTOR 0.5
 
+MenuItemDrawable::~MenuItemDrawable()
+{
+    delete textDrawable;
+}
+
 MenuItemDrawable::MenuItemDrawable(const std::string& text, std::function<void()> callback) :
     callback(callback)
 {
@@ -46,12 +51,6 @@ void MenuItemDrawable::draw()
         Game::primitiveShapeHelper.drawRect(Game::renderer, selectionRect, {255, 255, 255, 255});
     }
     textDrawable->draw();
-}
-
-void MenuItemDrawable::dispose()
-{
-    textDrawable->dispose();
-    delete textDrawable;
 }
 
 void MenuItemDrawable::pick()

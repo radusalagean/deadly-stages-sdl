@@ -14,7 +14,31 @@ Level::Level(std::string id)
 
 Level::~Level()
 {
-    dispose();
+    tileset.clear();
+
+    if (playerWeapon != nullptr)
+    {
+        delete playerWeapon;
+        playerWeapon = nullptr;
+    }
+
+    if (player != nullptr)
+    {
+        delete player;
+        player = nullptr;
+    }
+
+    for (auto& bullet : bullets)
+    {
+        delete bullet;
+    }
+    bullets.clear();
+
+    for (auto& enemy : enemies)
+    {
+        delete enemy;
+    }
+    enemies.clear();
 }
 
 void Level::load()
@@ -98,35 +122,6 @@ void Level::render()
     #ifdef DEBUG_DRAW_COLLISION_RECTS
     renderDebugShapes(camera);
     #endif
-}
-
-void Level::dispose()
-{
-    tileset.clear();
-
-    if (playerWeapon != nullptr)
-    {
-        delete playerWeapon;
-        playerWeapon = nullptr;
-    }
-
-    if (player != nullptr)
-    {
-        delete player;
-        player = nullptr;
-    }
-
-    for (auto& bullet : bullets)
-    {
-        delete bullet;
-    }
-    bullets.clear();
-
-    for (auto& enemy : enemies)
-    {
-        delete enemy;
-    }
-    enemies.clear();
 }
 
 SDL_Rect Level::buildTileRect(int column, int row) const

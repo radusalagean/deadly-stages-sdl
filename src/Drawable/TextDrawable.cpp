@@ -9,6 +9,11 @@ TextDrawable::TextDrawable(const std::string& text, const SDL_Color& color, cons
     font = Game::fontManager.getFont(fontFileName, 12); // Start with a default size of 12 so we can get the aspect ratio
 }
 
+TextDrawable::~TextDrawable()
+{
+    SDL_DestroyTexture(texture);
+}
+
 void TextDrawable::load()
 {
     refreshTexture();
@@ -30,11 +35,6 @@ void TextDrawable::update()
 void TextDrawable::draw()
 {
     SDL_RenderCopy(Game::renderer, texture, nullptr, &dstRect);
-}
-
-void TextDrawable::dispose()
-{
-    SDL_DestroyTexture(texture);
 }
 
 void TextDrawable::setText(const std::string& text)

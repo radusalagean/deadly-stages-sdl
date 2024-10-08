@@ -23,7 +23,6 @@ public:
     void handleEvents();
     void update();
     void render();
-    void dispose();
 
     std::string id;
 
