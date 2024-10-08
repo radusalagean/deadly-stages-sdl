@@ -23,7 +23,7 @@ namespace CollisionManager
     }
 
     bool rayVsRect(const Vector2D& rayOrigin, const Vector2D& rayDirection, const SDL_Rect& targetRect, 
-        Vector2D* intersectionPoint, Vector2D* intersectionNormal, float& tHitNear)
+        Vector2D* intersectionPoint, Vector2D* intersectionNormal, float& tHitNear, float& tHitFar)
     {
         if (intersectionPoint != nullptr)
         {
@@ -56,7 +56,7 @@ namespace CollisionManager
         }
 
         tHitNear = std::max(tNear.getX(), tNear.getY());
-        float tHitFar = std::min(tFar.getX(), tFar.getY());
+        tHitFar = std::min(tFar.getX(), tFar.getY());
         
         if (tHitFar < 0)
         {
@@ -102,7 +102,7 @@ namespace CollisionManager
     }
 
     bool dynamicRectVsRect(const SDL_Rect& dynamicRect, const Vector2D& proposedVelocity, const SDL_Rect& staticRect,
-        Vector2D* intersectionPoint, Vector2D* intersectionNormal, float& contactTime)
+        Vector2D* intersectionPoint, Vector2D* intersectionNormal, float& tHitNear, float& tHitFar, float& contactTime)
     {
         if (proposedVelocity.getX() == 0 && proposedVelocity.getY() == 0)
         {
@@ -120,7 +120,7 @@ namespace CollisionManager
         
         Vector2D rayOrigin = Vector2D(dynamicRect.x + dynamicRect.w / 2, dynamicRect.y + dynamicRect.h / 2);
 
-        if (rayVsRect(rayOrigin, proposedVelocity, expandedRect, intersectionPoint, intersectionNormal, contactTime))
+        if (rayVsRect(rayOrigin, proposedVelocity, expandedRect, intersectionPoint, intersectionNormal, tHitNear, tHitFar))
         {
             return contactTime >= 0 && contactTime < 1.0f;
         }
@@ -129,19 +129,21 @@ namespace CollisionManager
 
     bool dynamicRectVsRect(const SDL_Rect& dynamicRect, const Vector2D& proposedVelocity, const SDL_Rect& staticRect)
     {
-        float contactTime = 0;
-        return dynamicRectVsRect(dynamicRect, proposedVelocity, staticRect, nullptr, nullptr, contactTime);
+        float tHitNear = 0;
+        float tHitFar = 0;
+        return dynamicRectVsRect(dynamicRect, proposedVelocity, staticRect, nullptr, nullptr, tHitNear, tHitFar, tHitNear);
     }
 
     bool resolveDynamicRectVsRect(const SDL_Rect& dynamicRect, Vector2D& proposedVelocity, const SDL_Rect& staticRect)
     {
         Vector2D intersectionPoint;
         Vector2D intersectionNormal;
-        float contactTime = 0;
+        float tHitNear = 0;
+        float tHitFar = 0;
 
-        if (dynamicRectVsRect(dynamicRect, proposedVelocity, staticRect, &intersectionPoint, &intersectionNormal, contactTime))
+        if (dynamicRectVsRect(dynamicRect, proposedVelocity, staticRect, &intersectionPoint, &intersectionNormal, tHitNear, tHitFar, tHitNear))
         {
-            proposedVelocity += intersectionNormal * Vector2D(std::abs(proposedVelocity.getX()), std::abs(proposedVelocity.getY())) * (1 - contactTime);
+            proposedVelocity += intersectionNormal * Vector2D(std::abs(proposedVelocity.getX()), std::abs(proposedVelocity.getY())) * (1 - tHitNear);
             return true;
         }
         return false;
@@ -151,8 +153,11 @@ namespace CollisionManager
     {
         Vector2D intersectionPoint;
         Vector2D intersectionNormal;
-        float contactTime = 0;
+        float tHitNear = 0;
+        float tHitFar = 0;
         std::vector<CollisionInfo> collisions;
+
+        bool isSubjectEntityBullet = dynamic_cast<Bullet*>(&subjectEntity);
 
         SDL_Rect subjectBoundsRect = 
         {
@@ -207,10 +212,10 @@ namespace CollisionManager
                 if (tile->isCollidable()) 
                 {
                     SDL_Rect tileRect = level.buildTileRect(x, y);
-                    if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, tileRect, &intersectionPoint, &intersectionNormal, contactTime)) 
+                    if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, tileRect, &intersectionPoint, &intersectionNormal, tHitNear, tHitFar, tHitNear)) 
                     {
                         SDL_Rect collidedRect = level.buildTileRect(x, y);
-                        CollisionInfo collision = {collidedRect, contactTime};
+                        CollisionInfo collision = {collidedRect, tHitNear};
                         #ifdef DEBUG_DRAW_COLLISION_RECTS
                         level.collidedRects.push_back(collidedRect);
                         #endif
@@ -231,9 +236,9 @@ namespace CollisionManager
                 player->collisionRect.w,
                 player->collisionRect.h
             };
-            if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, playerRect, &intersectionPoint, &intersectionNormal, contactTime))
+            if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, playerRect, &intersectionPoint, &intersectionNormal, tHitNear, tHitFar, tHitNear))
             {
-                CollisionInfo collision = {playerRect, contactTime, player};
+                CollisionInfo collision = {playerRect, tHitNear, player};
                 #ifdef DEBUG_DRAW_COLLISION_RECTS
                 level.collidedRects.push_back(playerRect);
                 #endif
@@ -253,7 +258,8 @@ namespace CollisionManager
                 enemy->collisionRect.w,
                 enemy->collisionRect.h
             };
-            if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, enemyRect, &intersectionPoint, &intersectionNormal, contactTime))
+            float& contactTime = isSubjectEntityBullet ? tHitFar : tHitNear;
+            if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, enemyRect, &intersectionPoint, &intersectionNormal, tHitNear, tHitFar, contactTime))
             {
                 CollisionInfo collision = {enemyRect, contactTime, enemy};
                 #ifdef DEBUG_DRAW_COLLISION_RECTS
@@ -275,7 +281,7 @@ namespace CollisionManager
             {
                 *firstCollidedEntity = collision.collidedEntity;
             }
-            if (subjectEntity.getCollisionResolution() == CollisionManager::CollisionResolution::COLLISION_RESOLUTION_VANISH)
+            if (isSubjectEntityBullet)
             {
                 subjectEntity.pendingRemoval = true;
                 proposedVelocity.reset();

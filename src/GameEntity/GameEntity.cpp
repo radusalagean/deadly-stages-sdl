@@ -52,11 +52,6 @@ void GameEntity::drawCollisionRect(Camera& camera) // Draw collision rect with b
 }
 #endif
 
-CollisionManager::CollisionResolution GameEntity::getCollisionResolution()
-{
-    return CollisionManager::CollisionResolution::COLLISION_RESOLUTION_PUSH;
-}
-
 void GameEntity::sendDamage(GameEntity* targetEntity)
 {
     targetEntity->receiveDamage(damageAmount);

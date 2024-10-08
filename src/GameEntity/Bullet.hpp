@@ -14,10 +14,7 @@ public:
     void update(Camera& camera, Level& level);
     void draw(Camera& camera);
 
-    int speedPxPerSecond = 6;
-    // int speedPxPerSecond = 600;
-
-    CollisionManager::CollisionResolution getCollisionResolution() override;
+    int speedPxPerSecond = 600;
 };
 
 #endif // __SRC_GAMEENTITY_BULLET_HPP__

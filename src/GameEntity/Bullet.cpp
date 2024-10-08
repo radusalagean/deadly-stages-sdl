@@ -34,8 +34,3 @@ void Bullet::draw(Camera& camera)
 {
     GameEntity::draw(camera);
 }
-
-CollisionManager::CollisionResolution Bullet::getCollisionResolution()
-{
-    return CollisionManager::CollisionResolution::COLLISION_RESOLUTION_VANISH;
-}

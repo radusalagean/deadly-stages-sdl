@@ -10,10 +10,6 @@
 #include "../Core/Constants.hpp"
 #include "../Core/Config.hpp"
 
-namespace CollisionManager {
-    enum class CollisionResolution;
-}
-
 class GameEntity
 {
 public:
@@ -32,6 +28,7 @@ public:
     int currentHealth = -1;
 
     SDL_Rect collisionRect;
+    SDL_Rect bulletCollisionRect;
 
     Vector2D position;
     Vector2D center;
@@ -56,8 +53,6 @@ public:
             height
         };
     }
-
-    virtual CollisionManager::CollisionResolution getCollisionResolution();
 
     #ifdef DEBUG_DRAW_COLLISION_RECTS
     void drawCollisionRect(Camera& camera);
