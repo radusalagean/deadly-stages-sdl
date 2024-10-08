@@ -236,9 +236,11 @@ void Level::renderDebugShapes(Camera& camera)
 
 void Level::handleGameEntityPendingRemovals()
 {
-    VectorUtils::removeFromVectorIf(enemies, [](Enemy* enemy) {
+    VectorUtils::removeFromVectorIf(enemies, [this](Enemy* enemy) {
         if (enemy->pendingRemoval)
         {
+            if (enemy->bounty > 0)
+                score += enemy->bounty;
             delete enemy;
             return true;
         }

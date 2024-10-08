@@ -26,6 +26,7 @@ public:
     int damageAmount = -1;
     int maxHealth = -1;
     int currentHealth = -1;
+    int bounty = -1;
 
     SDL_Rect collisionRect;
     SDL_Rect bulletCollisionRect;
