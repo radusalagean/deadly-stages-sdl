@@ -67,7 +67,7 @@ void Level::handleEvents()
         float speed = player->speedPxPerSecond * Game::latestLoopDeltaTimeSeconds;
         if (Game::control.isActionDown(CA_SPRINT) && player->stamina > 0.0f)
         {
-            speed *= player->sprintMultiplier;
+            speed += player->sprintBoost * Game::latestLoopDeltaTimeSeconds;
             player->stamina -= player->staminaDecreaseRatePerSecond * Game::latestLoopDeltaTimeSeconds;
             if (player->stamina < 0.0f)
                 player->stamina = 0.0f;
@@ -166,8 +166,8 @@ void Level::advanceWaveIfNeeded()
         return;
     wave++;
     enemiesLeftToSpawn = wave * 6;
-    currentEnemySpeedMultiplier *= 1.05f;
-    logd("New wave: %d, enemies left to spawn: %d", wave, enemiesLeftToSpawn);
+    currentEnemySpeed *= speedFactorIncreasePerWave;
+    player->speedPxPerSecond *= speedFactorIncreasePerWave;
 }
 
 void Level::spawnEnemiesIfNeeded()
@@ -186,7 +186,7 @@ void Level::spawnEnemiesIfNeeded()
             enemy->setSize(32, 32);
             enemy->texturePath = "res/level/" + id + "/enemy.png";
             enemy->target = &player->positionPlusCenter;
-            enemy->speedPxPerSecond *= currentEnemySpeedMultiplier;
+            enemy->speedPxPerSecond = currentEnemySpeed;
             enemies.push_back(enemy);
             enemy->load(texturePool);
             enemiesLeftToSpawn--;

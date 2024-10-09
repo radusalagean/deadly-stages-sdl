@@ -42,7 +42,7 @@ void GameOverScreen::loadAssets()
 void GameOverScreen::loadMenuItems()
 {
     std::vector<MenuItemDrawable*> menuItems{
-        new MenuItemDrawable("CONTINUE", std::bind(&GameOverScreen::menuContinue, this)),
+        new MenuItemDrawable("RESTART", std::bind(&GameOverScreen::menuContinue, this)),
         new MenuItemDrawable("END", std::bind(&GameOverScreen::menuEnd, this))
     };
     menuDrawable->setMenuItems(menuItems);

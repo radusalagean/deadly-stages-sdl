@@ -48,7 +48,8 @@ public:
     int wave = 0;
     int enemiesLeftToSpawn = 0;
     int getEnemiesLeft();
-    float currentEnemySpeedMultiplier = 1.00f;
+    const float speedFactorIncreasePerWave = 1.05f;
+    float currentEnemySpeed = 100.0f;
     std::vector<Vector2D*> spawnPoints{};
     Debouncer spawnEnemyDebouncer = Debouncer(1000);
     void advanceWaveIfNeeded();

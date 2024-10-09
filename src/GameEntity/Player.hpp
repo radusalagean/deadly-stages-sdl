@@ -10,8 +10,8 @@ public:
     Player();
     ~Player();
 
-    const float speedPxPerSecond = 100.0f;
-    const float sprintMultiplier = 2.0f;
+    const float sprintBoost = 100.0f;
+    float speedPxPerSecond = 100.0f;
     float stamina = 1.0f;
     const float staminaDecreaseRatePerSecond = 0.5f;
     const float staminaIncreaseRatePerSecond = 0.2f;
