@@ -41,10 +41,12 @@ void MenuDrawable::layout(int x, int y, int w, int h)
             currentY += menuItemSpacing;
         }
     }
-    if (w > maxMenuItemWidth) // Center the menu items
+    int menuHeight = currentY - y;
+    if (w > maxMenuItemWidth || h > menuHeight)
     {
-        int newX = x + ((w - maxMenuItemWidth) / 2);
-        layout(newX, y, maxMenuItemWidth, h);
+        int finalX = w > maxMenuItemWidth ? x + ((w - maxMenuItemWidth) / 2) : x;
+        int finalY = h > menuHeight ? y + ((h - menuHeight) / 2) : y;
+        layout(finalX, finalY, maxMenuItemWidth, menuHeight);
     }
 }
 

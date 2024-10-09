@@ -32,8 +32,7 @@ void LevelPreview::draw()
 {
     if (selected)
     {
-        Game::primitiveShapeHelper.drawRectOutline(Game::renderer, selectionRect, {255, 0, 0, 255}, 
-            selectionRectOutlineThickness);
+        Game::primitiveShapeHelper.drawRectOutline(selectionRect, {255, 0, 0, 255}, selectionRectOutlineThickness);
     }
     imageDrawable->draw();
     nameTextDrawable->draw();

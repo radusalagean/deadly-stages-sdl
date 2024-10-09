@@ -28,6 +28,8 @@ void GameScreen::init()
     level->load();
     hud = new Hud(level->score, level->wave, std::bind(&Level::getEnemiesLeft, level), level->player->maxHealth, level->player->currentHealth);
     hud->load();
+    pauseOverlay.load();
+
     // Custom cursor
     SDL_ShowCursor(SDL_DISABLE);
     cursorTexture = SDLUtils::loadTexture("res/image/cursor.png");
@@ -36,24 +38,35 @@ void GameScreen::init()
 
 void GameScreen::handleEvents()
 {
+    // Custom cursor
+    SDL_GetMouseState(&cursorRect.x, &cursorRect.y);
+
+    if (paused)
+    {
+        pauseOverlay.handleEvents();
+        return;
+    }
     level->handleEvents();
     if (Game::control.isActionDown(CA_ESCAPE))
     {
-        Game::screenManager.setScreen(new MainMenuScreen());
+        paused = true;
     }
-
-    // Custom cursor
-    SDL_GetMouseState(&cursorRect.x, &cursorRect.y);
 }
 
 void GameScreen::layoutPass()
 {
     hud->layoutPass();
+    pauseOverlay.layoutPass();
     layoutInvalidated = false;
 }
 
 void GameScreen::update()
 {
+    if (paused)
+    {
+        pauseOverlay.update();
+        return;
+    }
     level->update();
     hud->update();
 }
@@ -75,6 +88,12 @@ void GameScreen::render()
 
     // HUD
     hud->render();
+
+    // Pause overlay
+    if (paused)
+    {
+        pauseOverlay.render();
+    }
 
     SDL_RenderPresent(Game::renderer);
 }

@@ -48,7 +48,7 @@ void MenuItemDrawable::draw()
 {
     if (selected)
     {
-        Game::primitiveShapeHelper.drawRect(Game::renderer, selectionRect, {255, 255, 255, 255});
+        Game::primitiveShapeHelper.drawRect(selectionRect, {255, 255, 255, 255});
     }
     textDrawable->draw();
 }

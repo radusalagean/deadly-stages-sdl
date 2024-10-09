@@ -49,7 +49,7 @@ void GameEntity::drawCollisionRect(Camera& camera) // Draw collision rect with b
     debugRect.y = GSCALE(position.y) + GSCALE(collisionRect.y) - camera.position.y;
     debugRect.w = GSCALE(collisionRect.w);
     debugRect.h = GSCALE(collisionRect.h);
-    Game::primitiveShapeHelper.drawRectOutline(Game::renderer, debugRect, {0, 0, 255, 255}, 2);
+    Game::primitiveShapeHelper.drawRectOutline(debugRect, {0, 0, 255, 255}, 2);
 }
 #endif
 

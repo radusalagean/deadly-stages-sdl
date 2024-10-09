@@ -196,7 +196,7 @@ void Level::renderDebugShapes(Camera& camera)
         int w = GSCALE(collidedRect.w);
         int h = GSCALE(collidedRect.h);
         SDL_Rect collidedRectDst = { x, y, w, h };
-        Game::primitiveShapeHelper.drawRectOutline(Game::renderer, collidedRectDst, {255, 0, 0, 255}, 2);
+        Game::primitiveShapeHelper.drawRectOutline(collidedRectDst, {255, 0, 0, 255}, 2);
     }
     collidedRects.clear();
 
@@ -210,7 +210,7 @@ void Level::renderDebugShapes(Camera& camera)
         static_cast<int>(GSCALE(checkAreaRect.w)),
         static_cast<int>(GSCALE(checkAreaRect.h))
         };
-        Game::primitiveShapeHelper.drawRectOutline(Game::renderer, checkAreaRectDst, {0, 255, 0, 255}, 1);
+        Game::primitiveShapeHelper.drawRectOutline(checkAreaRectDst, {0, 255, 0, 255}, 1);
     }
     checkAreaRects.clear();
 
@@ -224,7 +224,7 @@ void Level::renderDebugShapes(Camera& camera)
             static_cast<int>(GSCALE(checkAreaTileIndicesRect.w)),
             static_cast<int>(GSCALE(checkAreaTileIndicesRect.h))
         };
-        Game::primitiveShapeHelper.drawRectOutline(Game::renderer, checkAreaTileIndicesDst, {255, 255, 0, 255}, 2);
+        Game::primitiveShapeHelper.drawRectOutline(checkAreaTileIndicesDst, {255, 255, 0, 255}, 2);
     }
     checkAreaTileIndicesRects.clear();
 }

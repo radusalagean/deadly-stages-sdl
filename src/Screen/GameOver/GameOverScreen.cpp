@@ -73,13 +73,6 @@ void GameOverScreen::render()
 
 void GameOverScreen::layoutPass()
 {
-    { // Game Over
-        int height = USCALE(Game::height * 0.6);
-        int width = height * gameOverImageDrawable->getAspectRatio();
-        int x = (Game::width - width) / 2;
-        int y = USCALE(Game::height * 0.1);
-        gameOverImageDrawable->layout(x, y, width, height);
-    }
     { // Stats
         int height = USCALE(Game::height * 0.06);
         int width = height * statsTextDrawable->getAspectRatio();
@@ -87,11 +80,22 @@ void GameOverScreen::layoutPass()
         int y = Game::height / 2 - height / 2;
         statsTextDrawable->layout(x, y, width, height);
     }
-    { // Menu
-        int height = USCALE(Game::height * 0.3);
-        int width = USCALE(Game::width * 0.5);
+    { // Game Over
+        int statsTopY = statsTextDrawable->dstRect.y;
+        int spaceAboveStats = statsTopY;
+        int height = USCALE(Game::height * 0.2);
+        int width = height * gameOverImageDrawable->getAspectRatio();
         int x = (Game::width - width) / 2;
-        int y = Game::height - height - USCALE(Game::height * 0.05) - Constants::WINDOW_PADDING_PX;
+        int y = std::max(spaceAboveStats / 2 - height / 2, 0);
+        gameOverImageDrawable->layout(x, y, width, height);
+    }
+    { // Menu
+        int statsBottomY = statsTextDrawable->dstRect.y + statsTextDrawable->dstRect.h;
+        int remainingHeight = Game::height - statsBottomY;
+        int height = remainingHeight;
+        int width = Game::width;
+        int x = 0;
+        int y = statsBottomY;
         menuDrawable->layout(x, y, width, height);
     }
     layoutInvalidated = false;

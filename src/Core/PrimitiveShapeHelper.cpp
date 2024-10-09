@@ -2,9 +2,11 @@
 
 #include <SDL.h>
 #include <algorithm>
+#include "../Game.hpp"
 
-void PrimitiveShapeHelper::drawRect(SDL_Renderer* renderer, const SDL_Rect& rect, const SDL_Color& color)
+void PrimitiveShapeHelper::drawRect(const SDL_Rect& rect, const SDL_Color& color)
 {
+    SDL_Renderer* renderer = Game::renderer;
     SDL_Color oldColor;
     SDL_GetRenderDrawColor(renderer, &oldColor.r, &oldColor.g, &oldColor.b, &oldColor.a);
     
@@ -14,8 +16,9 @@ void PrimitiveShapeHelper::drawRect(SDL_Renderer* renderer, const SDL_Rect& rect
     SDL_SetRenderDrawColor(renderer, oldColor.r, oldColor.g, oldColor.b, oldColor.a);
 }
 
-void PrimitiveShapeHelper::drawRectOutline(SDL_Renderer* renderer, const SDL_Rect& rect, const SDL_Color& color, int borderWidth)
+void PrimitiveShapeHelper::drawRectOutline(const SDL_Rect& rect, const SDL_Color& color, int borderWidth)
 {
+    SDL_Renderer* renderer = Game::renderer;
     SDL_Color oldColor;
     SDL_GetRenderDrawColor(renderer, &oldColor.r, &oldColor.g, &oldColor.b, &oldColor.a);
     

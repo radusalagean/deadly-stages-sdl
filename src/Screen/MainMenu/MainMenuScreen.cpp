@@ -84,16 +84,18 @@ void MainMenuScreen::layoutPass()
 {
     { // Title Screen
         int y = USCALE(Game::height * 0.1);
-        int height = USCALE(Game::height * 0.6);
+        int height = USCALE(Game::height * 0.5);
         int width = height * titleScreenImageDrawable->getAspectRatio();
         int x = (Game::width - width) / 2;
         titleScreenImageDrawable->layout(x, y, width, height);
     }
     { // Main Menu
-        int height = USCALE(Game::height * 0.3);
-        int width = USCALE(Game::width * 0.5);
-        int x = (Game::width - width) / 2;
-        int y = Game::height - height - USCALE(Game::height * 0.05) - Constants::WINDOW_PADDING_PX;
+        int titleScreenBottomY = titleScreenImageDrawable->dstRect.y + titleScreenImageDrawable->dstRect.h;
+        int remainingHeight = Game::height - titleScreenBottomY;
+        int height = remainingHeight;
+        int width = Game::width;
+        int x = 0;
+        int y = titleScreenBottomY;
         mainMenuDrawable->layout(x, y, width, height);
     }
     { // Demo Label

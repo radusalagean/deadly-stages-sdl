@@ -53,9 +53,9 @@ void HudHealthBar::drawCell(int x, int y, int w, int h, bool isFull)
     outerRect.y = y;
     outerRect.w = w;
     outerRect.h = h;
-    Game::primitiveShapeHelper.drawRect(Game::renderer, outerRect, backgroundColor);
+    Game::primitiveShapeHelper.drawRect(outerRect, backgroundColor);
     int borderWidth = ceil(borderWidthUnitInterval * h);
-    Game::primitiveShapeHelper.drawRectOutline(Game::renderer, outerRect, borderColor, borderWidth);
+    Game::primitiveShapeHelper.drawRectOutline(outerRect, borderColor, borderWidth);
     SDL_Rect innerRect;
     int innerRectHeight = ceil(h * innerCellHeightUnitInterval);
     if (innerRectHeight % 2 == 1)
@@ -65,8 +65,8 @@ void HudHealthBar::drawCell(int x, int y, int w, int h, bool isFull)
     innerRect.w = w;
     innerRect.h = innerRectHeight;
     SDL_Color innerColor = isFull ? healthColor : backgroundColor;
-    Game::primitiveShapeHelper.drawRect(Game::renderer, innerRect, innerColor);
-    Game::primitiveShapeHelper.drawRectOutline(Game::renderer, innerRect, borderColor, borderWidth);
+    Game::primitiveShapeHelper.drawRect(innerRect, innerColor);
+    Game::primitiveShapeHelper.drawRectOutline(innerRect, borderColor, borderWidth);
 }
 
 Vector2D HudHealthBar::computeSize()
