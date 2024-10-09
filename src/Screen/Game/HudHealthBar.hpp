@@ -15,11 +15,9 @@ public:
     void update();
     void draw();
 
-    Vector2D computeSize();
+    int getActualWidth();
 
 private:
-    const int cellHeight = 35;
-    const int cellWidth = 21;
     const float innerCellHeightUnitInterval = 25.0f / 35.0f;
     const float borderWidthUnitInterval = 1.0f / 35.0f;
     SDL_Color borderColor = {0, 0, 0, 255};
@@ -28,8 +26,7 @@ private:
 
     const int numCells;
     int& filledCells;
-
-    SDL_Rect allocatedRect;
+    int cellWidth = 0;
 
     void drawCell(int x, int y, int w, int h, bool isFull);
 };

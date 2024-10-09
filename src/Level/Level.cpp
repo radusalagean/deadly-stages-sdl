@@ -64,13 +64,27 @@ void Level::handleEvents()
     if (Game::control.isActionDown(CA_UP) || Game::control.isActionDown(CA_DOWN) || 
         Game::control.isActionDown(CA_LEFT) || Game::control.isActionDown(CA_RIGHT))
     {
-        float speedMultiplier = player->speedPxPerSecond * Game::latestLoopDeltaTimeSeconds;
+        float speed = player->speedPxPerSecond * Game::latestLoopDeltaTimeSeconds;
+        if (Game::control.isActionDown(CA_SPRINT) && player->stamina > 0.0f)
+        {
+            speed *= player->sprintMultiplier;
+            player->stamina -= player->staminaDecreaseRatePerSecond * Game::latestLoopDeltaTimeSeconds;
+            if (player->stamina < 0.0f)
+                player->stamina = 0.0f;
+            player->lastStaminaDecreaseTime = std::chrono::steady_clock::now();
+        }
+        else if (player->stamina < 1.0f && player->canIncreaseStamina())
+        {
+            player->stamina += player->staminaIncreaseRatePerSecond * Game::latestLoopDeltaTimeSeconds;
+            if (player->stamina > 1.0f)
+                player->stamina = 1.0f;
+        }
         Vector2D velocity;
-        velocity.y = Game::control.isActionDown(CA_UP) ? -speedMultiplier :
-                              Game::control.isActionDown(CA_DOWN) ? speedMultiplier : 0;
+        velocity.y = Game::control.isActionDown(CA_UP) ? -speed :
+                              Game::control.isActionDown(CA_DOWN) ? speed : 0;
 
-        velocity.x = Game::control.isActionDown(CA_LEFT) ? -speedMultiplier :
-                              Game::control.isActionDown(CA_RIGHT) ? speedMultiplier : 0;
+        velocity.x = Game::control.isActionDown(CA_LEFT) ? -speed :
+                              Game::control.isActionDown(CA_RIGHT) ? speed : 0;
 
         CollisionManager::processMovement(*player, velocity, *this);
         player->velocity = velocity;

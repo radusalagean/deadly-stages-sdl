@@ -36,5 +36,13 @@ void ImageDrawable::update()
 
 void ImageDrawable::draw()
 {
+    if (transparency != 255)
+    {
+        SDL_SetTextureAlphaMod(texture, transparency);
+    }
     SDL_RenderCopy(Game::renderer, texture, NULL, &dstRect);
+    if (transparency != 255)
+    {
+        SDL_SetTextureAlphaMod(texture, 255);
+    }
 }

@@ -13,6 +13,12 @@ Player::Player() : GameEntity()
     currentHealth = maxHealth;
 }
 
+bool Player::canIncreaseStamina()
+{
+    return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - lastStaminaDecreaseTime)
+        .count() >= staminaIncreaseCooldownMs;
+}
+
 Player::~Player()
 {
 

@@ -3,9 +3,9 @@
 #include "../../Core/Constants.hpp"
 #include "../../Core/Macros.hpp"
 #include "HudHealthBar.hpp"
+#include "../../Core/PrimitiveShapeHelper.hpp"
 
-Hud::Hud(int& score, int& wave, std::function<int()> getEnemiesLeft, const int& maxHealth, int& currentHealth) : 
-    score(score), wave(wave), getEnemiesLeft(getEnemiesLeft)
+Hud::Hud(Level& level) : level(level)
 {
     scoreTextDrawable = new TextDrawable(buildScoreText());
     drawables.push_back(scoreTextDrawable);
@@ -13,7 +13,10 @@ Hud::Hud(int& score, int& wave, std::function<int()> getEnemiesLeft, const int& 
     drawables.push_back(waveTextDrawable);
     enemiesLeftTextDrawable = new TextDrawable(buildEnemiesLeftText());
     drawables.push_back(enemiesLeftTextDrawable);
-    healthBar = new HudHealthBar(maxHealth, currentHealth);
+    playerHudDrawable = new ImageDrawable("player_hud.png");
+    playerHudDrawable->transparency = 200;
+    drawables.push_back(playerHudDrawable);
+    healthBar = new HudHealthBar(level.player->maxHealth, level.player->currentHealth);
     drawables.push_back(healthBar);
 }
 
@@ -36,23 +39,25 @@ void Hud::load()
 
 std::string Hud::buildScoreText()
 {
-    return scoreLabel + std::to_string(score);
+    return scoreLabel + std::to_string(level.score);
 }
 
 std::string Hud::buildWaveText()
 {
-    return waveLabel + std::to_string(wave);
+    return waveLabel + std::to_string(level.wave);
 }
 
 std::string Hud::buildEnemiesLeftText()
 {
-    return leftLabel + std::to_string(getEnemiesLeft());
+    return leftLabel + std::to_string(level.getEnemiesLeft());
 }
 
 void Hud::layoutPass()
 {
     const int midSeparation = USCALE(Game::width * 0.05);
     const float textHeight = USCALE(Game::height * 0.04);
+    playerHudPadding = USCALE(Game::height * 0.025);
+    const float playerHudBarSpacing = USCALE(Game::height * 0.01);
     { // Score
         int width = textHeight * scoreTextDrawable->getAspectRatio();
         int x = Constants::WINDOW_PADDING_PX;
@@ -71,37 +76,50 @@ void Hud::layoutPass()
         int y = Constants::WINDOW_PADDING_PX;
         enemiesLeftTextDrawable->layout(x, y, width, textHeight);
     }
-    { // Health Bar
-        Vector2D size = healthBar->computeSize();
-        int width = size.x;
-        int height = size.y;
-        int x = Game::width / 2 - width / 2;
+    { // Player HUD
+        int height = USCALE(Game::height * 0.22);
+        int width = height * playerHudDrawable->getAspectRatio();
+        int x = Constants::WINDOW_PADDING_PX;
         int y = Game::height - height - Constants::WINDOW_PADDING_PX;
+        playerHudDrawable->layout(x, y, width, height);
+    }
+    { // Health Bar
+        int width = playerHudDrawable->dstRect.w - 2 * playerHudPadding;
+        int height = playerHudDrawable->dstRect.h * 0.3;
+        int x = Constants::WINDOW_PADDING_PX + playerHudPadding;
+        int y = Game::height - Constants::WINDOW_PADDING_PX - playerHudPadding - height;
         healthBar->layout(x, y, width, height);
+    }
+    { // Stamina Bar
+        refreshStaminaBarWidth();
+        staminaBarRect.h = playerHudDrawable->dstRect.h * 0.05;
+        staminaBarRect.x = Constants::WINDOW_PADDING_PX + playerHudPadding;
+        staminaBarRect.y = healthBar->dstRect.y - staminaBarRect.h - playerHudBarSpacing;
     }
 }
 
 void Hud::update()
 {
-    if (score != lastProcessedScore)
+    if (level.score != lastProcessedScore)
     {
         scoreTextDrawable->setText(buildScoreText());
-        lastProcessedScore = score;
+        lastProcessedScore = level.score;
     }
-    if (wave != lastProcessedWave)
+    if (level.wave != lastProcessedWave)
     {
         waveTextDrawable->setText(buildWaveText());
-        lastProcessedWave = wave;
+        lastProcessedWave = level.wave;
     }
-    if (getEnemiesLeft() != lastProcessedEnemiesLeft)
+    if (level.getEnemiesLeft() != lastProcessedEnemiesLeft)
     {
         enemiesLeftTextDrawable->setText(buildEnemiesLeftText());
-        lastProcessedEnemiesLeft = getEnemiesLeft();
+        lastProcessedEnemiesLeft = level.getEnemiesLeft();
     }
     for (auto drawable : drawables)
     {
         drawable->update();
     }
+    refreshStaminaBarWidth();
 }
 
 void Hud::render()
@@ -110,4 +128,10 @@ void Hud::render()
     {
         drawable->draw();
     }
+    Game::primitiveShapeHelper.drawRect(staminaBarRect, {240, 208, 26, 255});
+}
+
+void Hud::refreshStaminaBarWidth()
+{
+    staminaBarRect.w = healthBar->getActualWidth() * level.player->stamina;
 }

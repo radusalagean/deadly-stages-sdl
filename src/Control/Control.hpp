@@ -13,7 +13,8 @@ enum ControlAction
     CA_RIGHT,
     CA_SELECT,
     CA_ESCAPE,
-    CA_FIRE
+    CA_FIRE,
+    CA_SPRINT
 };
 
 class Control
@@ -34,7 +35,8 @@ private:
         {SDL_SCANCODE_A, {CA_LEFT}},
         {SDL_SCANCODE_D, {CA_RIGHT}},
         {SDL_SCANCODE_RETURN, {CA_SELECT}},
-        {SDL_SCANCODE_ESCAPE, {CA_ESCAPE}}
+        {SDL_SCANCODE_ESCAPE, {CA_ESCAPE}},
+        {SDL_SCANCODE_LSHIFT, {CA_SPRINT}}
     }; // key: scancode, value: actions
 
     std::unordered_map<int, std::set<int>> mouseMap{
@@ -47,7 +49,8 @@ private:
         {SDL_CONTROLLER_BUTTON_DPAD_LEFT, {CA_LEFT}},
         {SDL_CONTROLLER_BUTTON_DPAD_RIGHT, {CA_RIGHT}},
         {SDL_CONTROLLER_BUTTON_A, {CA_SELECT}},
-        {SDL_CONTROLLER_BUTTON_B, {CA_FIRE}}
+        {SDL_CONTROLLER_BUTTON_B, {CA_FIRE}},
+        {SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, {CA_SPRINT}}
     }; // key: button, value: actions
 
     inline void unlockIfReleased()

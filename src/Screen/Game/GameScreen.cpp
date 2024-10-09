@@ -26,7 +26,7 @@ void GameScreen::init()
 {
     level = levelParser.parseLevel(levelId);
     level->load();
-    hud = new Hud(level->score, level->wave, std::bind(&Level::getEnemiesLeft, level), level->player->maxHealth, level->player->currentHealth);
+    hud = new Hud(*level);
     hud->load();
     pauseOverlay.load();
 
@@ -78,14 +78,6 @@ void GameScreen::render()
     // Level    
     level->render();
 
-    // Custom cursor
-    cursorRect.w = USCALE(cursorWidth);
-    cursorRect.h = USCALE(cursorHeight);
-    // Center the crosshair on the cursor
-    cursorRect.x = cursorRect.x - cursorRect.w / 2;
-    cursorRect.y = cursorRect.y - cursorRect.h / 2;
-    SDL_RenderCopy(Game::renderer, cursorTexture, NULL, &cursorRect);
-
     // HUD
     hud->render();
 
@@ -94,6 +86,14 @@ void GameScreen::render()
     {
         pauseOverlay.render();
     }
+
+    // Custom cursor
+    cursorRect.w = USCALE(cursorWidth);
+    cursorRect.h = USCALE(cursorHeight);
+    // Center the crosshair on the cursor
+    cursorRect.x = cursorRect.x - cursorRect.w / 2;
+    cursorRect.y = cursorRect.y - cursorRect.h / 2;
+    SDL_RenderCopy(Game::renderer, cursorTexture, NULL, &cursorRect);
 
     SDL_RenderPresent(Game::renderer);
 }

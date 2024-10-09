@@ -19,6 +19,8 @@ public:
         const std::string& parentDirectory = "res/image/");
     ~ImageDrawable();
     
+    int transparency = 255;
+    
     void layout(int x, int y, int w, int h);
     void load();
     void update();

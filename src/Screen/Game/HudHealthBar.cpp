@@ -17,10 +17,7 @@ HudHealthBar::~HudHealthBar()
 
 void HudHealthBar::layout(int x, int y, int w, int h)
 {
-    allocatedRect.x = x;
-    allocatedRect.y = y;
-    allocatedRect.w = w;
-    allocatedRect.h = h;
+    setDstRect(x, y, w, h);
 }
 
 void HudHealthBar::load()
@@ -30,16 +27,16 @@ void HudHealthBar::load()
 
 void HudHealthBar::update()
 {
-
+    cellWidth = dstRect.w / numCells;
 }
 
 void HudHealthBar::draw()
 {
-    int currentX = allocatedRect.x;
-    int cellWidth = allocatedRect.w / numCells;
+    int currentX = dstRect.x;
+    int cellHeight = dstRect.h;
     for (int i = 0; i < numCells; i++)
     {
-        drawCell(currentX, allocatedRect.y, cellWidth, allocatedRect.h, i < filledCells);
+        drawCell(currentX, dstRect.y, cellWidth, cellHeight, i < filledCells);
         currentX += cellWidth;
     }
 }
@@ -69,7 +66,7 @@ void HudHealthBar::drawCell(int x, int y, int w, int h, bool isFull)
     Game::primitiveShapeHelper.drawRectOutline(innerRect, borderColor, borderWidth);
 }
 
-Vector2D HudHealthBar::computeSize()
+int HudHealthBar::getActualWidth()
 {
-    return Vector2D(numCells * USCALE(cellWidth), USCALE(cellHeight)) * (Game::height / 512.0f);
+    return cellWidth * numCells;
 }
