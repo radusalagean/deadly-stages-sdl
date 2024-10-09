@@ -50,6 +50,7 @@ void GameScreen::handleEvents()
     if (Game::control.isActionDown(CA_ESCAPE))
     {
         paused = true;
+        Game::control.releaseAndBlockAction(CA_ESCAPE);
     }
 }
 

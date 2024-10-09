@@ -28,7 +28,7 @@ void Weapon::update(Level& level)
         rotation = *ownerRotation - 90;
 }
 
-void Weapon::fire(std::function<void(const Vector2D&, float)> bulletCreationCallback)
+void Weapon::onFireRequest(std::function<void(const Vector2D&, float)> bulletCreationCallback)
 {
     if (!fireDebouncer.canPerformAction())
         return;

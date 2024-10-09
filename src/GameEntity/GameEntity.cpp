@@ -29,10 +29,21 @@ void GameEntity::update(Level& level)
 
 void GameEntity::draw(Camera& camera)
 {
-    dstRect.x = GSCALE(position.x) - camera.position.x;
-    dstRect.y = GSCALE(position.y) - camera.position.y;
-    dstRect.w = GSCALE(width);
-    dstRect.h = GSCALE(height);
+    if (dstRectScale == 1.0f)
+    {
+        dstRect.w = GSCALE(width);
+        dstRect.h = GSCALE(height);
+        dstRect.x = GSCALE(position.x) - camera.position.x;
+        dstRect.y = GSCALE(position.y) - camera.position.y;
+    }
+    else
+    {
+        dstRect.w = GSCALE(width * dstRectScale);
+        dstRect.h = GSCALE(height * dstRectScale);
+        dstRect.x = GSCALE(positionPlusCenter.x - (dstRect.w / 2)) - camera.position.x;
+        dstRect.y = GSCALE(positionPlusCenter.y - (dstRect.h / 2)) - camera.position.y;
+    }
+    
     SDL_RenderCopyEx(Game::renderer, texture, NULL, &dstRect, rotation, NULL, SDL_FLIP_NONE);
 }
 

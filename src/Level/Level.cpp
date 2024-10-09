@@ -94,10 +94,17 @@ void Level::handleEvents()
         player->velocity.reset();
     }
 
+    // Jump
+    if (Game::control.isActionDown(CA_JUMP))
+    {
+        player->onJumpRequest();
+        Game::control.releaseAndBlockAction(CA_JUMP);
+    }
+
     // Fire
     if (Game::control.isActionDown(CA_FIRE))
     {
-        playerWeapon->fire([this](const Vector2D& position, float rotation)
+        playerWeapon->onFireRequest([this](const Vector2D& position, float rotation)
         {
             Bullet* bullet = new Bullet(position, rotation, texturePool);
             bullets.push_back(bullet);

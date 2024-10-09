@@ -12,7 +12,7 @@ public:
     ~Weapon();
 
     void update(Level& level);
-    void fire(std::function<void(const Vector2D&, float)> bulletCreationCallback);
+    void onFireRequest(std::function<void(const Vector2D&, float)> bulletCreationCallback);
 
     int id = 0;
     int damagePerBullet = 0;

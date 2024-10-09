@@ -14,7 +14,8 @@ enum ControlAction
     CA_SELECT,
     CA_ESCAPE,
     CA_FIRE,
-    CA_SPRINT
+    CA_SPRINT,
+    CA_JUMP
 };
 
 class Control
@@ -25,6 +26,7 @@ private:
     SDL_GameController* gameController = nullptr;
 
     std::set<int> pressedActions{};
+    std::set<int> blockedActions{};
     std::unordered_map<SDL_Scancode, std::set<int>> keyboardMap{
         {SDL_SCANCODE_UP, {CA_UP}},
         {SDL_SCANCODE_DOWN, {CA_DOWN}},
@@ -36,7 +38,8 @@ private:
         {SDL_SCANCODE_D, {CA_RIGHT}},
         {SDL_SCANCODE_RETURN, {CA_SELECT}},
         {SDL_SCANCODE_ESCAPE, {CA_ESCAPE}},
-        {SDL_SCANCODE_LSHIFT, {CA_SPRINT}}
+        {SDL_SCANCODE_LSHIFT, {CA_SPRINT}},
+        {SDL_SCANCODE_SPACE, {CA_JUMP}}
     }; // key: scancode, value: actions
 
     std::unordered_map<int, std::set<int>> mouseMap{
@@ -50,7 +53,8 @@ private:
         {SDL_CONTROLLER_BUTTON_DPAD_RIGHT, {CA_RIGHT}},
         {SDL_CONTROLLER_BUTTON_A, {CA_SELECT}},
         {SDL_CONTROLLER_BUTTON_B, {CA_FIRE}},
-        {SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, {CA_SPRINT}}
+        {SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, {CA_SPRINT}},
+        {SDL_CONTROLLER_BUTTON_X, {CA_JUMP}}
     }; // key: button, value: actions
 
     inline void unlockIfReleased()
@@ -82,6 +86,10 @@ public:
     void onControllerButtonUp(SDL_GameControllerButton button);
 
     inline void lock() { locked = true; }
+
+    void onActionDown(int action);
+    void onActionUp(int action);
+    void releaseAndBlockAction(int action);
 };
 
 #endif // __SRC_CONTROL_CONTROL_HPP__

@@ -61,14 +61,13 @@ bool Control::isActionUp(int action)
 void Control::onKeyDown(SDL_Scancode scancode)
 {
     for (auto& action : keyboardMap[scancode])
-        pressedActions.insert(action);
+        onActionDown(action);
 }
 
 void Control::onKeyUp(SDL_Scancode scancode)
 {
     for (auto& action : keyboardMap[scancode])
-
-        pressedActions.erase(action);
+        onActionUp(action);
 }   
 #pragma endregion
 
@@ -76,13 +75,13 @@ void Control::onKeyUp(SDL_Scancode scancode)
 void Control::onMouseButtonDown(Uint8 button)
 {
     for (auto& action : mouseMap[button])
-        pressedActions.insert(action);
+        onActionDown(action);
 }
 
 void Control::onMouseButtonUp(Uint8 button)
 {
     for (auto& action : mouseMap[button])
-        pressedActions.erase(action);
+        onActionUp(action);
 }
 #pragma endregion
 
@@ -90,12 +89,31 @@ void Control::onMouseButtonUp(Uint8 button)
 void Control::onControllerButtonDown(SDL_GameControllerButton button)
 {
     for (auto& action : gameControllerMap[button])
-        pressedActions.insert(action);
+        onActionDown(action);
 }
 
 void Control::onControllerButtonUp(SDL_GameControllerButton button)
 {
     for (auto& action : gameControllerMap[button])
-        pressedActions.erase(action);
+        onActionUp(action);
 }
 #pragma endregion
+
+void Control::onActionDown(int action)
+{
+    if (blockedActions.find(action) != blockedActions.end())
+        return;
+    pressedActions.insert(action);
+}
+
+void Control::onActionUp(int action)
+{
+    pressedActions.erase(action);
+    blockedActions.erase(action);
+}
+
+void Control::releaseAndBlockAction(int action)
+{
+    pressedActions.erase(action);
+    blockedActions.insert(action);
+}

@@ -38,6 +38,7 @@ public:
     Vector2D positionPlusCenter;
     SDL_Texture* texture = nullptr;
     SDL_Rect dstRect;
+    float dstRectScale = 1.0f;
 
     virtual void load(TexturePool& texturePool);
     virtual void update(Level& level);

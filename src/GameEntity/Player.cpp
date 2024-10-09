@@ -35,13 +35,16 @@ void Player::update(Level& level)
     SDL_GetMouseState(&mouseX, &mouseY);
 
     // Calculate the angle between the player center point and the mouse relative to the camera position
-    float angle = atan2(mouseY - GSCALE(position.y + center.y) + camera.position.y, mouseX - GSCALE(position.x + center.x) + camera.position.x);
+    float angle = atan2(mouseY - GSCALE(position.y + center.y) + camera.position.y, 
+        mouseX - GSCALE(position.x + center.x) + camera.position.x);
 
     // Convert the angle from radians to degrees
     angle = angle * (180 / M_PI);
 
     // Set the rotation of the player
     rotation = angle - 180;
+
+    updateJumpState();
 }
 
 void Player::draw(Camera& camera)
@@ -58,4 +61,26 @@ void Player::receiveDamage(const int amount)
     if (!hurtDebouncer.canPerformAction())
         return;
     GameEntity::receiveDamage(amount);
+}
+
+void Player::onJumpRequest()
+{
+    if (jumpAnimator || stamina < jumpStaminaCost) {
+        return;
+    }
+    stamina -= jumpStaminaCost;
+    lastStaminaDecreaseTime = std::chrono::steady_clock::now();
+    jumpAnimator = new FloatAnimator(dstRectScale, 1.12f, jumpDurationMs);
+}
+
+void Player::updateJumpState()
+{
+    if (!jumpAnimator)
+        return;
+    jumpAnimator->update();
+    if (jumpAnimator->isComplete()) {
+        delete jumpAnimator;
+        jumpAnimator = nullptr;
+        dstRectScale = 1.0f;
+    }
 }
