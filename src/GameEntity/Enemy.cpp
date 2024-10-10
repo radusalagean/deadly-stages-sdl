@@ -9,12 +9,22 @@ Enemy::Enemy() : GameEntity()
     damageAmount = 1;
     maxHealth = 5;
     currentHealth = maxHealth;
-    bounty = 100;
 }
 
 Enemy::~Enemy()
 {
     
+}
+
+void Enemy::init(Level& level, Vector2D& spawnPoint)
+{
+    setPosition(spawnPoint);
+    setSize(32, 32);
+    texturePath = "res/level/" + level.id + "/enemy.png";
+    target = &level.player->positionPlusCenter;
+    speedPxPerSecond = level.currentEnemySpeed;
+    topSpeedPxPerSecond = level.currentEnemySpeed;
+    bounty = ceil(topSpeedPxPerSecond);
 }
 
 void Enemy::update(Level& level)
@@ -47,4 +57,11 @@ void Enemy::draw(Camera& camera)
 void Enemy::crush()
 {
     pendingRemoval = true;
+}
+
+void Enemy::receiveDamage(const int amount)
+{
+    int speedDecreasePerHealthUnit = topSpeedPxPerSecond / maxHealth;
+    GameEntity::receiveDamage(amount);
+    speedPxPerSecond = topSpeedPxPerSecond - (speedDecreasePerHealthUnit * (maxHealth - currentHealth));
 }

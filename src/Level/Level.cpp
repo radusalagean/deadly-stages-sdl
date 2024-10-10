@@ -175,8 +175,11 @@ void Level::advanceWaveIfNeeded()
         return;
     wave++;
     enemiesLeftToSpawn = wave * 6;
-    currentEnemySpeed *= speedFactorIncreasePerWave;
-    player->speedPxPerSecond *= speedFactorIncreasePerWave;
+    if (wave > 1)
+    {
+        currentEnemySpeed *= speedFactorIncreasePerWave;
+        player->speedPxPerSecond *= speedFactorIncreasePerWave;
+    }
 }
 
 void Level::spawnEnemiesIfNeeded()
@@ -189,13 +192,8 @@ void Level::spawnEnemiesIfNeeded()
         {
             if (enemiesLeftToSpawn <= 0)
                 break;
-
             Enemy* enemy = new Enemy();
-            enemy->setPosition(*spawnPoint);
-            enemy->setSize(32, 32);
-            enemy->texturePath = "res/level/" + id + "/enemy.png";
-            enemy->target = &player->positionPlusCenter;
-            enemy->speedPxPerSecond = currentEnemySpeed;
+            enemy->init(*this, *spawnPoint);
             enemies.push_back(enemy);
             enemy->load(texturePool);
             enemiesLeftToSpawn--;

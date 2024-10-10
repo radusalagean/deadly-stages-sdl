@@ -10,14 +10,21 @@ public:
     Enemy();
     ~Enemy();
 
-    float speedPxPerSecond = 100.0f;
+    void init(Level& level, Vector2D& spawnPoint);
+
+    // Speed
+    float topSpeedPxPerSecond = 0.0f;
+    float speedPxPerSecond = 0.0f;
+
+    // Damage
+    void receiveDamage(const int amount);
+    void crush();
 
     Vector2D* target = nullptr;
 
     void update(Level& level);
     void draw(Camera& camera);
 
-    void crush();
 };
 
 #endif // __SRC_GAMEENTITY_ENEMY_HPP__
