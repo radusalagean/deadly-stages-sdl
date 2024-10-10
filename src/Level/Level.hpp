@@ -32,7 +32,8 @@ public:
     TexturePool texturePool;
     Player* player = nullptr;
     Camera camera;
-    Weapon* playerWeapon = nullptr;
+    std::vector<Weapon*> playerWeapons{};
+    Weapon* currentPlayerWeapon = nullptr;
     std::vector<Bullet*> bullets{};
     std::vector<Enemy*> enemies{};
     
@@ -58,7 +59,8 @@ public:
 
     SDL_Rect buildTileRect(int x, int y) const;
 
-    void assignWeaponToPlayer(int weaponId);
+    void onWeaponOrMagReceived(WeaponId weaponId);
+    void cycleWeapon(int offset);
 
     #ifdef DEBUG_DRAW_COLLISION_RECTS
     std::vector<SDL_Rect> collidedRects{};

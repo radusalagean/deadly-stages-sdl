@@ -14,8 +14,14 @@ enum ControlAction
     CA_SELECT,
     CA_ESCAPE,
     CA_FIRE,
+    CA_RELOAD,
     CA_SPRINT,
-    CA_JUMP
+    CA_JUMP,
+    CA_PREVIOUS_WEAPON,
+    CA_NEXT_WEAPON,
+    CA_DEBUG_WEAPON_1,
+    CA_DEBUG_WEAPON_2,
+    CA_DEBUG_WEAPON_3
 };
 
 class Control
@@ -39,7 +45,11 @@ private:
         {SDL_SCANCODE_RETURN, {CA_SELECT}},
         {SDL_SCANCODE_ESCAPE, {CA_ESCAPE}},
         {SDL_SCANCODE_LSHIFT, {CA_SPRINT}},
-        {SDL_SCANCODE_SPACE, {CA_JUMP}}
+        {SDL_SCANCODE_SPACE, {CA_JUMP}},
+        {SDL_SCANCODE_R, {CA_RELOAD}},
+        {SDL_SCANCODE_1, {CA_DEBUG_WEAPON_1}},
+        {SDL_SCANCODE_2, {CA_DEBUG_WEAPON_2}},
+        {SDL_SCANCODE_3, {CA_DEBUG_WEAPON_3}}
     }; // key: scancode, value: actions
 
     std::unordered_map<int, std::set<int>> mouseMap{
@@ -54,7 +64,8 @@ private:
         {SDL_CONTROLLER_BUTTON_A, {CA_SELECT}},
         {SDL_CONTROLLER_BUTTON_B, {CA_FIRE}},
         {SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, {CA_SPRINT}},
-        {SDL_CONTROLLER_BUTTON_X, {CA_JUMP}}
+        {SDL_CONTROLLER_BUTTON_X, {CA_JUMP}},
+        {SDL_CONTROLLER_BUTTON_Y, {CA_RELOAD}}
     }; // key: button, value: actions
 
     inline void unlockIfReleased()
@@ -80,6 +91,7 @@ public:
     // Mouse
     void onMouseButtonDown(Uint8 button);
     void onMouseButtonUp(Uint8 button);
+    void onMouseWheelScroll(Sint32 y);
 
     // Game Controller
     void onControllerButtonDown(SDL_GameControllerButton button);
@@ -89,7 +101,14 @@ public:
 
     void onActionDown(int action);
     void onActionUp(int action);
+    void releaseAction(int action);
     void releaseAndBlockAction(int action);
+    void performAndScheduleActionRelease(int action, Uint32 delayMs = 1000);
+};
+
+struct ScheduleTimerData {
+    int action;
+    Control* control;
 };
 
 #endif // __SRC_CONTROL_CONTROL_HPP__

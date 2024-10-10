@@ -17,8 +17,7 @@ GameEntity::~GameEntity()
 
 void GameEntity::load(TexturePool& texturePool)
 {
-    texturePool.load(texturePath);
-    texture = texturePool.get(texturePath);
+    texture = texturePool.loadIfNeededAndGet(texturePath);
 }
 
 void GameEntity::update(Level& level)

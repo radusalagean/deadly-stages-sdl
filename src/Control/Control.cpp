@@ -28,6 +28,10 @@ void Control::handleEvent(SDL_Event& event)
         onMouseButtonUp(event.button.button);
         break;
 
+    case SDL_MOUSEWHEEL:
+        onMouseWheelScroll(event.wheel.y);
+        break;
+
     case SDL_CONTROLLERDEVICEADDED:
         gameController = SDL_GameControllerOpen(event.cdevice.which);
         break;
@@ -83,6 +87,14 @@ void Control::onMouseButtonUp(Uint8 button)
     for (auto& action : mouseMap[button])
         onActionUp(action);
 }
+
+void Control::onMouseWheelScroll(Sint32 y)
+{
+    if (y > 0)
+        performAndScheduleActionRelease(CA_NEXT_WEAPON);
+    else if (y < 0)
+        performAndScheduleActionRelease(CA_PREVIOUS_WEAPON);
+}
 #pragma endregion
 
 #pragma region Game Controller
@@ -112,8 +124,30 @@ void Control::onActionUp(int action)
     blockedActions.erase(action);
 }
 
+void Control::releaseAction(int action)
+{
+    pressedActions.erase(action);
+}
+
 void Control::releaseAndBlockAction(int action)
 {
     pressedActions.erase(action);
     blockedActions.insert(action);
+}
+
+void Control::performAndScheduleActionRelease(int action, Uint32 delayMs)
+{
+    if (isActionDown(action))
+        return;
+        
+    onActionDown(action);
+    
+    ScheduleTimerData* data = new ScheduleTimerData{action, this};
+
+    SDL_AddTimer(delayMs, [](Uint32 interval, void* param) -> Uint32 {
+        ScheduleTimerData* data = static_cast<ScheduleTimerData*>(param);
+        data->control->onActionUp(data->action);
+        delete data;
+        return 0;  // Don't repeat the timer
+    }, data);
 }

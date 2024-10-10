@@ -12,8 +12,7 @@ public:
     TexturePool();
     ~TexturePool();
 
-    void load(const std::string& path);
-    SDL_Texture* get(const std::string& path);
+    SDL_Texture* loadIfNeededAndGet(const std::string& path);
 
     std::map<std::string, SDL_Texture*> textures;
 };

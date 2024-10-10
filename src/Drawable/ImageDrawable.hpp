@@ -17,9 +17,11 @@ private:
 public:
     ImageDrawable(const std::string& fileName, 
         const std::string& parentDirectory = "res/image/");
+    ImageDrawable(SDL_Texture* texture);
     ~ImageDrawable();
     
     int transparency = 255;
+    bool externalTexture = false;
     
     void layout(int x, int y, int w, int h);
     void load();

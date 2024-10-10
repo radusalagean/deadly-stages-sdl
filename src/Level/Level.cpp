@@ -8,6 +8,7 @@
 #include "../Core/VectorUtils.hpp"
 #include "../Screen/GameOver/GameOverScreen.hpp"
 #include "../ScreenManager/ScreenManager.hpp"
+#include "../Core/PrimitiveShapeHelper.hpp"
 
 Level::Level(std::string id)
 {
@@ -18,11 +19,11 @@ Level::~Level()
 {
     tileset.clear();
 
-    if (playerWeapon != nullptr)
+    for (auto& weapon : playerWeapons)
     {
-        delete playerWeapon;
-        playerWeapon = nullptr;
+        delete weapon;
     }
+    playerWeapons.clear();
 
     if (player != nullptr)
     {
@@ -55,7 +56,7 @@ void Level::load()
     camera.mapBounds = new Vector2D(widthPx, heightPx);
     camera.target = &player->positionPlusCenter; // The camera will follow the player
 
-    assignWeaponToPlayer(WEAPON_PISTOL);
+    onWeaponOrMagReceived(WeaponId::WEAPON_PISTOL);
 }
 
 void Level::handleEvents()
@@ -104,11 +105,47 @@ void Level::handleEvents()
     // Fire
     if (Game::control.isActionDown(CA_FIRE))
     {
-        playerWeapon->onFireRequest([this](const Vector2D& position, float rotation)
+        currentPlayerWeapon->onFireRequest([this](const Vector2D& position, float rotation)
         {
             Bullet* bullet = new Bullet(position, rotation, texturePool);
             bullets.push_back(bullet);
         });
+    }
+
+    // Reload
+    if (Game::control.isActionDown(CA_RELOAD))
+    {
+        currentPlayerWeapon->reloadIfPossible();
+    }
+
+    // Cycle weapon
+    if (Game::control.isActionDown(CA_PREVIOUS_WEAPON))
+    {
+        cycleWeapon(-1);
+        Game::control.releaseAction(CA_PREVIOUS_WEAPON);
+    }
+    else if (Game::control.isActionDown(CA_NEXT_WEAPON))
+    {
+        cycleWeapon(1);
+        Game::control.releaseAction(CA_NEXT_WEAPON);
+    }
+
+    // Debug weapons
+    // TODO - Later, change this to it only selects the weapon from the player's inventory, after pickups are implemented
+    if (Game::control.isActionDown(CA_DEBUG_WEAPON_1))
+    {
+        onWeaponOrMagReceived(WeaponId::WEAPON_PISTOL);
+        Game::control.releaseAndBlockAction(CA_DEBUG_WEAPON_1);
+    }
+    if (Game::control.isActionDown(CA_DEBUG_WEAPON_2))
+    {
+        onWeaponOrMagReceived(WeaponId::WEAPON_SHOTGUN);
+        Game::control.releaseAndBlockAction(CA_DEBUG_WEAPON_2);
+    }
+    if (Game::control.isActionDown(CA_DEBUG_WEAPON_3))
+    {
+        onWeaponOrMagReceived(WeaponId::WEAPON_SMG);
+        Game::control.releaseAndBlockAction(CA_DEBUG_WEAPON_3);
     }
 }
 
@@ -116,7 +153,7 @@ void Level::update()
 {
     camera.update();
     player->update(*this);
-    playerWeapon->update(*this);
+    currentPlayerWeapon->update(*this);
     for (auto& bullet : bullets)
     {
         bullet->update(*this);
@@ -159,14 +196,43 @@ SDL_Rect Level::buildTileRect(int column, int row) const
     return tileRect;
 }
 
-void Level::assignWeaponToPlayer(int weaponId)
+void Level::onWeaponOrMagReceived(WeaponId weaponId)
 {
-    if (playerWeapon != nullptr)
+    auto found = std::find_if(playerWeapons.begin(), playerWeapons.end(), [weaponId](const Weapon* weapon) {
+        return weapon->id == weaponId;
+    });
+
+    if (found == playerWeapons.end()) // Weapon not found in the player's inventory
     {
-        delete playerWeapon;
+        Weapon* newWeapon = Weapon::createWeapon(weaponId, texturePool);
+        playerWeapons.push_back(newWeapon);
+        currentPlayerWeapon = newWeapon;
+        currentPlayerWeapon->setOwner(*player);
     }
-    playerWeapon = Weapon::createWeapon(weaponId);
-    playerWeapon->setOwner(*player);
+    else
+    {
+        currentPlayerWeapon = *found;
+    }
+    if (!currentPlayerWeapon->hasInfiniteMags)
+        currentPlayerWeapon->availableMags += wave;
+}
+
+void Level::cycleWeapon(int offset)
+{
+    if (playerWeapons.size() <= 1 || offset == 0)
+        return;
+    if (offset < -1) offset = -1;
+    if (offset > 1) offset = 1;
+    auto it = std::find(playerWeapons.begin(), playerWeapons.end(), currentPlayerWeapon);
+    if (it != playerWeapons.end()) {
+        it += offset;
+        if (it == playerWeapons.end()) {
+            it = playerWeapons.begin();
+        } else if (it < playerWeapons.begin()) {
+            it = playerWeapons.end() - 1;
+        }
+        currentPlayerWeapon = *it;
+    }
 }
 
 void Level::advanceWaveIfNeeded()

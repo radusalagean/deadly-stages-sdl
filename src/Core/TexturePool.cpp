@@ -16,15 +16,12 @@ TexturePool::~TexturePool()
     }
 }
 
-void TexturePool::load(const std::string& path)
+SDL_Texture* TexturePool::loadIfNeededAndGet(const std::string& path)
 {
     if (textures.find(path) != textures.end())
-        return; // Texture already loaded
+        return textures[path]; // Texture already loaded
 
-    textures[path] = SDLUtils::loadTexture(path);
-}
-
-SDL_Texture* TexturePool::get(const std::string& path)
-{
-    return textures[path];
+    SDL_Texture* texture = SDLUtils::loadTexture(path);
+    textures[path] = texture;
+    return texture;
 }

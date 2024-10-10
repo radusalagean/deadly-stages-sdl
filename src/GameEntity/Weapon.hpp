@@ -4,32 +4,69 @@
 #include "GameEntity.hpp"
 #include "../Core/Debouncer.hpp"
 
+class FloatAnimator;
+class TexturePool;
+
+enum class WeaponId
+{
+    WEAPON_UNDEFINED,
+    WEAPON_PISTOL,
+    WEAPON_SHOTGUN,
+    WEAPON_SMG
+};
+
+struct WeaponConfig
+{
+    WeaponId id = WeaponId::WEAPON_UNDEFINED;
+    int damagePerBullet = 0;
+    int bulletsPerMag = 0;
+    bool hasInfiniteMags = false;
+    int fireRateDelayMillis = 0;
+    int reloadTimeMillis = 0;
+    bool automatic = false;
+    int bulletsPerShot = 0;
+    int spreadAngle = 0;
+    std::string textureFileName = "";
+};
+
 class Weapon : public GameEntity
 {
 public:
-    Weapon(int id, int damagePerBullet, int ammo, bool hasInfiniteAmmo, 
-        int fireRateMillis, int bulletsPerShot, int spreadAngle);
+    static const std::map<WeaponId, WeaponConfig> weaponConfigs;
+    static WeaponConfig createWeaponConfig(WeaponId id);
+    static Weapon* createWeapon(WeaponId id, TexturePool& texturePool);
+
+    Weapon(WeaponConfig config, TexturePool& texturePool);
     ~Weapon();
 
     void update(Level& level);
-    void onFireRequest(std::function<void(const Vector2D&, float)> bulletCreationCallback);
 
-    int id = 0;
-    int damagePerBullet = 0;
-    int ammo = 0;
-    bool hasInfiniteAmmo = false;
-    int fireRateMillis = 0;
-    int bulletsPerShot = 0;
-    int spreadAngle = 0;
+    // Config
+    WeaponId id;
+    int damagePerBullet;
+    int bulletsPerMag;
+    bool hasInfiniteMags;
+    int fireRateDelayMillis;
+    int reloadTimeMillis;
+    bool automatic;
+    int bulletsPerShot;
+    int spreadAngle;
     float angleBetweenBullets = 0;
-    
+
+    // Fire & Reload
+    Debouncer fireDebouncer = Debouncer(fireRateDelayMillis);
+    void onFireRequest(std::function<void(const Vector2D&, float)> bulletCreationCallback);
+    float reloadProgress = 0.0f;
+    FloatAnimator* reloadAnimator = nullptr;
+    int availableMags = 0;
+    int ammoInCurrentMag = 0;
+    void autoReloadIfNeeded();
+    void reloadIfPossible();
+    inline bool isReloading() { return reloadAnimator != nullptr; }
+    void updateReloadState();
+
+    // Owner
     void setOwner(GameEntity& owner);
-
-    Debouncer fireDebouncer = Debouncer(fireRateMillis);
-
-    static Weapon* createWeapon(int id);
-
-    
 
 private:
     Vector2D* ownerPosition = nullptr;
@@ -39,13 +76,6 @@ private:
     Vector2D* ownerCenter = nullptr;
     Vector2D position;
     Vector2D offset = Vector2D(20, -20);
-};
-
-enum WeaponId
-{
-    WEAPON_PISTOL = 1,
-    WEAPON_SHOTGUN,
-    WEAPON_SMG
 };
 
 #endif // __SRC_GAMEENTITY_WEAPON_HPP__

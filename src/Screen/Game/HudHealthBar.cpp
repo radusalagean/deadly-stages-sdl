@@ -18,6 +18,7 @@ HudHealthBar::~HudHealthBar()
 void HudHealthBar::layout(int x, int y, int w, int h)
 {
     setDstRect(x, y, w, h);
+    cellWidth = dstRect.w / numCells;
 }
 
 void HudHealthBar::load()
@@ -27,7 +28,7 @@ void HudHealthBar::load()
 
 void HudHealthBar::update()
 {
-    cellWidth = dstRect.w / numCells;
+    
 }
 
 void HudHealthBar::draw()
