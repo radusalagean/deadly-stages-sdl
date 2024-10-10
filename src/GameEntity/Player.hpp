@@ -38,6 +38,8 @@ public:
     const float jumpStaminaCost = 0.2f;
     void onJumpRequest();
     void updateJumpState();
+    inline bool isJumping() { return jumpAnimator != nullptr; }
+    void crushEnemiesIfNeeded(Level& level);
 };
 
 #endif // __SRC_GAMEENTITY_PLAYER_HPP__

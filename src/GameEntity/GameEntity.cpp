@@ -25,6 +25,7 @@ void GameEntity::update(Level& level)
 {
     position += velocity;
     positionPlusCenter = position + center;
+    refreshPositionPlusCollisionRect();
 }
 
 void GameEntity::draw(Camera& camera)
@@ -50,6 +51,30 @@ void GameEntity::draw(Camera& camera)
 void GameEntity::setPosition(Vector2D position)
 {
     this->position = position;
+    this->positionPlusCenter = position + center;
+    this->refreshPositionPlusCollisionRect();
+}
+
+void GameEntity::setSize(int width, int height)
+{
+    this->width = width; 
+    this->height = height; 
+    this->center = Vector2D(width / 2, height / 2);
+    this->collisionRect = {
+        0,
+        0,
+        width,
+        height
+    };
+    this->refreshPositionPlusCollisionRect();
+}
+
+void GameEntity::refreshPositionPlusCollisionRect()
+{
+    positionPlusCollisionRect.x = position.x + collisionRect.x;
+    positionPlusCollisionRect.y = position.y + collisionRect.y;
+    positionPlusCollisionRect.w = collisionRect.w;
+    positionPlusCollisionRect.h = collisionRect.h;
 }
 
 #ifdef DEBUG_DRAW_COLLISION_RECTS

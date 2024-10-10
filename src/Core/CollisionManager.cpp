@@ -149,7 +149,7 @@ namespace CollisionManager
         return false;
     }
 
-    void processMovement(GameEntity& subjectEntity, Vector2D& proposedVelocity, Level& level, GameEntity** firstCollidedEntity)
+    void processMovement(GameEntity& subjectEntity, Vector2D& proposedVelocity, Level& level, GameEntity** firstCollidedEntity, bool jumping)
     {
         Vector2D intersectionPoint;
         Vector2D intersectionNormal;
@@ -159,13 +159,7 @@ namespace CollisionManager
 
         bool isSubjectEntityBullet = dynamic_cast<Bullet*>(&subjectEntity);
 
-        SDL_Rect subjectBoundsRect = 
-        {
-            static_cast<int>(subjectEntity.position.x) + subjectEntity.collisionRect.x,
-            static_cast<int>(subjectEntity.position.y) + subjectEntity.collisionRect.y,
-            subjectEntity.collisionRect.w,
-            subjectEntity.collisionRect.h
-        };
+        SDL_Rect& subjectBoundsRect = subjectEntity.positionPlusCollisionRect;
         SDL_Rect proposedRect = 
         {
             subjectBoundsRect.x + static_cast<int>(proposedVelocity.x),
@@ -227,15 +221,9 @@ namespace CollisionManager
 
         // Check collisions with player
         Player* player = level.player;
-        if (&subjectEntity != player) // TODO Check only in a restricted area
+        if (&subjectEntity != player)
         {
-            SDL_Rect playerRect = 
-            {
-                static_cast<int>(player->position.x) + player->collisionRect.x,
-                static_cast<int>(player->position.y) + player->collisionRect.y,
-                player->collisionRect.w,
-                player->collisionRect.h
-            };
+            SDL_Rect& playerRect = player->positionPlusCollisionRect;
             if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, playerRect, &intersectionPoint, &intersectionNormal, tHitNear, tHitFar, tHitNear))
             {
                 CollisionInfo collision = {playerRect, tHitNear, player};
@@ -246,28 +234,26 @@ namespace CollisionManager
             }
         }
 
-        // Check collisions with enemies
-        for (Enemy* enemy : level.enemies)
+        if (!jumping)
         {
-            if (&subjectEntity == enemy)
-                continue;
-            SDL_Rect enemyRect = 
+            // Check collisions with enemies
+            for (Enemy* enemy : level.enemies)
             {
-                static_cast<int>(enemy->position.x) + enemy->collisionRect.x,
-                static_cast<int>(enemy->position.y) + enemy->collisionRect.y,
-                enemy->collisionRect.w,
-                enemy->collisionRect.h
-            };
-            float& contactTime = isSubjectEntityBullet ? tHitFar : tHitNear;
-            if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, enemyRect, &intersectionPoint, &intersectionNormal, tHitNear, tHitFar, contactTime))
-            {
-                CollisionInfo collision = {enemyRect, contactTime, enemy};
-                #ifdef DEBUG_DRAW_COLLISION_RECTS
-                level.collidedRects.push_back(enemyRect);
-                #endif
-                collisions.push_back(collision);
+                if (&subjectEntity == enemy)
+                    continue;
+                SDL_Rect& enemyRect = enemy->positionPlusCollisionRect;
+                float& contactTime = isSubjectEntityBullet ? tHitFar : tHitNear;
+                if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, enemyRect, &intersectionPoint, &intersectionNormal, tHitNear, tHitFar, contactTime))
+                {
+                    CollisionInfo collision = {enemyRect, contactTime, enemy};
+                    #ifdef DEBUG_DRAW_COLLISION_RECTS
+                    level.collidedRects.push_back(enemyRect);
+                    #endif
+                    collisions.push_back(collision);
+                }
             }
         }
+        
 
         // Sort intersections by contact time
         std::sort(collisions.begin(), collisions.end(), [](const CollisionInfo& a, const CollisionInfo& b) {

@@ -16,6 +16,8 @@ public:
 
     void update(Level& level);
     void draw(Camera& camera);
+
+    void crush();
 };
 
 #endif // __SRC_GAMEENTITY_ENEMY_HPP__

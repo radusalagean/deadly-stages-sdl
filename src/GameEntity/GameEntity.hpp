@@ -31,7 +31,7 @@ public:
     int bounty = -1;
 
     SDL_Rect collisionRect;
-    SDL_Rect bulletCollisionRect;
+    SDL_Rect positionPlusCollisionRect;
 
     Vector2D position;
     Vector2D center;
@@ -46,17 +46,8 @@ public:
 
     void setPosition(Vector2D position);
 
-    void setSize(int width, int height) { 
-        this->width = width; 
-        this->height = height; 
-        this->center = Vector2D(width / 2, height / 2);
-        this->collisionRect = {
-            0,
-            0,
-            width,
-            height
-        };
-    }
+    void setSize(int width, int height);
+    void refreshPositionPlusCollisionRect();
 
     #ifdef DEBUG_DRAW_COLLISION_RECTS
     void drawCollisionRect(Camera& camera);

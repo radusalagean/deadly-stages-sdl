@@ -6,6 +6,8 @@
 #include <math.h>
 #include "../Core/Config.hpp"
 #include "../Level/Level.hpp"
+#include "../Core/CollisionManager.hpp"
+#include "../GameEntity/Enemy.hpp"
 
 Player::Player() : GameEntity()
 {
@@ -45,6 +47,7 @@ void Player::update(Level& level)
     rotation = angle - 180;
 
     updateJumpState();
+    crushEnemiesIfNeeded(level);
 }
 
 void Player::draw(Camera& camera)
@@ -65,7 +68,7 @@ void Player::receiveDamage(const int amount)
 
 void Player::onJumpRequest()
 {
-    if (jumpAnimator || stamina < jumpStaminaCost) {
+    if (isJumping() || stamina < jumpStaminaCost) {
         return;
     }
     stamina -= jumpStaminaCost;
@@ -75,12 +78,25 @@ void Player::onJumpRequest()
 
 void Player::updateJumpState()
 {
-    if (!jumpAnimator)
+    if (!isJumping())
         return;
     jumpAnimator->update();
     if (jumpAnimator->isComplete()) {
         delete jumpAnimator;
         jumpAnimator = nullptr;
         dstRectScale = 1.0f;
+    }
+}
+
+void Player::crushEnemiesIfNeeded(Level& level)
+{
+    if (isJumping())
+        return;
+    for (auto& enemy : level.enemies)
+    {
+        if (CollisionManager::rectVsRect(positionPlusCollisionRect, enemy->positionPlusCollisionRect))
+        {
+            enemy->crush();
+        }
     }
 }

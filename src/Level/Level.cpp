@@ -86,7 +86,7 @@ void Level::handleEvents()
         velocity.x = Game::control.isActionDown(CA_LEFT) ? -speed :
                               Game::control.isActionDown(CA_RIGHT) ? speed : 0;
 
-        CollisionManager::processMovement(*player, velocity, *this);
+        CollisionManager::processMovement(*player, velocity, *this, nullptr, player->isJumping());
         player->velocity = velocity;
     }
     else
@@ -133,7 +133,6 @@ void Level::update()
 void Level::render()
 {
     tileLayer.render(camera);
-    player->draw(camera);
     for (auto& bullet : bullets)
     {
         bullet->draw(camera);
@@ -142,6 +141,9 @@ void Level::render()
     {
         enemy->draw(camera);
     }
+    
+    player->draw(camera);
+    
     #ifdef DEBUG_DRAW_COLLISION_RECTS
     renderDebugShapes(camera);
     #endif

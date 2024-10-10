@@ -43,3 +43,8 @@ void Enemy::draw(Camera& camera)
     drawCollisionRect(camera);
     #endif
 }
+
+void Enemy::crush()
+{
+    pendingRemoval = true;
+}
