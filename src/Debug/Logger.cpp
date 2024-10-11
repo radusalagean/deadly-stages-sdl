@@ -54,12 +54,12 @@ namespace Logger
         va_end(args);
 
         printf("%s", result);
-
+#ifndef __PSP__
         FILE* pFile;
         pFile = fopen("Log.txt", "a");
         fwrite(result, strlen(result), 1, pFile);
         fclose(pFile);
-
+#endif
         free(result);
     }
 

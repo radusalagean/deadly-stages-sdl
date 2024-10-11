@@ -2,6 +2,7 @@
 
 #include "../Game.hpp"
 #include "../Core/FontManager.hpp"
+#include <SDL_ttf.h>
 
 TextDrawable::TextDrawable(const std::string& text, const SDL_Color& color, const std::string& fontFileName) 
     : fontFileName(fontFileName), text(text), color(color)
@@ -54,7 +55,7 @@ void TextDrawable::refreshTexture()
     {
         SDL_DestroyTexture(texture);
     }
-    SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
+    SDL_Surface* surface = TTF_RenderText_Blended(font, text.c_str(), color);
     texture = SDL_CreateTextureFromSurface(Game::renderer, surface);
     SDL_FreeSurface(surface);
     

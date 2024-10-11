@@ -8,6 +8,18 @@
 		}
 	],
 	"settings": {
+		"C_Cpp.default.includePath": [
+			"${workspaceFolder:PSP}/../../**",
+			"${workspaceFolder:PSP}/../../../vendor/**",
+			"~/pspdev/psp/sdk/include/**",
+			"~/pspdev/psp/include/SDL2"
+		],
+		"C_Cpp.default.compilerPath": "~/pspdev/bin/psp-gcc",
+		"C_Cpp.default.cStandard": "c17",
+		"C_Cpp.default.cppStandard": "c++17",
+		"C_Cpp.default.defines": [
+			"__PSP__"
+		],
 		"files.associations": {
 			"*.tcc": "cpp",
 			"format": "cpp",

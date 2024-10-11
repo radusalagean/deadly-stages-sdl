@@ -15,6 +15,7 @@
             "type": "node",
             "request": "launch",
             "runtimeExecutable": "${workspaceFolder:PSP}/scripts/launch-psplink-debug.sh",
+            "cwd": "${workspaceFolder:PSP}/../../../build/psp-debug",
             "preLaunchTask": "compile-debug"
         }
     ]

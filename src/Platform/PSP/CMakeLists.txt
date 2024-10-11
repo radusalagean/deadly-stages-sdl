@@ -13,6 +13,9 @@ list(FILTER SOURCES EXCLUDE REGEX "${SRC_DIR}/Platform/.*")
 # Find all .cpp files recursively in the Platform/PSP directory
 file(GLOB_RECURSE PSP_SOURCES "${SRC_DIR}/Platform/PSP/*.cpp")
 
+# Add tinyxml2 to the SOURCES list
+list(APPEND SOURCES "${SRC_DIR}/../vendor/tinyxml2/tinyxml2.cpp")   
+
 # Manually include the PSP files in the SOURCES list
 list(APPEND SOURCES ${PSP_SOURCES})
 
@@ -25,9 +28,10 @@ find_package(SDL2 REQUIRED)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
 target_include_directories(${PROJECT_NAME} PRIVATE ~/pspdev/psp/sdk/include/)
+target_include_directories(${PROJECT_NAME} PRIVATE ${SRC_DIR}/../vendor/tinyxml2)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    ${SDL2_LIBRARIES} SDL2_image SDL2_ttf jpeg png16 z pspdebug
+    SDL2main SDL2_ttf SDL2 GL freetype png z pspvram pspdisplay pspvfpu pspgu pspge pspdebug psphprm pspctrl pspaudio harfbuzz bz2 SDL2_image jpeg png16
 )
 
 set(BUILD_PRX 1)
