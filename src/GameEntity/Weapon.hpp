@@ -3,6 +3,7 @@
 
 #include "GameEntity.hpp"
 #include "../Core/Debouncer.hpp"
+#include <functional>
 
 class FloatAnimator;
 class TexturePool;

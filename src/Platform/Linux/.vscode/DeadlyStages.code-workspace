@@ -8,6 +8,14 @@
 		}
 	],
 	"settings": {
+		"C_Cpp.default.includePath": [
+			"${workspaceFolder:Linux}/../../**",
+			"${workspaceFolder:Linux}/../../../vendor/**",
+			"/usr/include/SDL2/*"
+		],
+		"C_Cpp.default.compilerPath": "/usr/bin/g++",
+		"C_Cpp.default.cStandard": "c17",
+		"C_Cpp.default.cppStandard": "c++17",
 		"files.associations": {
 			"cstdlib": "cpp",
 			"cctype": "cpp",

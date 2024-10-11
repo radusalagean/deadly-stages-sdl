@@ -4,6 +4,8 @@
 #include <SDL.h>
 #include <vector>
 #include <set>
+#include <unordered_map>
+#include <algorithm>
 
 enum ControlAction
 {
