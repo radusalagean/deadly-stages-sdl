@@ -3,6 +3,7 @@
 #include <math.h>
 #include "../Game.hpp"
 #include "../Core/CollisionManager.hpp"
+#include <chrono>
 
 Enemy::Enemy() : GameEntity()
 {
@@ -38,9 +39,14 @@ void Enemy::update(Level& level)
     velocity = Vector2D(cos(rotation * M_PI / 180.0f), sin(rotation * M_PI / 180.0f)) * -speedPxPerSecond * Game::latestLoopDeltaTimeSeconds;
     GameEntity* firstCollidedEntity = nullptr;
     CollisionManager::processMovement(*this, velocity, level, &firstCollidedEntity);
-    if (firstCollidedEntity != nullptr && dynamic_cast<Player*>(firstCollidedEntity))
+    Player* collidedPlayer = dynamic_cast<Player*>(firstCollidedEntity);
+    if (collidedPlayer != nullptr)
     {
-        sendDamage(firstCollidedEntity);
+        handleContactWithPlayer(collidedPlayer);
+    }
+    else
+    {
+        isInContactWithPlayer = false;
     }
     GameEntity::update(level);
 }
@@ -52,6 +58,20 @@ void Enemy::draw(Camera& camera)
     #ifdef DEBUG_DRAW_COLLISION_RECTS
     drawCollisionRect(camera);
     #endif
+}
+
+void Enemy::handleContactWithPlayer(Player* player)
+{
+    if (!isInContactWithPlayer) {
+        isInContactWithPlayer = true;
+        contactWithPlayerStartTime = std::chrono::steady_clock::now();
+    } else {
+        auto currentTime = std::chrono::steady_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - contactWithPlayerStartTime).count();
+        if (duration >= hitAfterContactDelayMs) {
+            sendDamage(player);
+        }
+    }
 }
 
 void Enemy::crush()

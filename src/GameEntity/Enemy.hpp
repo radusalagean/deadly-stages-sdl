@@ -20,6 +20,12 @@ public:
     void receiveDamage(const int amount);
     void crush();
 
+    // Contact with player
+    const int hitAfterContactDelayMs = 300;
+    bool isInContactWithPlayer = false;
+    std::chrono::steady_clock::time_point contactWithPlayerStartTime;
+    void handleContactWithPlayer(Player* player);
+
     Vector2D* target = nullptr;
 
     void update(Level& level);
