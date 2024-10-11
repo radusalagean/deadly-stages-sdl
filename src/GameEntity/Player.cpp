@@ -47,7 +47,7 @@ void Player::update(Level& level)
     // Set the rotation of the player
     rotation = angle - 180;
 
-    updateJumpState();
+    updateJumpState(level);
     crushEnemiesIfNeeded(level);
 }
 
@@ -77,15 +77,17 @@ void Player::onJumpRequest()
     jumpAnimator = new FloatAnimator(dstRectScale, 1.12f, jumpDurationMs);
 }
 
-void Player::updateJumpState()
+void Player::updateJumpState(Level& level)
 {
     if (!isJumping())
         return;
     jumpAnimator->update();
-    if (jumpAnimator->isComplete()) {
+    if (jumpAnimator->isComplete())
+    {
         delete jumpAnimator;
         jumpAnimator = nullptr;
         dstRectScale = 1.0f;
+        level.camera.startShake(300, 2.0f);
     }
 }
 

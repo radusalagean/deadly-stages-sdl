@@ -2,7 +2,9 @@
 
 #include "../Game.hpp"
 #include "../Core/Macros.hpp"
+#include "../GameEntity/GameEntity.hpp"
 #include <algorithm>
+#include <random>
 
 void Camera::update()
 {
@@ -26,4 +28,47 @@ void Camera::update()
         position.x = newX;
         position.y = newY;
     }
+
+    // Update shake effect
+    updateShake();
+}
+
+void Camera::startShake(int durationMs, float intensity)
+{
+    isShaking = true;
+    shakeStartTime = std::chrono::steady_clock::now();
+    shakeDuration = durationMs;
+    shakeIntensity = intensity;
+}
+
+void Camera::updateShake()
+{
+    if (!isShaking)
+    {
+        return;
+    }
+
+    auto currentTime = std::chrono::steady_clock::now();
+    auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - shakeStartTime).count();
+
+    if (elapsedTime >= shakeDuration)
+    {
+        isShaking = false;
+        shakeOffset = Vector2D(0, 0);
+        return;
+    }
+
+    // Calculate shake intensity based on remaining time
+    float remainingIntensity = shakeIntensity * (1.0f - static_cast<float>(elapsedTime) / shakeDuration);
+
+    // Generate random offset
+    static std::default_random_engine generator;
+    std::uniform_real_distribution<float> distribution(-remainingIntensity, remainingIntensity);
+
+    shakeOffset.x = distribution(generator);
+    shakeOffset.y = distribution(generator);
+
+    // Apply shake offset to camera position
+    position.x += shakeOffset.x;
+    position.y += shakeOffset.y;
 }

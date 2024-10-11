@@ -37,7 +37,7 @@ public:
     FloatAnimator* jumpAnimator = nullptr;
     const float jumpStaminaCost = 0.2f;
     void onJumpRequest();
-    void updateJumpState();
+    void updateJumpState(Level& level);
     inline bool isJumping() { return jumpAnimator != nullptr; }
     void crushEnemiesIfNeeded(Level& level);
 };
