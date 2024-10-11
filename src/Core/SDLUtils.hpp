@@ -10,6 +10,7 @@
 namespace SDLUtils
 {
     SDL_Texture* loadTexture(const std::string& path);
+    SDL_Texture* createShadowTexture(SDL_Texture* originalTexture);
 }
 
 #endif // __SRC_CORE_SDLUTILS_HPP__

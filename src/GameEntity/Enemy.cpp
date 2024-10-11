@@ -10,6 +10,7 @@ Enemy::Enemy() : GameEntity()
     damageAmount = 1;
     maxHealth = 5;
     currentHealth = maxHealth;
+    castShadow = true;
 }
 
 Enemy::~Enemy()

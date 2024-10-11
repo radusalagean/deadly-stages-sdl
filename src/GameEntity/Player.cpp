@@ -13,6 +13,7 @@ Player::Player() : GameEntity()
 {
     maxHealth = 14;
     currentHealth = maxHealth;
+    castShadow = true;
 }
 
 bool Player::canIncreaseStamina()

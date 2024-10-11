@@ -5,6 +5,7 @@
 #include <string>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <utility>
 
 class TexturePool
 {
@@ -12,9 +13,10 @@ public:
     TexturePool();
     ~TexturePool();
 
-    SDL_Texture* loadIfNeededAndGet(const std::string& path);
+    // First: texture, Second: shadow texture (optional)
+    std::pair<SDL_Texture*, SDL_Texture*> loadIfNeededAndGet(const std::string& path, bool attachShadow);
 
-    std::map<std::string, SDL_Texture*> textures;
+    std::map<std::string, std::pair<SDL_Texture*, SDL_Texture*>> textures;
 };
 
 #endif // __SRC_CORE_TEXTUREPOOL_HPP__

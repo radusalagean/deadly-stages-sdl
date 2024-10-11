@@ -5,6 +5,7 @@
 #include "../Core/PrimitiveShapeHelper.hpp"
 #include "../Core/CollisionManager.hpp"
 #include "../Level/Level.hpp"
+#include "../Core/SDLUtils.hpp"
 
 GameEntity::GameEntity()
 {
@@ -13,11 +14,15 @@ GameEntity::GameEntity()
 
 GameEntity::~GameEntity()
 {
+
 }
 
 void GameEntity::load(TexturePool& texturePool)
 {
-    texture = texturePool.loadIfNeededAndGet(texturePath);
+    auto texturePair = texturePool.loadIfNeededAndGet(texturePath, castShadow);
+    texture = texturePair.first;
+    if (texturePair.second != nullptr)
+        shadowTexture = texturePair.second;
 }
 
 void GameEntity::update(Level& level)
@@ -43,7 +48,20 @@ void GameEntity::draw(Camera& camera)
         dstRect.x = GSCALE(positionPlusCenter.x - (dstRect.w / 2)) - camera.position.x;
         dstRect.y = GSCALE(positionPlusCenter.y - (dstRect.h / 2)) - camera.position.y;
     }
-    
+
+    if (castShadow && shadowTexture != nullptr)
+    {
+        float scale = 1.18f;
+        if (dstRectScale > 1.0f)
+            scale *= 1.0f + ((dstRectScale - 1.0f) * 0.4f);
+        shadowDstRect.w = static_cast<int>(dstRect.w * scale);
+        shadowDstRect.h = static_cast<int>(dstRect.h * scale);
+        shadowDstRect.x = dstRect.x + (dstRect.w - shadowDstRect.w) / 2;
+        shadowDstRect.y = dstRect.y + (dstRect.h - shadowDstRect.h) / 2;
+
+        SDL_RenderCopyEx(Game::renderer, shadowTexture, NULL, &shadowDstRect, rotation, NULL, SDL_FLIP_NONE);
+    }
+
     SDL_RenderCopyEx(Game::renderer, texture, NULL, &dstRect, rotation, NULL, SDL_FLIP_NONE);
 }
 

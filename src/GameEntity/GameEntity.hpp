@@ -9,6 +9,7 @@
 #include "../Level/Camera.hpp"
 #include "../Core/Constants.hpp"
 #include "../Core/Config.hpp"
+#include "../Core/SDLUtils.hpp"
 
 class Level;
 
@@ -24,6 +25,7 @@ public:
     int width = 0;
     int height = 0;
     double rotation = 0;
+    bool castShadow = false;
 
     int damageAmount = -1;
     int maxHealth = -1;
@@ -38,6 +40,8 @@ public:
     Vector2D positionPlusCenter;
     SDL_Texture* texture = nullptr;
     SDL_Rect dstRect;
+    SDL_Texture* shadowTexture = nullptr;
+    SDL_Rect shadowDstRect;
     float dstRectScale = 1.0f;
 
     virtual void load(TexturePool& texturePool);
@@ -56,6 +60,9 @@ public:
     bool pendingRemoval = false;
     void sendDamage(GameEntity* targetEntity);
     virtual void receiveDamage(const int amount);
+
+private:
+    void drawShadow(Camera& camera);
 };
 
 
