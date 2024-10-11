@@ -22,6 +22,16 @@ bool Player::canIncreaseStamina()
         .count() >= staminaIncreaseCooldownMs;
 }
 
+void Player::increaseStaminaIfPossible()
+{
+    if (stamina < 1.0f && canIncreaseStamina())
+    {
+        stamina += staminaIncreaseRatePerSecond * Game::latestLoopDeltaTimeSeconds;
+        if (stamina > 1.0f)
+            stamina = 1.0f;
+    }
+}
+
 Player::~Player()
 {
 
@@ -49,6 +59,7 @@ void Player::update(Level& level)
 
     updateJumpState(level);
     crushEnemiesIfNeeded(level);
+    increaseStaminaIfPossible();
 }
 
 void Player::draw(Camera& camera)

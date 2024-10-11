@@ -28,6 +28,7 @@ public:
     float stamina = 1.0f;
     std::chrono::steady_clock::time_point lastStaminaDecreaseTime = std::chrono::steady_clock::now();
     bool canIncreaseStamina();
+    void increaseStaminaIfPossible();
 
     // Sprint
     const float sprintBoost = 100.0f;

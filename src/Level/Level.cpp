@@ -74,12 +74,6 @@ void Level::handleEvents()
                 player->stamina = 0.0f;
             player->lastStaminaDecreaseTime = std::chrono::steady_clock::now();
         }
-        else if (player->stamina < 1.0f && player->canIncreaseStamina())
-        {
-            player->stamina += player->staminaIncreaseRatePerSecond * Game::latestLoopDeltaTimeSeconds;
-            if (player->stamina > 1.0f)
-                player->stamina = 1.0f;
-        }
         Vector2D velocity;
         velocity.y = Game::control.isActionDown(CA_UP) ? -speed :
                               Game::control.isActionDown(CA_DOWN) ? speed : 0;
