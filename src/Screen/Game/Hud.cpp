@@ -198,7 +198,6 @@ void Hud::refreshWeaponStats()
     if (weaponChanged)
     {
         // Weapon icon
-        logd("Refreshing weapon icon");
         SDL_Texture* currentWeaponTexture = level.currentPlayerWeapon->texture;
         if (weaponIconDrawable != nullptr)
         {
@@ -233,7 +232,6 @@ void Hud::refreshWeaponStats()
     std::string ammoInCurrentMagString = std::to_string(level.currentPlayerWeapon->ammoInCurrentMag);
     if (ammoInCurrentMagTextDrawable == nullptr)
     {
-        logd("Creating ammo in current mag text drawable");
         ammoInCurrentMagTextDrawable = new TextDrawable(ammoInCurrentMagString);
         ammoInCurrentMagTextDrawable->load();
         drawables.push_back(ammoInCurrentMagTextDrawable);
@@ -248,7 +246,6 @@ void Hud::refreshWeaponStats()
     std::string availableMagsString = level.currentPlayerWeapon->hasInfiniteMags ? "" : std::to_string(level.currentPlayerWeapon->availableMags);
     if (availableMagsTextDrawable == nullptr)
     {
-        logd("Creating available mags text drawable");
         availableMagsTextDrawable = new TextDrawable(availableMagsString, Constants::COLOR_YELLOW_ACCENT, "PressStart2P.ttf");
         availableMagsTextDrawable->load();
         drawables.push_back(availableMagsTextDrawable);

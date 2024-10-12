@@ -29,7 +29,7 @@ void GameEntity::update(Level& level)
 {
     position += velocity;
     positionPlusCenter = position + center;
-    refreshPositionPlusCollisionRect();
+    refreshCollisionData();
 }
 
 void GameEntity::draw(Camera& camera)
@@ -69,7 +69,7 @@ void GameEntity::setPosition(Vector2D position)
 {
     this->position = position;
     this->positionPlusCenter = position + center;
-    this->refreshPositionPlusCollisionRect();
+    this->refreshCollisionData();
 }
 
 void GameEntity::setSize(int width, int height)
@@ -77,32 +77,81 @@ void GameEntity::setSize(int width, int height)
     this->width = width; 
     this->height = height; 
     this->center = Vector2D(width / 2, height / 2);
-    this->collisionRect = {
+    this->collisionRect = 
+    {
         0,
         0,
         width,
         height
     };
-    this->refreshPositionPlusCollisionRect();
+    this->collisionLine = 
+    {
+        {width / 2.0f, 0.0f},
+        {width / 2.0f, static_cast<float>(height)}
+    };
+    this->refreshCollisionData();
 }
 
-void GameEntity::refreshPositionPlusCollisionRect()
+void GameEntity::setRotation(float angle)
+{
+    // Only update if the angle has actually changed
+    if (this->rotation != angle) {
+        this->rotation = angle;
+
+        // Rotate the collision line based on the entity's rotation
+        float radians = rotation * M_PI / 180.0f;
+        float cosAngle = cos(radians);
+        float sinAngle = sin(radians);
+
+        // Reset collision line to its original position
+        collisionLine.start = {width / 2.0f, 0.0f};
+        collisionLine.end = {width / 2.0f, static_cast<float>(height)};
+
+        // Rotate the start point of the collision line
+        float startX = collisionLine.start.x - center.x;
+        float startY = collisionLine.start.y - center.y;
+        collisionLine.start.x = center.x + (startX * cosAngle) - (startY * sinAngle);
+        collisionLine.start.y = center.y + (startX * sinAngle) + (startY * cosAngle);
+
+        // Rotate the end point of the collision line
+        float endX = collisionLine.end.x - center.x;
+        float endY = collisionLine.end.y - center.y;
+        collisionLine.end.x = center.x + (endX * cosAngle) - (endY * sinAngle);
+        collisionLine.end.y = center.y + (endX * sinAngle) + (endY * cosAngle);
+    }
+}
+
+void GameEntity::refreshCollisionData()
 {
     positionPlusCollisionRect.x = position.x + collisionRect.x;
     positionPlusCollisionRect.y = position.y + collisionRect.y;
     positionPlusCollisionRect.w = collisionRect.w;
     positionPlusCollisionRect.h = collisionRect.h;
+
+    positionPlusCollisionLine.start.x = position.x + collisionLine.start.x;
+    positionPlusCollisionLine.start.y = position.y + collisionLine.start.y;
+    positionPlusCollisionLine.end.x = position.x + collisionLine.end.x;
+    positionPlusCollisionLine.end.y = position.y + collisionLine.end.y;
 }
 
 #ifdef DEBUG_DRAW_COLLISION_RECTS
-void GameEntity::drawCollisionRect(Camera& camera) // Draw collision rect with blue
+void GameEntity::drawCollisionRect(Camera& camera) 
 {
-    SDL_Rect debugRect;
-    debugRect.x = GSCALE(position.x) + GSCALE(collisionRect.x) - camera.position.x;
-    debugRect.y = GSCALE(position.y) + GSCALE(collisionRect.y) - camera.position.y;
+    // Draw collision rect with blue
+    SDL_Rect debugRect; 
+    debugRect.x = GSCALE(positionPlusCollisionRect.x) - camera.position.x;
+    debugRect.y = GSCALE(positionPlusCollisionRect.y) - camera.position.y;
     debugRect.w = GSCALE(collisionRect.w);
     debugRect.h = GSCALE(collisionRect.h);
     Game::primitiveShapeHelper.drawRectOutline(debugRect, {0, 0, 255, 255}, 2);
+
+    // Draw collision line with red
+    Line debugLine;
+    debugLine.start.x = GSCALE(positionPlusCollisionLine.start.x) - camera.position.x;
+    debugLine.start.y = GSCALE(positionPlusCollisionLine.start.y) - camera.position.y;
+    debugLine.end.x = GSCALE(positionPlusCollisionLine.end.x) - camera.position.x;
+    debugLine.end.y = GSCALE(positionPlusCollisionLine.end.y) - camera.position.y;
+    Game::primitiveShapeHelper.drawLine(debugLine, {255, 0, 0, 255});
 }
 #endif
 

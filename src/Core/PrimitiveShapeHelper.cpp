@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include <algorithm>
 #include "../Game.hpp"
+#include "Line.hpp"
 
 void PrimitiveShapeHelper::drawRect(const SDL_Rect& rect, const SDL_Color& color)
 {
@@ -85,6 +86,18 @@ void PrimitiveShapeHelper::drawInfinitySymbol(SDL_Rect& dstRect, const SDL_Color
         }
         loopRadius--;
     }
+
+    SDL_SetRenderDrawColor(renderer, oldColor.r, oldColor.g, oldColor.b, oldColor.a);
+}
+
+void PrimitiveShapeHelper::drawLine(const Line& line, const SDL_Color& color)
+{
+    SDL_Renderer* renderer = Game::renderer;
+    SDL_Color oldColor;
+    SDL_GetRenderDrawColor(renderer, &oldColor.r, &oldColor.g, &oldColor.b, &oldColor.a);
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+
+    SDL_RenderDrawLine(renderer, line.start.x, line.start.y, line.end.x, line.end.y);
 
     SDL_SetRenderDrawColor(renderer, oldColor.r, oldColor.g, oldColor.b, oldColor.a);
 }

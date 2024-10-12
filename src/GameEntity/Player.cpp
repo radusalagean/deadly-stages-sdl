@@ -52,10 +52,10 @@ void Player::update(Level& level)
         mouseX - GSCALE(position.x + center.x) + camera.position.x);
 
     // Convert the angle from radians to degrees
-    angle = angle * (180 / M_PI);
+    angle = angle * (180 / M_PI) - 180;
 
     // Set the rotation of the player
-    rotation = angle - 180;
+    setRotation(angle);
 
     updateJumpState(level);
     crushEnemiesIfNeeded(level);

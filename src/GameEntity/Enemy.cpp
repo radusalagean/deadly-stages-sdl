@@ -34,8 +34,8 @@ void Enemy::update(Level& level)
     if (target != nullptr)
     {
         float angle = atan2(target->y - positionPlusCenter.y, target->x - positionPlusCenter.x);
-        angle = angle * (180 / M_PI);
-        rotation = angle - 180;
+        angle = angle * (180 / M_PI) - 180;
+        setRotation(angle);
     }
     velocity = Vector2D(cos(rotation * M_PI / 180.0f), sin(rotation * M_PI / 180.0f)) * -speedPxPerSecond * Game::latestLoopDeltaTimeSeconds;
     GameEntity* firstCollidedEntity = nullptr;

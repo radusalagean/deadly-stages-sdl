@@ -10,6 +10,7 @@
 #include "../Core/Constants.hpp"
 #include "../Core/Config.hpp"
 #include "../Core/SDLUtils.hpp"
+#include "../Core/Line.hpp"
 
 class Level;
 
@@ -34,6 +35,8 @@ public:
 
     SDL_Rect collisionRect;
     SDL_Rect positionPlusCollisionRect;
+    Line collisionLine;
+    Line positionPlusCollisionLine;
 
     Vector2D position;
     Vector2D center;
@@ -51,7 +54,8 @@ public:
     void setPosition(Vector2D position);
 
     void setSize(int width, int height);
-    void refreshPositionPlusCollisionRect();
+    void setRotation(float angle);
+    void refreshCollisionData();
 
     #ifdef DEBUG_DRAW_COLLISION_RECTS
     void drawCollisionRect(Camera& camera);

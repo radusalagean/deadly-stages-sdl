@@ -75,7 +75,6 @@ private:
     int* ownerHeight = nullptr;
     double* ownerRotation = nullptr;
     Vector2D* ownerCenter = nullptr;
-    Vector2D position;
     Vector2D offset = Vector2D(20, -20);
 };
 

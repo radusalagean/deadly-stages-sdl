@@ -6,8 +6,8 @@
 Bullet::Bullet(Vector2D weaponPosition, float rotation, TexturePool& texturePool)
 {
     this->setSize(8, 16);
-    this->position = weaponPosition - this->center;
-    this->rotation = rotation;
+    this->setPosition(weaponPosition - this->center);
+    this->setRotation(rotation);
     this->texturePath = "res/game_entity/bullet.png";
     this->load(texturePool);
     this->damageAmount = 1;

@@ -84,11 +84,11 @@ void Weapon::update(Level& level)
         float offsetX = offset.x * sin(rotation * M_PI / 180.0f);
         float offsetY = offset.y * cos(rotation * M_PI / 180.0f);
 
-        position = *ownerPosition + *ownerCenter + Vector2D(offsetX, offsetY);
+        setPosition(*ownerPosition + *ownerCenter + Vector2D(offsetX, offsetY));
     }
 
     if (ownerRotation != nullptr)
-        rotation = *ownerRotation - 90;
+        setRotation(*ownerRotation - 90);
 
     autoReloadIfNeeded();
     updateReloadState();

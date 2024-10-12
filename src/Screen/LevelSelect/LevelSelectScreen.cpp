@@ -85,14 +85,12 @@ void LevelSelectScreen::selectLevel(const std::string& id)
 void LevelSelectScreen::previousLevel()
 {
     if (levelPreviews.empty()) return;
-    logd("Previous level");
     selectedIndex = (selectedIndex - 1 + levelPreviews.size()) % levelPreviews.size();
 }
 
 void LevelSelectScreen::nextLevel()
 {
     if (levelPreviews.empty()) return;
-    logd("Next level");
     selectedIndex = (selectedIndex + 1) % levelPreviews.size();
 }
 

@@ -149,6 +149,82 @@ namespace CollisionManager
         return false;
     }
 
+    bool lineVsLine(const Line& line1, const Line& line2, Vector2D& intersectionPoint)
+    {
+        float x1 = line1.start.x;
+        float y1 = line1.start.y;
+        float x2 = line1.end.x;
+        float y2 = line1.end.y;
+        
+        float x3 = line2.start.x;
+        float y3 = line2.start.y;
+        float x4 = line2.end.x;
+        float y4 = line2.end.y;
+
+        // Calculate the denominator of the equations
+        float denominator = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+
+        if (denominator == 0) // Lines are parallel
+        {
+            return false;
+        }
+
+        float t1_numerator = (x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4);
+        float t2_numerator = (x1 - x3) * (y1 - y2) - (y1 - y3) * (x1 - x2);
+
+        float t1 = t1_numerator / denominator;
+        float t2 = t2_numerator / denominator;
+
+        if (t1 >= 0.0f && t1 <= 1.0f && t2 >= 0.0f && t2 <= 1.0f) {
+            // Calculate the intersection point
+            intersectionPoint.x = x1 + t1 * (x2 - x1);
+            intersectionPoint.y = y1 + t1 * (y2 - y1);
+            return true;
+        }
+        return false;
+    }
+
+    bool sweptRectangleVsLine(const SDL_Rect& rect, const SDL_Rect& proposedRect, const Line& targetLine, Vector2D& intersectionPoint, float& contactTime)
+    {
+        Line topLeft { 
+            {static_cast<float>(rect.x), static_cast<float>(rect.y)}, 
+            {static_cast<float>(proposedRect.x), static_cast<float>(proposedRect.y)} 
+        };
+        Line topRight { 
+            {static_cast<float>(rect.x + rect.w), static_cast<float>(rect.y)}, 
+            {static_cast<float>(proposedRect.x + proposedRect.w), static_cast<float>(proposedRect.y)} 
+        };
+        Line bottomLeft { 
+            {static_cast<float>(rect.x), static_cast<float>(rect.y + rect.h)}, 
+            {static_cast<float>(proposedRect.x), static_cast<float>(proposedRect.y + proposedRect.h)} 
+        };
+        Line bottomRight { 
+            {static_cast<float>(rect.x + rect.w), static_cast<float>(rect.y + rect.h)}, 
+            {static_cast<float>(proposedRect.x + proposedRect.w), static_cast<float>(proposedRect.y + proposedRect.h)} 
+        };
+
+        Vector2D tempIntersection;
+        if (lineVsLine(topLeft, targetLine, tempIntersection) ||
+            lineVsLine(topRight, targetLine, tempIntersection) ||
+            lineVsLine(bottomLeft, targetLine, tempIntersection) ||
+            lineVsLine(bottomRight, targetLine, tempIntersection))
+        {
+            // Calculate contactTime based on the distance to the intersection point
+            Vector2D movement = {static_cast<float>(proposedRect.x - rect.x), static_cast<float>(proposedRect.y - rect.y)};
+            float movementLength = std::sqrt(movement.x * movement.x + movement.y * movement.y);
+            
+            if (movementLength > 0) {
+                Vector2D toIntersection = {tempIntersection.x - rect.x, tempIntersection.y - rect.y};
+                float intersectionDistance = std::sqrt(toIntersection.x * toIntersection.x + toIntersection.y * toIntersection.y);
+                contactTime = std::max(0.0f, std::min(intersectionDistance / movementLength, 1.0f));
+            }
+
+            intersectionPoint = tempIntersection;
+            return true;
+        }
+        return false;
+    }
+
     void processMovement(GameEntity& subjectEntity, Vector2D& proposedVelocity, Level& level, GameEntity** firstCollidedEntity, bool jumping)
     {
         Vector2D intersectionPoint;
@@ -242,19 +318,30 @@ namespace CollisionManager
                 if (&subjectEntity == enemy)
                     continue;
                 SDL_Rect& enemyRect = enemy->positionPlusCollisionRect;
-                float& contactTime = isSubjectEntityBullet ? tHitFar : tHitNear;
-                if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, enemyRect, &intersectionPoint, &intersectionNormal, tHitNear, tHitFar, contactTime))
+                if (isSubjectEntityBullet)
                 {
-                    CollisionInfo collision = {enemyRect, contactTime, enemy};
-                    #ifdef DEBUG_DRAW_COLLISION_RECTS
-                    level.collidedRects.push_back(enemyRect);
-                    #endif
-                    collisions.push_back(collision);
+                    float contactTime = 0.0f;
+                    if (sweptRectangleVsLine(subjectBoundsRect, proposedRect, enemy->positionPlusCollisionLine, intersectionPoint, contactTime))
+                    {
+                        CollisionInfo collision = {enemyRect, contactTime, enemy};
+                        collisions.push_back(collision);
+                    }
+                }
+                else
+                {
+                    float& contactTime = tHitNear;
+                    if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, enemyRect, &intersectionPoint, &intersectionNormal, tHitNear, tHitFar, contactTime))
+                    {
+                        CollisionInfo collision = {enemyRect, contactTime, enemy};
+                        #ifdef DEBUG_DRAW_COLLISION_RECTS
+                        level.collidedRects.push_back(enemyRect);
+                        #endif
+                        collisions.push_back(collision);
+                    }
                 }
             }
         }
         
-
         // Sort intersections by contact time
         std::sort(collisions.begin(), collisions.end(), [](const CollisionInfo& a, const CollisionInfo& b) {
             return a.contactTime < b.contactTime;

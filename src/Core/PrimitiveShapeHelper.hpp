@@ -3,6 +3,8 @@
 
 #include <SDL.h>
 
+struct Line;
+
 class PrimitiveShapeHelper
 {
 public:
@@ -10,6 +12,7 @@ public:
     void drawRectOutline(const SDL_Rect& rect, const SDL_Color& color, int borderWidth);
     SDL_Rect wrapRects(const SDL_Rect& rect1, const SDL_Rect& rect2);
     void drawInfinitySymbol(SDL_Rect& dstRect, const SDL_Color& color, int thickness);
+    void drawLine(const Line& line, const SDL_Color& color);
 };
 
 #endif // __SRC_CORE_PRIMITIVESHAPEHELPER_HPP__
