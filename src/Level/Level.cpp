@@ -145,8 +145,8 @@ void Level::handleEvents()
 
 void Level::update()
 {
-    camera.update();
     player->update(*this);
+    camera.update();
     currentPlayerWeapon->update(*this);
     for (auto& bullet : bullets)
     {
