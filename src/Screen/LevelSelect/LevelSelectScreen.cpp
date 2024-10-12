@@ -147,10 +147,8 @@ void LevelSelectScreen::update()
 
 void LevelSelectScreen::render()
 {
-    SDL_RenderClear(Game::renderer);
     for (auto levelPreview : levelPreviews)
     {
         levelPreview->draw();
     }
-    SDL_RenderPresent(Game::renderer);
 }

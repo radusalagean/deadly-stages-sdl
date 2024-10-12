@@ -25,6 +25,8 @@ namespace Game
     FontManager fontManager;
     ScreenManager screenManager;
     PrimitiveShapeHelper primitiveShapeHelper;
+    Options options;
+    FramerateIndicator framerateIndicator;
 
     float latestLoopDeltaTimeMs = 0;
     float latestLoopDeltaTimeSeconds = 0;
@@ -60,6 +62,7 @@ namespace Game
         logd("Renderer size on init: %dx%d", width, height);
 
         screenManager.init();
+        framerateIndicator.init();
     }
 
     void loop()
@@ -104,11 +107,15 @@ namespace Game
     void update()
     {
         screenManager.update();
+        framerateIndicator.update();
     }   
 
     void render()
     {
+        SDL_RenderClear(renderer);
         screenManager.render();
+        framerateIndicator.render();
+        SDL_RenderPresent(renderer);
     }
 
     void dispose()

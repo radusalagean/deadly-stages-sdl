@@ -6,6 +6,8 @@
 #include "Screen/MainMenu/MainMenuScreen.hpp"
 #include "Debug/Logger.hpp"
 #include "Control/Control.hpp"
+#include "Core/Options.hpp"
+#include "Core/FramerateIndicator.hpp"
 
 class FontManager;
 class ScreenManager;
@@ -27,6 +29,8 @@ namespace Game
     extern FontManager fontManager;
     extern ScreenManager screenManager;
     extern PrimitiveShapeHelper primitiveShapeHelper;
+    extern Options options;
+    extern FramerateIndicator framerateIndicator;
 
     // Time
     extern float latestLoopDeltaTimeMs;

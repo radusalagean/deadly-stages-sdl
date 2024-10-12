@@ -72,12 +72,11 @@ void MainMenuScreen::update()
 
 void MainMenuScreen::render()
 {
-    SDL_RenderClear(Game::renderer);
+    
     for (auto drawable : drawables)
     {
         drawable->draw();
     }
-    SDL_RenderPresent(Game::renderer);
 }
 
 void MainMenuScreen::layoutPass()

@@ -74,8 +74,6 @@ void GameScreen::update()
 
 void GameScreen::render()
 {
-    SDL_RenderClear(Game::renderer);
-
     // Level    
     level->render();
 
@@ -95,6 +93,4 @@ void GameScreen::render()
     cursorRect.x = cursorRect.x - cursorRect.w / 2;
     cursorRect.y = cursorRect.y - cursorRect.h / 2;
     SDL_RenderCopy(Game::renderer, cursorTexture, NULL, &cursorRect);
-
-    SDL_RenderPresent(Game::renderer);
 }

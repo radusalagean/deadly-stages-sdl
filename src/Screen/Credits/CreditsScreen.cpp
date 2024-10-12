@@ -98,12 +98,10 @@ void CreditsScreen::update()
 
 void CreditsScreen::render()
 {
-    SDL_RenderClear(Game::renderer);
     for (auto drawable : drawables)
     {
         drawable.textDrawable->draw();
     }
-    SDL_RenderPresent(Game::renderer);
 }
 
 void CreditsScreen::layoutPass()

@@ -63,12 +63,10 @@ void GameOverScreen::update()
 
 void GameOverScreen::render()
 {
-    SDL_RenderClear(Game::renderer);
     for (auto drawable : drawables)
     {
         drawable->draw();
     }
-    SDL_RenderPresent(Game::renderer);
 }
 
 void GameOverScreen::layoutPass()
