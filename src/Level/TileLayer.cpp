@@ -8,23 +8,29 @@
 
 void TileLayer::render(Camera& camera, int renderFlags)
 {
-    for (int y = 0; y < verticalTilesCount; y++)
+    int windowWidth = Game::width;
+    int windowHeight = Game::height;
+
+    int startX = std::max(0, static_cast<int>(camera.position.x / GSCALE(tileMap[0][0]->width)));
+    int startY = std::max(0, static_cast<int>(camera.position.y / GSCALE(tileMap[0][0]->height)));
+    int endX = std::min(horizontalTilesCount, static_cast<int>((camera.position.x + windowWidth) / GSCALE(tileMap[0][0]->width)) + 1);
+    int endY = std::min(verticalTilesCount, static_cast<int>((camera.position.y + windowHeight) / GSCALE(tileMap[0][0]->height)) + 1);
+
+    for (int y = startY; y < endY; y++)
     {
-        for (int x = 0; x < horizontalTilesCount; x++)
+        for (int x = startX; x < endX; x++)
         {
             Tile* tile = tileMap[y][x];
             if (tile != nullptr)
             {
-                bool canDraw = tile != nullptr;
-                if (!canDraw)
-                    continue;
-                canDraw = ((renderFlags & RENDER_FLAG_NON_COLLIDABLE_TILES && !tile->isCollidable())
-                        || (renderFlags & RENDER_FLAG_COLLIDABLE_TILES && tile->isCollidable()));
-                if (!canDraw)
-                    continue;
-                int drawX = (x * GSCALE(tile->width)) - camera.position.x;
-                int drawY = (y * GSCALE(tile->height)) - camera.position.y;
-                tile->draw(drawX, drawY);
+                bool canDraw = ((renderFlags & RENDER_FLAG_NON_COLLIDABLE_TILES && !tile->isCollidable())
+                             || (renderFlags & RENDER_FLAG_COLLIDABLE_TILES && tile->isCollidable()));
+                if (canDraw)
+                {
+                    int drawX = (x * GSCALE(tile->width)) - camera.position.x;
+                    int drawY = (y * GSCALE(tile->height)) - camera.position.y;
+                    tile->draw(drawX, drawY);
+                }
             }
         }
     }
