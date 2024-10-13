@@ -163,17 +163,21 @@ void Level::update()
 
 void Level::render()
 {
-    tileLayer.render(camera);
+    tileLayer.render(camera, TileLayer::RENDER_FLAG_NON_COLLIDABLE_TILES);
+
     for (auto& bullet : bullets)
     {
         bullet->draw(camera);
     }
+    
     for (auto& enemy : enemies)
     {
         enemy->draw(camera);
     }
     
     player->draw(camera);
+
+    tileLayer.render(camera, TileLayer::RENDER_FLAG_COLLIDABLE_TILES);
     
     #ifdef DEBUG_DRAW_COLLISION_RECTS
     renderDebugShapes(camera);
