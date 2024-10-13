@@ -54,7 +54,7 @@ namespace Logger
         va_end(args);
 
         printf("%s", result);
-#ifndef __PSP__
+#ifdef PRINT_LOGS_TO_FILE
         FILE* pFile;
         pFile = fopen("Log.txt", "a");
         fwrite(result, strlen(result), 1, pFile);

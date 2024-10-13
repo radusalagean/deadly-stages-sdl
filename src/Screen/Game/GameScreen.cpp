@@ -18,8 +18,11 @@ GameScreen::~GameScreen()
 {
     delete hud;
     delete level;
+
+#ifdef SUPPORTS_MOUSE_POINTER
     SDL_DestroyTexture(cursorTexture);
     SDL_ShowCursor(SDL_ENABLE);
+#endif
 }
 
 void GameScreen::init()
@@ -30,16 +33,18 @@ void GameScreen::init()
     hud->load();
     pauseOverlay.load();
 
-    // Custom cursor
+#ifdef SUPPORTS_MOUSE_POINTER
     SDL_ShowCursor(SDL_DISABLE);
     cursorTexture = SDLUtils::loadTexture("res/image/cursor.png");
     SDL_QueryTexture(cursorTexture, NULL, NULL, &cursorWidth, &cursorHeight);
+#endif
 }
 
 void GameScreen::handleEvents()
 {
-    // Custom cursor
+#ifdef SUPPORTS_MOUSE_POINTER
     SDL_GetMouseState(&cursorRect.x, &cursorRect.y);
+#endif
 
     if (paused)
     {
@@ -86,6 +91,7 @@ void GameScreen::render()
         pauseOverlay.render();
     }
 
+#ifdef SUPPORTS_MOUSE_POINTER
     // Custom cursor
     cursorRect.w = USCALE(cursorWidth);
     cursorRect.h = USCALE(cursorHeight);
@@ -93,4 +99,5 @@ void GameScreen::render()
     cursorRect.x = cursorRect.x - cursorRect.w / 2;
     cursorRect.y = cursorRect.y - cursorRect.h / 2;
     SDL_RenderCopy(Game::renderer, cursorTexture, NULL, &cursorRect);
+#endif
 }
