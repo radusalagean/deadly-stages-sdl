@@ -79,3 +79,15 @@ SDL_Texture* SDLUtils::createShadowTexture(SDL_Texture* originalTexture)
 
     return shadowTexture;
 }
+
+SDL_Color SDLUtils::tempColor;
+
+void SDLUtils::pushTempRendererDrawColor()
+{
+    SDL_GetRenderDrawColor(Game::renderer, &tempColor.r, &tempColor.g, &tempColor.b, &tempColor.a);
+}
+
+void SDLUtils::popTempRendererDrawColor()
+{
+    SDL_SetRenderDrawColor(Game::renderer, tempColor.r, tempColor.g, tempColor.b, tempColor.a);
+}

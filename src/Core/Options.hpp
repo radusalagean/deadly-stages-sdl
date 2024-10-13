@@ -5,7 +5,7 @@ class Options
 {
 public:
 
-    bool showFramerate = false;
+    bool showFramerate = true;
 };
 
 #endif // __SRC_CORE_OPTIONS_HPP__

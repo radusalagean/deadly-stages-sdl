@@ -19,7 +19,7 @@ public:
 
     // Damage
     Debouncer hurtDebouncer = Debouncer(500);
-    void receiveDamage(const int amount);
+    void receiveDamage(const int amount, BloodParticleManager& bloodParticleManager);
 
     // Stamina
     const float staminaDecreaseRatePerSecond = 0.5f;

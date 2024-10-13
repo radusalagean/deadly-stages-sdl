@@ -159,6 +159,7 @@ void Level::update()
     advanceWaveIfNeeded();
     spawnEnemiesIfNeeded();
     handleGameEntityPendingRemovals();
+    bloodParticleManager.update();
 }
 
 void Level::render()
@@ -174,6 +175,8 @@ void Level::render()
     {
         enemy->draw(camera);
     }
+
+    bloodParticleManager.render(camera.position);
     
     player->draw(camera);
 

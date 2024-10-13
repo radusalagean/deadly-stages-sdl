@@ -4,6 +4,8 @@
 #include "../Game.hpp"
 #include "../Core/CollisionManager.hpp"
 #include <chrono>
+#include "../Level/Level.hpp"
+#include "../GameEntity/BloodParticleManager.hpp"
 
 Enemy::Enemy() : GameEntity()
 {
@@ -43,7 +45,7 @@ void Enemy::update(Level& level)
     Player* collidedPlayer = dynamic_cast<Player*>(firstCollidedEntity);
     if (collidedPlayer != nullptr)
     {
-        handleContactWithPlayer(collidedPlayer);
+        handleContactWithPlayer(collidedPlayer, level.bloodParticleManager);
     }
     else
     {
@@ -61,7 +63,7 @@ void Enemy::draw(Camera& camera)
     #endif
 }
 
-void Enemy::handleContactWithPlayer(Player* player)
+void Enemy::handleContactWithPlayer(Player* player, BloodParticleManager& bloodParticleManager)
 {
     if (!isInContactWithPlayer) {
         isInContactWithPlayer = true;
@@ -70,19 +72,20 @@ void Enemy::handleContactWithPlayer(Player* player)
         auto currentTime = std::chrono::steady_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - contactWithPlayerStartTime).count();
         if (duration >= hitAfterContactDelayMs) {
-            sendDamage(player);
+            player->receiveDamage(damageAmount, bloodParticleManager);
         }
     }
 }
 
-void Enemy::crush()
+void Enemy::crush(BloodParticleManager& bloodParticleManager)
 {
     pendingRemoval = true;
+    bloodParticleManager.createParticles(positionPlusCenter, 100);
 }
 
-void Enemy::receiveDamage(const int amount)
+void Enemy::receiveDamage(const int amount, BloodParticleManager& bloodParticleManager)
 {
     int speedDecreasePerHealthUnit = topSpeedPxPerSecond / maxHealth;
-    GameEntity::receiveDamage(amount);
+    GameEntity::receiveDamage(amount, bloodParticleManager);
     speedPxPerSecond = topSpeedPxPerSecond - (speedDecreasePerHealthUnit * (maxHealth - currentHealth));
 }

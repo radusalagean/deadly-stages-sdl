@@ -10,6 +10,7 @@
 #include "../GameEntity/Weapon.hpp"
 #include "../GameEntity/Bullet.hpp"
 #include "../Core/Debouncer.hpp"
+#include "../GameEntity/BloodParticleManager.hpp"
 
 class Enemy;
 
@@ -68,6 +69,8 @@ public:
     std::vector<SDL_Rect> checkAreaTileIndicesRects{};
     void renderDebugShapes(Camera& camera);
     #endif
+
+    BloodParticleManager bloodParticleManager;
 };
 
 #endif // __SRC_LEVEL_LEVEL_HPP_

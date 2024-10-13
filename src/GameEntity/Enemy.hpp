@@ -17,14 +17,14 @@ public:
     float speedPxPerSecond = 0.0f;
 
     // Damage
-    void receiveDamage(const int amount);
-    void crush();
+    void receiveDamage(const int amount, BloodParticleManager& bloodParticleManager);
+    void crush(BloodParticleManager& bloodParticleManager);
 
     // Contact with player
     const int hitAfterContactDelayMs = 300;
     bool isInContactWithPlayer = false;
     std::chrono::steady_clock::time_point contactWithPlayerStartTime;
-    void handleContactWithPlayer(Player* player);
+    void handleContactWithPlayer(Player* player, BloodParticleManager& bloodParticleManager);
 
     Vector2D* target = nullptr;
 

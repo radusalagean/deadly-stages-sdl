@@ -13,6 +13,7 @@
 #include "../Core/Line.hpp"
 
 class Level;
+class BloodParticleManager;
 
 class GameEntity
 {
@@ -62,8 +63,7 @@ public:
     #endif
 
     bool pendingRemoval = false;
-    void sendDamage(GameEntity* targetEntity);
-    virtual void receiveDamage(const int amount);
+    virtual void receiveDamage(const int amount, BloodParticleManager& bloodParticleManager);
 
 private:
     void drawShadow(Camera& camera);

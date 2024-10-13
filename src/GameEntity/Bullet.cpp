@@ -2,6 +2,7 @@
 
 #include "../Game.hpp"
 #include "../Core/CollisionManager.hpp"
+#include "Enemy.hpp"
 
 Bullet::Bullet(Vector2D weaponPosition, float rotation, TexturePool& texturePool)
 {
@@ -25,7 +26,12 @@ void Bullet::update(Level& level)
     CollisionManager::processMovement(*this, velocity, level, &firstCollidedEntity);
     if (firstCollidedEntity != nullptr)
     {
-        sendDamage(firstCollidedEntity);
+        Enemy* enemy = dynamic_cast<Enemy*>(firstCollidedEntity);
+        if (enemy != nullptr)
+        {
+            enemy->receiveDamage(damageAmount, level.bloodParticleManager);
+        }
+        pendingRemoval = true;
     }
     GameEntity::update(level);
 }

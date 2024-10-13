@@ -4,24 +4,23 @@
 #include <algorithm>
 #include "../Game.hpp"
 #include "Line.hpp"
+#include "SDLUtils.hpp"
 
 void PrimitiveShapeHelper::drawRect(const SDL_Rect& rect, const SDL_Color& color)
 {
     SDL_Renderer* renderer = Game::renderer;
-    SDL_Color oldColor;
-    SDL_GetRenderDrawColor(renderer, &oldColor.r, &oldColor.g, &oldColor.b, &oldColor.a);
+    SDLUtils::pushTempRendererDrawColor();
     
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     SDL_RenderFillRect(renderer, &rect);
     
-    SDL_SetRenderDrawColor(renderer, oldColor.r, oldColor.g, oldColor.b, oldColor.a);
+    SDLUtils::popTempRendererDrawColor();
 }
 
 void PrimitiveShapeHelper::drawRectOutline(const SDL_Rect& rect, const SDL_Color& color, int borderWidth)
 {
     SDL_Renderer* renderer = Game::renderer;
-    SDL_Color oldColor;
-    SDL_GetRenderDrawColor(renderer, &oldColor.r, &oldColor.g, &oldColor.b, &oldColor.a);
+    SDLUtils::pushTempRendererDrawColor();
     
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     
@@ -41,7 +40,7 @@ void PrimitiveShapeHelper::drawRectOutline(const SDL_Rect& rect, const SDL_Color
     SDL_Rect rightBorder = {rect.x + rect.w - borderWidth, rect.y + borderWidth, borderWidth, rect.h - 2 * borderWidth};
     SDL_RenderFillRect(renderer, &rightBorder);
     
-    SDL_SetRenderDrawColor(renderer, oldColor.r, oldColor.g, oldColor.b, oldColor.a);
+    SDLUtils::popTempRendererDrawColor();
 }
 
 SDL_Rect PrimitiveShapeHelper::wrapRects(const SDL_Rect& rect1, const SDL_Rect& rect2)
@@ -67,8 +66,7 @@ SDL_Rect PrimitiveShapeHelper::wrapRects(const SDL_Rect& rect1, const SDL_Rect& 
 void PrimitiveShapeHelper::drawInfinitySymbol(SDL_Rect& dstRect, const SDL_Color& color, int thickness)
 {
     SDL_Renderer* renderer = Game::renderer;
-    SDL_Color oldColor;
-    SDL_GetRenderDrawColor(renderer, &oldColor.r, &oldColor.g, &oldColor.b, &oldColor.a);
+    SDLUtils::pushTempRendererDrawColor();
     
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 
@@ -87,17 +85,17 @@ void PrimitiveShapeHelper::drawInfinitySymbol(SDL_Rect& dstRect, const SDL_Color
         loopRadius--;
     }
 
-    SDL_SetRenderDrawColor(renderer, oldColor.r, oldColor.g, oldColor.b, oldColor.a);
+    SDLUtils::popTempRendererDrawColor();
 }
 
 void PrimitiveShapeHelper::drawLine(const Line& line, const SDL_Color& color)
 {
     SDL_Renderer* renderer = Game::renderer;
-    SDL_Color oldColor;
-    SDL_GetRenderDrawColor(renderer, &oldColor.r, &oldColor.g, &oldColor.b, &oldColor.a);
+    SDLUtils::pushTempRendererDrawColor();
+    
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 
     SDL_RenderDrawLine(renderer, line.start.x, line.start.y, line.end.x, line.end.y);
 
-    SDL_SetRenderDrawColor(renderer, oldColor.r, oldColor.g, oldColor.b, oldColor.a);
+    SDLUtils::popTempRendererDrawColor();
 }

@@ -35,7 +35,7 @@ void FramerateIndicator::update()
 
     if (SDL_GetTicks() - lastCycleProcessingTimeMs >= targetCycleTimeMs) {
         float currentCycleTimeSeconds = currentCycleTimeMs / 1000.0f;
-        int average = floor(currentCycleFrameCount / currentCycleTimeSeconds);
+        int average = ceil(currentCycleFrameCount / currentCycleTimeSeconds);
         lastCycleFramerate = average;
         currentCycleFrameCount = 0;
         currentCycleTimeMs = 0;
