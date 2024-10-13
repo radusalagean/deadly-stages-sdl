@@ -25,9 +25,9 @@ private:
 
     std::vector<CreditDrawable> drawables{};
     const std::vector<Credit> credits{
-        {"Madalin-Iulian Popa", "XtremePrime", "2015 SFML Version Programmer"},
+        {"Madalin-Iulian Popa", "XtremePrime", "2015 Original Version Programmer"},
         {"Andrei-Sabin Popescu", "Popica23", "Graphics Artwork"},
-        {"Radu Salagean", "", "2024 SDL Version Programmer"}
+        {"Radu Salagean", "", "2024 Remix Version Programmer"}
     };
     const std::string footerText = "Thanks for playing!";
 

@@ -4,7 +4,7 @@
         {
             "name": "Linux Launch",
             "type": "cppdbg",
-            "program": "${workspaceFolder:Linux}/../../../build/linux-x86_64-debug/DeadlyStagesDemo",
+            "program": "${workspaceFolder:Linux}/../../../build/linux-x86_64-debug/DeadlyStagesRemix",
             "request": "launch",
             "cwd": "${workspaceFolder:Linux}/../../../build/linux-x86_64-debug",
             "MIMode": "gdb",

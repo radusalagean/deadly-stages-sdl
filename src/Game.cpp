@@ -7,7 +7,7 @@
 #include "Core/PrimitiveShapeHelper.hpp"
 #include "Core/Constants.hpp"
 
-#define GAME_NAME "DeadlyStagesDemo"
+#define GAME_NAME "Deadly Stages Remix"
 #define WIDTH 480
 #define HEIGHT 272
 

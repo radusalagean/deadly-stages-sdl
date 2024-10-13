@@ -1,5 +1,32 @@
-# deadly-stages-sdl
-A multi-platform SDL reimplementation of the Deadly Stages Demo
+# Deadly Stages Remix
+A multi-platform SDL reimplementation of the original 2015 Deadly Stages Demo from @XtremePrime and @popica23
+
+## New features
+
+General:
+    - Multi-platform (Linux, Windows, macOS, Sony PSP)
+    - Controller support
+	- Game Pause state
+	- The game viewport adapts to any size (4:3 or wider aspect ratio highly recommended)
+	- Separate scaling options for both Gameplay and UI
+	- Hud improvements (new layout, more stats displayed)
+
+Behavior:
+	- Improved collision handling
+	- Player has stamina
+	- Player can sprint (stamina-dependent)
+	- Player can jump and crush enemies (stamina-dependent)
+	- Enemies slow down as they get hurt
+	- Enemy bounty is raised as you complete waves
+	- More realistic weapon behavior
+		- Ammo is split into mags
+		- Reload mechanism
+		- Each shot requires a re-press of the "fire" action for semi-automatic weapons
+	- Player starts receiving damage from an enemy only after being in continuous contact for 300ms
+
+- New visual effects: 
+	- Shadows
+	- Landing from a jump will shake the camera
 
 ## PSP
 - Dev environmnent setup on Ubuntu Linux:
@@ -23,5 +50,5 @@ A multi-platform SDL reimplementation of the Deadly Stages Demo
     - PSP: Open the PSPLink and connect to PC via USB cable
     - PC: Go to the directory where the build is located and run
         ```
-        pspsh -e ./DeadlyStagesDemo.prx
+        pspsh -e ./DeadlyStagesRemix.prx
         ```

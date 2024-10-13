@@ -16,7 +16,7 @@ private:
     
     #pragma region Drawables
     ImageDrawable* titleScreenImageDrawable = nullptr;
-    TextDrawable* demoLabelTextDrawable = nullptr;
+    TextDrawable* versionLabelTextDrawable = nullptr;
     TextDrawable* copyrightLabelTextDrawable = nullptr;
     MenuDrawable* mainMenuDrawable = nullptr;
     #pragma endregion

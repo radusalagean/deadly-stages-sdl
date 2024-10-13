@@ -4,7 +4,7 @@
         {
             "name": "macOS Launch",
             "type": "cppdbg",
-            "program": "${workspaceFolder:macOS}/../../../build/macos-arm64-debug/DeadlyStagesDemo",
+            "program": "${workspaceFolder:macOS}/../../../build/macos-arm64-debug/DeadlyStagesRemix",
             "request": "launch",
             "cwd": "${workspaceFolder:macOS}/../../../build/macos-arm64-debug/",
             "MIMode": "lldb",

@@ -9,7 +9,7 @@ g++ --std=c++17 \
     $COMMON_SOURCES \
     $PLATFORM_SPECIFIC_SOURCES \
     vendor/tinyxml2/tinyxml2.cpp \
-    -o build/linux-x86_64-debug/DeadlyStagesDemo \
+    -o build/linux-x86_64-debug/DeadlyStagesRemix \
     -Wall -O0 -g \
     `sdl2-config --cflags --libs` -lSDL2_image -lSDL2_mixer -lSDL2_ttf \
     -Ivendor/tinyxml2
