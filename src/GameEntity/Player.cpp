@@ -71,11 +71,11 @@ void Player::draw(Camera& camera)
     #endif
 }
 
-void Player::receiveDamage(const int amount, BloodParticleManager& bloodParticleManager)
+void Player::receiveDamage(const int amount, Level& level)
 {
     if (!hurtDebouncer.canPerformAction())
         return;
-    GameEntity::receiveDamage(amount, bloodParticleManager);
+    GameEntity::receiveDamage(amount, level);
 }
 
 void Player::onJumpRequest()
@@ -110,7 +110,7 @@ void Player::crushEnemiesIfNeeded(Level& level)
     {
         if (CollisionManager::rectVsRect(positionPlusCollisionRect, enemy->positionPlusCollisionRect))
         {
-            enemy->crush(level.bloodParticleManager);
+            enemy->crush(level);
         }
     }
 }

@@ -8,7 +8,7 @@ class BloodParticle {
 public:
     BloodParticle(Vector2D position, Vector2D velocity, float lifetime);
     void update();
-    void render(SDL_Renderer* renderer, const Vector2D& cameraPosition);
+    void render(const Vector2D& cameraPosition);
     float lifetime;
     static constexpr float MAX_LIFETIME_SECONDS = 0.7f;
 

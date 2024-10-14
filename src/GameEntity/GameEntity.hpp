@@ -63,10 +63,7 @@ public:
     #endif
 
     bool pendingRemoval = false;
-    virtual void receiveDamage(const int amount, BloodParticleManager& bloodParticleManager);
-
-private:
-    void drawShadow(Camera& camera);
+    virtual void receiveDamage(const int amount, Level& level);
 };
 
 

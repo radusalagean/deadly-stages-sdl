@@ -12,7 +12,8 @@ void BloodParticle::update() {
     lifetime -= Game::latestLoopDeltaTimeSeconds;
 }
 
-void BloodParticle::render(SDL_Renderer* renderer, const Vector2D& cameraPosition) {
+void BloodParticle::render(const Vector2D& cameraPosition) {
+    SDL_Renderer* renderer = Game::renderer;
     SDLUtils::pushTempRendererDrawColor();
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_Rect particleRect = {

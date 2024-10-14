@@ -11,6 +11,7 @@
 #include "../GameEntity/Bullet.hpp"
 #include "../Core/Debouncer.hpp"
 #include "../GameEntity/BloodParticleManager.hpp"
+#include "../GameEntity/BloodPool.hpp"
 
 class Enemy;
 
@@ -37,7 +38,7 @@ public:
     Weapon* currentPlayerWeapon = nullptr;
     std::vector<Bullet*> bullets{};
     std::vector<Enemy*> enemies{};
-    
+    std::vector<BloodPool*> bloodPools;
 
     int horizontalTilesCount = 0;
     int verticalTilesCount = 0;
@@ -71,6 +72,8 @@ public:
     #endif
 
     BloodParticleManager bloodParticleManager;
+
+    void createBloodPool(const Vector2D& position);
 };
 
 #endif // __SRC_LEVEL_LEVEL_HPP_

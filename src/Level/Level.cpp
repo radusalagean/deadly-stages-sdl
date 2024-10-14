@@ -9,6 +9,7 @@
 #include "../Screen/GameOver/GameOverScreen.hpp"
 #include "../ScreenManager/ScreenManager.hpp"
 #include "../Core/PrimitiveShapeHelper.hpp"
+#include "../GameEntity/BloodPool.hpp"
 
 Level::Level(std::string id)
 {
@@ -42,6 +43,12 @@ Level::~Level()
         delete enemy;
     }
     enemies.clear();
+
+    for (auto& bloodPool : bloodPools)
+    {
+        delete bloodPool;
+    }
+    bloodPools.clear();
 }
 
 void Level::load()
@@ -165,6 +172,11 @@ void Level::update()
 void Level::render()
 {
     tileLayer.render(camera, TileLayer::RENDER_FLAG_NON_COLLIDABLE_TILES);
+
+    for (auto& bloodPool : bloodPools)
+    {
+        bloodPool->draw(camera);
+    }
 
     for (auto& bullet : bullets)
     {
@@ -344,4 +356,10 @@ void Level::handleGameEntityPendingRemovals()
     {
         Game::screenManager.setScreen(new GameOverScreen(score, wave, id));
     }
+}
+
+void Level::createBloodPool(const Vector2D& position)
+{
+    BloodPool* bloodPool = new BloodPool(position);
+    bloodPools.push_back(bloodPool);
 }

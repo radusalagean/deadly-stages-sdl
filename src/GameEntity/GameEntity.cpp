@@ -155,12 +155,15 @@ void GameEntity::drawCollisionRect(Camera& camera)
 }
 #endif
 
-void GameEntity::receiveDamage(const int amount, BloodParticleManager& bloodParticleManager)
+void GameEntity::receiveDamage(const int amount, Level& level)
 {
     if (currentHealth <= 0)
         return;
     currentHealth = std::max(0, currentHealth - amount);
-    bloodParticleManager.createParticles(positionPlusCenter, 10 * amount);
+    level.bloodParticleManager.createParticles(positionPlusCenter, 10 * amount);
     if (currentHealth == 0)
+    {
+        level.createBloodPool(positionPlusCenter);
         pendingRemoval = true;
+    }
 }

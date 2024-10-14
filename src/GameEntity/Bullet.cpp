@@ -29,7 +29,7 @@ void Bullet::update(Level& level)
         Enemy* enemy = dynamic_cast<Enemy*>(firstCollidedEntity);
         if (enemy != nullptr)
         {
-            enemy->receiveDamage(damageAmount, level.bloodParticleManager);
+            enemy->receiveDamage(damageAmount, level);
         }
         pendingRemoval = true;
     }

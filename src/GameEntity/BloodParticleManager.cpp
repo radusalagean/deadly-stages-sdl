@@ -30,6 +30,6 @@ void BloodParticleManager::update() {
 
 void BloodParticleManager::render(const Vector2D& cameraPosition) {
     for (auto& particle : particles) {
-        particle.render(Game::renderer, cameraPosition);
+        particle.render(cameraPosition);
     }
 }
