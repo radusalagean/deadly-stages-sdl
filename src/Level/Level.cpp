@@ -2,14 +2,18 @@
 
 #include "../Core/Macros.hpp"
 #include "../Core/CollisionManager.hpp"
-#include "../GameEntity/Enemy.hpp"
 #include "../Game.hpp"
 #include "../Core/PrimitiveShapeHelper.hpp"
 #include "../Core/VectorUtils.hpp"
 #include "../Screen/GameOver/GameOverScreen.hpp"
 #include "../ScreenManager/ScreenManager.hpp"
 #include "../Core/PrimitiveShapeHelper.hpp"
+#include "../GameEntity/Player.hpp"
+#include "../GameEntity/Weapon.hpp"
+#include "../GameEntity/Bullet.hpp"
+#include "../GameEntity/Enemy.hpp"
 #include "../GameEntity/BloodPool.hpp"
+#include "../GameEntity/Pickup.hpp"
 
 Level::Level(std::string id)
 {
@@ -49,6 +53,12 @@ Level::~Level()
         delete bloodPool;
     }
     bloodPools.clear();
+
+    for (auto& pickup : pickups)
+    {
+        delete pickup;
+    }
+    pickups.clear();
 }
 
 void Level::load()
@@ -131,22 +141,21 @@ void Level::handleEvents()
         Game::control.releaseAction(CA_NEXT_WEAPON);
     }
 
-    // Debug weapons
-    // TODO - Later, change this to it only selects the weapon from the player's inventory, after pickups are implemented
-    if (Game::control.isActionDown(CA_DEBUG_WEAPON_1))
+    // Weapon manual selection
+    if (Game::control.isActionDown(CA_WEAPON_ID_1))
     {
-        onWeaponOrMagReceived(WeaponId::WEAPON_PISTOL);
-        Game::control.releaseAndBlockAction(CA_DEBUG_WEAPON_1);
+        selectWeaponId(WeaponId::WEAPON_PISTOL);
+        Game::control.releaseAndBlockAction(CA_WEAPON_ID_1);
     }
-    if (Game::control.isActionDown(CA_DEBUG_WEAPON_2))
+    if (Game::control.isActionDown(CA_WEAPON_ID_2))
     {
-        onWeaponOrMagReceived(WeaponId::WEAPON_SHOTGUN);
-        Game::control.releaseAndBlockAction(CA_DEBUG_WEAPON_2);
+        selectWeaponId(WeaponId::WEAPON_SHOTGUN);
+        Game::control.releaseAndBlockAction(CA_WEAPON_ID_2);
     }
-    if (Game::control.isActionDown(CA_DEBUG_WEAPON_3))
+    if (Game::control.isActionDown(CA_WEAPON_ID_3))
     {
-        onWeaponOrMagReceived(WeaponId::WEAPON_SMG);
-        Game::control.releaseAndBlockAction(CA_DEBUG_WEAPON_3);
+        selectWeaponId(WeaponId::WEAPON_SMG);
+        Game::control.releaseAndBlockAction(CA_WEAPON_ID_3);
     }
 }
 
@@ -163,6 +172,10 @@ void Level::update()
     {
         enemy->update(*this);
     }
+    for (auto& pickup : pickups)
+    {
+        pickup->update(*this);
+    }
     advanceWaveIfNeeded();
     spawnEnemiesIfNeeded();
     handleGameEntityPendingRemovals();
@@ -176,6 +189,11 @@ void Level::render()
     for (auto& bloodPool : bloodPools)
     {
         bloodPool->draw(camera);
+    }
+
+    for (auto& pickup : pickups)
+    {
+        pickup->draw(camera);
     }
 
     for (auto& bullet : bullets)
@@ -209,25 +227,45 @@ SDL_Rect Level::buildTileRect(int column, int row) const
     return tileRect;
 }
 
-void Level::onWeaponOrMagReceived(WeaponId weaponId)
+void Level::onWeaponOrMagReceived(int weaponId)
 {
     auto found = std::find_if(playerWeapons.begin(), playerWeapons.end(), [weaponId](const Weapon* weapon) {
         return weapon->id == weaponId;
     });
 
+    Weapon* targetWeapon = nullptr;
+    bool isNewWeapon = false;
     if (found == playerWeapons.end()) // Weapon not found in the player's inventory
     {
-        Weapon* newWeapon = Weapon::createWeapon(weaponId, texturePool);
-        playerWeapons.push_back(newWeapon);
-        currentPlayerWeapon = newWeapon;
-        currentPlayerWeapon->setOwner(*player);
+        targetWeapon = Weapon::createWeapon(weaponId, texturePool);
+        playerWeapons.push_back(targetWeapon);
+        targetWeapon->setOwner(*player);
+        isNewWeapon = true;
     }
     else
     {
-        currentPlayerWeapon = *found;
+        targetWeapon = *found;
     }
-    if (!currentPlayerWeapon->hasInfiniteMags)
-        currentPlayerWeapon->availableMags += wave;
+    if (currentPlayerWeapon == nullptr || 
+        (currentPlayerWeapon->id != weaponId && (currentPlayerWeapon->isOutOfAmmo() || isNewWeapon)))
+    {
+        currentPlayerWeapon = targetWeapon;
+    }
+
+    if (!targetWeapon->hasInfiniteMags)
+        targetWeapon->availableMags += wave;
+}
+
+void Level::selectWeaponId(int weaponId)
+{
+    if (weaponId < 0 || weaponId >= WeaponId::WEAPON_ENUM_COUNT)
+        return;
+    auto found = std::find_if(playerWeapons.begin(), playerWeapons.end(), [weaponId](const Weapon* weapon) {
+        return weapon->id == weaponId;
+    });
+    if (found == playerWeapons.end())
+        return;
+    currentPlayerWeapon = *found;
 }
 
 void Level::cycleWeapon(int offset)
@@ -337,6 +375,7 @@ void Level::handleGameEntityPendingRemovals()
         {
             if (enemy->bounty > 0)
                 score += enemy->bounty;
+            attemptToSpawnPickup(enemy->position);
             delete enemy;
             return true;
         }
@@ -352,6 +391,15 @@ void Level::handleGameEntityPendingRemovals()
         return false;
     });
 
+    VectorUtils::removeFromVectorIf(pickups, [](Pickup* pickup) {
+        if (pickup->pendingRemoval)
+        {
+            delete pickup;
+            return true;
+        }
+        return false;
+    });
+
     if (player->pendingRemoval)
     {
         Game::screenManager.setScreen(new GameOverScreen(score, wave, id));
@@ -362,4 +410,37 @@ void Level::createBloodPool(const Vector2D& position)
 {
     BloodPool* bloodPool = new BloodPool(position);
     bloodPools.push_back(bloodPool);
+}
+
+void Level::attemptToSpawnPickup(const Vector2D position)
+{
+    for (int i = 0; i < PickupId::PICKUP_ENUM_COUNT; i++)
+    {
+        if (rand() % 100 < 15) // 15% chance to spawn a pickup for each iteration
+        {
+            Pickup* pickup = new Pickup(static_cast<PickupId>(i), position, texturePool);
+            pickups.push_back(pickup);
+            return;
+        }
+    }
+}
+
+void Level::collectPickup(Pickup* pickup)
+{
+    switch (pickup->id)
+    {
+    case PickupId::PICKUP_HEALTH:
+        player->increaseHealth(1);
+        break;
+    case PickupId::PICKUP_SHOTGUN:
+        onWeaponOrMagReceived(WeaponId::WEAPON_SHOTGUN);
+        break;
+    case PickupId::PICKUP_SMG:
+        onWeaponOrMagReceived(WeaponId::WEAPON_SMG);
+        break;
+    
+    default:
+        break;
+    }
+    pickup->pendingRemoval = true;
 }

@@ -5,6 +5,8 @@
 #include "../Level/TileLayer.hpp"
 #include "../Core/PrimitiveShapeHelper.hpp"
 #include "../GameEntity/Enemy.hpp"
+#include "../GameEntity/Player.hpp"
+#include "../GameEntity/Bullet.hpp"
 #include <sstream>
 #include <algorithm>
 #include <functional>

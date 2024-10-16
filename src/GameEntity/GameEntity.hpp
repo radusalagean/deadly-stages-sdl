@@ -64,6 +64,7 @@ public:
 
     bool pendingRemoval = false;
     virtual void receiveDamage(const int amount, Level& level);
+    virtual void increaseHealth(const int amount);
 };
 
 

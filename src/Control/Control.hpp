@@ -21,9 +21,9 @@ enum ControlAction
     CA_JUMP,
     CA_PREVIOUS_WEAPON,
     CA_NEXT_WEAPON,
-    CA_DEBUG_WEAPON_1,
-    CA_DEBUG_WEAPON_2,
-    CA_DEBUG_WEAPON_3
+    CA_WEAPON_ID_1,
+    CA_WEAPON_ID_2,
+    CA_WEAPON_ID_3
 };
 
 class Control
@@ -49,9 +49,9 @@ private:
         {SDL_SCANCODE_LSHIFT, {CA_SPRINT}},
         {SDL_SCANCODE_SPACE, {CA_JUMP}},
         {SDL_SCANCODE_R, {CA_RELOAD}},
-        {SDL_SCANCODE_1, {CA_DEBUG_WEAPON_1}},
-        {SDL_SCANCODE_2, {CA_DEBUG_WEAPON_2}},
-        {SDL_SCANCODE_3, {CA_DEBUG_WEAPON_3}}
+        {SDL_SCANCODE_1, {CA_WEAPON_ID_1}},
+        {SDL_SCANCODE_2, {CA_WEAPON_ID_2}},
+        {SDL_SCANCODE_3, {CA_WEAPON_ID_3}}
     }; // key: scancode, value: actions
 
     std::unordered_map<int, std::set<int>> mouseMap{

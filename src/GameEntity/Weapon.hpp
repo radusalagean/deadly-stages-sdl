@@ -8,17 +8,18 @@
 class FloatAnimator;
 class TexturePool;
 
-enum class WeaponId
+enum WeaponId
 {
-    WEAPON_UNDEFINED,
+    WEAPON_UNDEFINED = -1,
     WEAPON_PISTOL,
     WEAPON_SHOTGUN,
-    WEAPON_SMG
+    WEAPON_SMG,
+    WEAPON_ENUM_COUNT
 };
 
 struct WeaponConfig
 {
-    WeaponId id = WeaponId::WEAPON_UNDEFINED;
+    int id = WeaponId::WEAPON_UNDEFINED;
     int damagePerBullet = 0;
     int bulletsPerMag = 0;
     bool hasInfiniteMags = false;
@@ -33,9 +34,9 @@ struct WeaponConfig
 class Weapon : public GameEntity
 {
 public:
-    static const std::map<WeaponId, WeaponConfig> weaponConfigs;
-    static WeaponConfig createWeaponConfig(WeaponId id);
-    static Weapon* createWeapon(WeaponId id, TexturePool& texturePool);
+    static const std::map<int, WeaponConfig> weaponConfigs;
+    static WeaponConfig createWeaponConfig(int id);
+    static Weapon* createWeapon(int id, TexturePool& texturePool);
 
     Weapon(WeaponConfig config, TexturePool& texturePool);
     ~Weapon();
@@ -43,7 +44,7 @@ public:
     void update(Level& level);
 
     // Config
-    WeaponId id;
+    int id;
     int damagePerBullet;
     int bulletsPerMag;
     bool hasInfiniteMags;
@@ -61,6 +62,7 @@ public:
     FloatAnimator* reloadAnimator = nullptr;
     int availableMags = 0;
     int ammoInCurrentMag = 0;
+    bool isOutOfAmmo();
     void autoReloadIfNeeded();
     void reloadIfPossible();
     inline bool isReloading() { return reloadAnimator != nullptr; }

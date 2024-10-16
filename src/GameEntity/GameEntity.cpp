@@ -167,3 +167,8 @@ void GameEntity::receiveDamage(const int amount, Level& level)
         pendingRemoval = true;
     }
 }
+
+void GameEntity::increaseHealth(const int amount)
+{
+    currentHealth = std::min(maxHealth, currentHealth + amount);
+}

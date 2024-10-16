@@ -8,6 +8,7 @@
 #include "../Level/Level.hpp"
 #include "../Core/CollisionManager.hpp"
 #include "../GameEntity/Enemy.hpp"
+#include "../GameEntity/Pickup.hpp"
 
 Player::Player() : GameEntity()
 {
@@ -59,6 +60,7 @@ void Player::update(Level& level)
 
     updateJumpState(level);
     crushEnemiesIfNeeded(level);
+    collectPickupIfNeeded(level);
     increaseStaminaIfPossible();
 }
 
@@ -85,7 +87,7 @@ void Player::onJumpRequest()
     }
     stamina -= jumpStaminaCost;
     lastStaminaDecreaseTime = std::chrono::steady_clock::now();
-    jumpAnimator = new FloatAnimator(dstRectScale, 1.12f, jumpDurationMs);
+    jumpAnimator = new FloatAnimator(dstRectScale, maxDstRectScale, jumpDurationMs);
 }
 
 void Player::updateJumpState(Level& level)
@@ -111,6 +113,17 @@ void Player::crushEnemiesIfNeeded(Level& level)
         if (CollisionManager::rectVsRect(positionPlusCollisionRect, enemy->positionPlusCollisionRect))
         {
             enemy->crush(level);
+        }
+    }
+}
+
+void Player::collectPickupIfNeeded(Level& level)
+{
+    for (auto& pickup : level.pickups)
+    {
+        if (CollisionManager::rectVsRect(positionPlusCollisionRect, pickup->positionPlusCollisionRect))
+        {
+            level.collectPickup(pickup);
         }
     }
 }

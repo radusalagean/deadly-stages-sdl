@@ -5,15 +5,16 @@
 #include "Tile.hpp"
 #include "TileLayer.hpp"
 #include "../Core/TexturePool.hpp"
-#include "../GameEntity/Player.hpp"
 #include "Camera.hpp"
-#include "../GameEntity/Weapon.hpp"
-#include "../GameEntity/Bullet.hpp"
 #include "../Core/Debouncer.hpp"
 #include "../GameEntity/BloodParticleManager.hpp"
-#include "../GameEntity/BloodPool.hpp"
 
+class Player;
+class Weapon;
+class Bullet;
 class Enemy;
+class BloodPool;
+class Pickup;
 
 class Level 
 {
@@ -39,7 +40,7 @@ public:
     std::vector<Bullet*> bullets{};
     std::vector<Enemy*> enemies{};
     std::vector<BloodPool*> bloodPools;
-
+    std::vector<Pickup*> pickups{};
     int horizontalTilesCount = 0;
     int verticalTilesCount = 0;
     int tileWidthPx = 0;
@@ -61,7 +62,8 @@ public:
 
     SDL_Rect buildTileRect(int x, int y) const;
 
-    void onWeaponOrMagReceived(WeaponId weaponId);
+    void onWeaponOrMagReceived(int weaponId);
+    void selectWeaponId(int weaponId);
     void cycleWeapon(int offset);
 
     #ifdef DEBUG_DRAW_COLLISION_RECTS
@@ -74,6 +76,9 @@ public:
     BloodParticleManager bloodParticleManager;
 
     void createBloodPool(const Vector2D& position);
+
+    void attemptToSpawnPickup(const Vector2D position);
+    void collectPickup(Pickup* pickup);
 };
 
 #endif // __SRC_LEVEL_LEVEL_HPP_

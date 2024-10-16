@@ -4,6 +4,7 @@
 #include "../../Core/Macros.hpp"
 #include "HudHealthBar.hpp"
 #include "../../Core/PrimitiveShapeHelper.hpp"
+#include "../../GameEntity/Player.hpp"
 
 Hud::Hud(Level& level) : level(level)
 {

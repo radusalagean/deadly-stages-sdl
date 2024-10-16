@@ -3,6 +3,7 @@
 
 #include "../../Game.hpp"
 #include "../../Level/Level.hpp"
+#include "../../GameEntity/Weapon.hpp"
 
 class HudHealthBar;
 
@@ -42,7 +43,7 @@ private:
     
     HudHealthBar* healthBar = nullptr;
 
-    WeaponId lastProcessedWeaponId = WeaponId::WEAPON_UNDEFINED;
+    int lastProcessedWeaponId = WeaponId::WEAPON_UNDEFINED;
     ImageDrawable* weaponIconDrawable = nullptr;
     TextDrawable* ammoInCurrentMagTextDrawable = nullptr;
     int lastProcessedAmmoInCurrentMag = -1;

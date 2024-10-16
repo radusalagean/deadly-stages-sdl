@@ -4,7 +4,7 @@
 #include "../Core/CollisionManager.hpp"
 #include "Enemy.hpp"
 
-Bullet::Bullet(Vector2D weaponPosition, float rotation, TexturePool& texturePool)
+Bullet::Bullet(Vector2D weaponPosition, float rotation, TexturePool& texturePool) : GameEntity()
 {
     this->setSize(8, 16);
     this->setPosition(weaponPosition - this->center);

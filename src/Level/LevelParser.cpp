@@ -1,8 +1,8 @@
 #include "LevelParser.hpp"
 
 #include "Level.hpp"
-
 #include <sstream>
+#include "../GameEntity/Player.hpp"
 
 #define LEVEL_PATH "res/level/"
 

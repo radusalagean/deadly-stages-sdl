@@ -3,6 +3,7 @@
 
 #include "Vector2D.hpp"
 #include "../Level/Level.hpp"
+#include "Line.hpp"
 
 class GameEntity;
 

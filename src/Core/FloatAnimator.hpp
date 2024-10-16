@@ -8,6 +8,7 @@ public:
     FloatAnimator(float& value, float targetValue, int durationMs);
     
     void update();
+    void setNewTargetValueAndReset(float targetValue);
     bool isComplete() const;
 
 private:

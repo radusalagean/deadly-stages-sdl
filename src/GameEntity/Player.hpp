@@ -35,12 +35,14 @@ public:
 
     // Jump
     const int jumpDurationMs = 500;
+    const float maxDstRectScale = 1.12f;
     FloatAnimator* jumpAnimator = nullptr;
     const float jumpStaminaCost = 0.2f;
     void onJumpRequest();
     void updateJumpState(Level& level);
     inline bool isJumping() { return jumpAnimator != nullptr; }
     void crushEnemiesIfNeeded(Level& level);
+    void collectPickupIfNeeded(Level& level);
 };
 
 #endif // __SRC_GAMEENTITY_PLAYER_HPP__

@@ -6,7 +6,7 @@
 #include "../Game.hpp"
 #include "../Core/TexturePool.hpp"
 
-WeaponConfig Weapon::createWeaponConfig(WeaponId id)
+WeaponConfig Weapon::createWeaponConfig(int id)
 {
     WeaponConfig cfg;
     cfg.id = id;
@@ -49,15 +49,15 @@ WeaponConfig Weapon::createWeaponConfig(WeaponId id)
     return cfg;
 }
 
-const std::map<WeaponId, WeaponConfig> Weapon::weaponConfigs = 
+const std::map<int, WeaponConfig> Weapon::weaponConfigs = 
 {
     {WeaponId::WEAPON_PISTOL, createWeaponConfig(WeaponId::WEAPON_PISTOL)},
     {WeaponId::WEAPON_SHOTGUN, createWeaponConfig(WeaponId::WEAPON_SHOTGUN)},
     {WeaponId::WEAPON_SMG, createWeaponConfig(WeaponId::WEAPON_SMG)}
 };
 
-Weapon::Weapon(WeaponConfig config, TexturePool& texturePool)
-    : id(config.id), 
+Weapon::Weapon(WeaponConfig config, TexturePool& texturePool) : GameEntity(),
+    id(config.id), 
     damagePerBullet(config.damagePerBullet), 
     bulletsPerMag(config.bulletsPerMag),
     hasInfiniteMags(config.hasInfiniteMags),
@@ -119,12 +119,17 @@ void Weapon::onFireRequest(std::function<void(const Vector2D&, float)> bulletCre
     }
 }
 
-Weapon* Weapon::createWeapon(WeaponId id, TexturePool& texturePool)
+Weapon* Weapon::createWeapon(int id, TexturePool& texturePool)
 {
     auto config = weaponConfigs.find(id);
     if (config == weaponConfigs.end())
         return nullptr;
     return new Weapon(config->second, texturePool);
+}
+
+bool Weapon::isOutOfAmmo()
+{
+    return ammoInCurrentMag == 0 && availableMags == 0 && !hasInfiniteMags;
 }
 
 void Weapon::autoReloadIfNeeded()
