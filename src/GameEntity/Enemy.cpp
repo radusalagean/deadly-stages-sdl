@@ -5,7 +5,7 @@
 #include "../Core/CollisionManager.hpp"
 #include <chrono>
 #include "../Level/Level.hpp"
-#include "../GameEntity/BloodParticleManager.hpp"
+#include "../BloodParticle/BloodParticleManager.hpp"
 #include "../GameEntity/Player.hpp"
 
 Enemy::Enemy() : GameEntity()

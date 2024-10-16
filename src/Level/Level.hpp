@@ -7,7 +7,7 @@
 #include "../Core/TexturePool.hpp"
 #include "Camera.hpp"
 #include "../Core/Debouncer.hpp"
-#include "../GameEntity/BloodParticleManager.hpp"
+#include "../BloodParticle/BloodParticleManager.hpp"
 
 class Player;
 class Weapon;
