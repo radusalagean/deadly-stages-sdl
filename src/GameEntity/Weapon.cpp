@@ -113,7 +113,7 @@ void Weapon::onFireRequest(std::function<void(const Vector2D&, float)> bulletCre
             spread = angleBetweenBullets * i - spreadAngle;
         }
         if (!automatic)
-            Game::control.releaseAndBlockAction(CA_FIRE);
+            Game::control.releaseAndBlockAction(CA_GAME_FIRE);
         bulletCreationCallback(position, rotation + spread);
         ammoInCurrentMag--;
     }
@@ -140,7 +140,7 @@ void Weapon::autoReloadIfNeeded()
 
 void Weapon::reloadIfPossible()
 {
-    if (ammoInCurrentMag == bulletsPerMag || isReloading() || Game::control.isActionDown(CA_FIRE))
+    if (ammoInCurrentMag == bulletsPerMag || isReloading() || Game::control.isActionDown(CA_GAME_FIRE))
         return;
     bool hasAvailableMags = hasInfiniteMags || availableMags > 0;
     if (!hasAvailableMags)

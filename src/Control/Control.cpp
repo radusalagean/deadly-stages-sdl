@@ -91,9 +91,9 @@ void Control::onMouseButtonUp(Uint8 button)
 void Control::onMouseWheelScroll(Sint32 y)
 {
     if (y > 0)
-        performAndScheduleActionRelease(CA_NEXT_WEAPON);
+        performAndScheduleActionRelease(CA_GAME_NEXT_WEAPON);
     else if (y < 0)
-        performAndScheduleActionRelease(CA_PREVIOUS_WEAPON);
+        performAndScheduleActionRelease(CA_GAME_PREVIOUS_WEAPON);
 }
 #pragma endregion
 

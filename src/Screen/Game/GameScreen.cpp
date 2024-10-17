@@ -52,10 +52,10 @@ void GameScreen::handleEvents()
         return;
     }
     level->handleEvents();
-    if (Game::control.isActionDown(CA_ESCAPE))
+    if (Game::control.isActionDown(CA_MENUS_BACK))
     {
         paused = true;
-        Game::control.releaseAndBlockAction(CA_ESCAPE);
+        Game::control.releaseAndBlockAction(CA_MENUS_BACK);
     }
 }
 

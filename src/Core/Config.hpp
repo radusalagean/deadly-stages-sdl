@@ -8,5 +8,8 @@
     #define PRINT_LOGS_TO_FILE
 #endif
 
+#if defined(__PSP__)
+    #define SUPPORTS_AUTOAIM
+#endif
 
 #endif // __SRC_CORE_CONFIG_HPP__

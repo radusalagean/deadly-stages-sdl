@@ -100,31 +100,31 @@ void MenuDrawable::selectCurrentMenuItem()
 
 void MenuDrawable::handleEvents()
 {
-    if (Game::control.isActionDown(CA_UP))
+    if (Game::control.isActionDown(CA_MENUS_UP))
     {
         if (navigationDebouncer.canPerformAction(NAVIGATION_ACTION_PREVIOUS))
         {
             previousMenuItem();
         }
     }
-    else if (Game::control.isActionUp(CA_UP))
+    else if (Game::control.isActionUp(CA_MENUS_UP))
     {
         navigationDebouncer.resetAction(NAVIGATION_ACTION_PREVIOUS);
     }
 
-    if (Game::control.isActionDown(CA_DOWN))
+    if (Game::control.isActionDown(CA_MENUS_DOWN))
     {
         if (navigationDebouncer.canPerformAction(NAVIGATION_ACTION_NEXT))
         {
             nextMenuItem();
         }
     }
-    else if (Game::control.isActionUp(CA_DOWN))
+    else if (Game::control.isActionUp(CA_MENUS_DOWN))
     {
         navigationDebouncer.resetAction(NAVIGATION_ACTION_NEXT);
     }
 
-    if (Game::control.isActionDown(CA_SELECT))
+    if (Game::control.isActionDown(CA_MENUS_SELECT))
     {
         selectCurrentMenuItem();
     }

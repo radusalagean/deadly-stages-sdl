@@ -38,7 +38,7 @@ void MainMenuScreen::init()
 
 void MainMenuScreen::handleEvents()
 {
-    if (Game::control.isActionDown(CA_ESCAPE))
+    if (Game::control.isActionDown(CA_MENUS_BACK))
         Game::isRunning = false;
     mainMenuDrawable->handleEvents();
 }

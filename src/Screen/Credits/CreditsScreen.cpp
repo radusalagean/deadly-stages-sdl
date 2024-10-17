@@ -75,7 +75,7 @@ void CreditsScreen::loadAssets()
 
 void CreditsScreen::handleEvents()
 {
-    if (Game::control.isActionDown(CA_ESCAPE))
+    if (Game::control.isActionDown(CA_MENUS_BACK))
     {
         Game::screenManager.popScreen();
     }

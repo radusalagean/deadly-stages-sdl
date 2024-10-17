@@ -79,11 +79,11 @@ void Level::load()
 void Level::handleEvents()
 {
     // Movement
-    if (Game::control.isActionDown(CA_UP) || Game::control.isActionDown(CA_DOWN) || 
-        Game::control.isActionDown(CA_LEFT) || Game::control.isActionDown(CA_RIGHT))
+    if (Game::control.isActionDown(CA_GAME_MOVE_UP) || Game::control.isActionDown(CA_GAME_MOVE_DOWN) || 
+        Game::control.isActionDown(CA_GAME_MOVE_LEFT) || Game::control.isActionDown(CA_GAME_MOVE_RIGHT))
     {
         float speed = player->speedPxPerSecond * Game::latestLoopDeltaTimeSeconds;
-        if (Game::control.isActionDown(CA_SPRINT) && player->stamina > 0.0f)
+        if (Game::control.isActionDown(CA_GAME_SPRINT) && player->stamina > 0.0f)
         {
             speed += player->sprintBoost * Game::latestLoopDeltaTimeSeconds;
             player->stamina -= player->staminaDecreaseRatePerSecond * Game::latestLoopDeltaTimeSeconds;
@@ -92,11 +92,11 @@ void Level::handleEvents()
             player->lastStaminaDecreaseTime = std::chrono::steady_clock::now();
         }
         Vector2D velocity;
-        velocity.y = Game::control.isActionDown(CA_UP) ? -speed :
-                              Game::control.isActionDown(CA_DOWN) ? speed : 0;
+        velocity.y = Game::control.isActionDown(CA_GAME_MOVE_UP) ? -speed :
+                              Game::control.isActionDown(CA_GAME_MOVE_DOWN) ? speed : 0;
 
-        velocity.x = Game::control.isActionDown(CA_LEFT) ? -speed :
-                              Game::control.isActionDown(CA_RIGHT) ? speed : 0;
+        velocity.x = Game::control.isActionDown(CA_GAME_MOVE_LEFT) ? -speed :
+                              Game::control.isActionDown(CA_GAME_MOVE_RIGHT) ? speed : 0;
 
         CollisionManager::processMovement(*player, velocity, *this, nullptr, player->isJumping());
         player->velocity = velocity;
@@ -107,14 +107,14 @@ void Level::handleEvents()
     }
 
     // Jump
-    if (Game::control.isActionDown(CA_JUMP))
+    if (Game::control.isActionDown(CA_GAME_JUMP))
     {
         player->onJumpRequest();
-        Game::control.releaseAndBlockAction(CA_JUMP);
+        Game::control.releaseAndBlockAction(CA_GAME_JUMP);
     }
 
     // Fire
-    if (Game::control.isActionDown(CA_FIRE))
+    if (Game::control.isActionDown(CA_GAME_FIRE))
     {
         currentPlayerWeapon->onFireRequest([this](const Vector2D& position, float rotation)
         {
@@ -124,38 +124,38 @@ void Level::handleEvents()
     }
 
     // Reload
-    if (Game::control.isActionDown(CA_RELOAD))
+    if (Game::control.isActionDown(CA_GAME_RELOAD))
     {
         currentPlayerWeapon->reloadIfPossible();
     }
 
     // Cycle weapon
-    if (Game::control.isActionDown(CA_PREVIOUS_WEAPON))
+    if (Game::control.isActionDown(CA_GAME_PREVIOUS_WEAPON))
     {
         cycleWeapon(-1);
-        Game::control.releaseAction(CA_PREVIOUS_WEAPON);
+        Game::control.releaseAction(CA_GAME_PREVIOUS_WEAPON);
     }
-    else if (Game::control.isActionDown(CA_NEXT_WEAPON))
+    else if (Game::control.isActionDown(CA_GAME_NEXT_WEAPON))
     {
         cycleWeapon(1);
-        Game::control.releaseAction(CA_NEXT_WEAPON);
+        Game::control.releaseAction(CA_GAME_NEXT_WEAPON);
     }
 
     // Weapon manual selection
-    if (Game::control.isActionDown(CA_WEAPON_ID_1))
+    if (Game::control.isActionDown(CA_GAME_WEAPON_ID_1))
     {
         selectWeaponId(WeaponId::WEAPON_PISTOL);
-        Game::control.releaseAndBlockAction(CA_WEAPON_ID_1);
+        Game::control.releaseAndBlockAction(CA_GAME_WEAPON_ID_1);
     }
-    if (Game::control.isActionDown(CA_WEAPON_ID_2))
+    if (Game::control.isActionDown(CA_GAME_WEAPON_ID_2))
     {
         selectWeaponId(WeaponId::WEAPON_SHOTGUN);
-        Game::control.releaseAndBlockAction(CA_WEAPON_ID_2);
+        Game::control.releaseAndBlockAction(CA_GAME_WEAPON_ID_2);
     }
-    if (Game::control.isActionDown(CA_WEAPON_ID_3))
+    if (Game::control.isActionDown(CA_GAME_WEAPON_ID_3))
     {
         selectWeaponId(WeaponId::WEAPON_SMG);
-        Game::control.releaseAndBlockAction(CA_WEAPON_ID_3);
+        Game::control.releaseAndBlockAction(CA_GAME_WEAPON_ID_3);
     }
 }
 

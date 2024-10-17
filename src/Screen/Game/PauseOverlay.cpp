@@ -58,10 +58,10 @@ void PauseOverlay::render()
 void PauseOverlay::handleEvents()
 {
     menuDrawable->handleEvents();
-    if (Game::control.isActionDown(CA_ESCAPE))
+    if (Game::control.isActionDown(CA_MENUS_BACK))
     {
         menuContinue();
-        Game::control.releaseAndBlockAction(CA_ESCAPE);
+        Game::control.releaseAndBlockAction(CA_MENUS_BACK);
     }
 }
 
