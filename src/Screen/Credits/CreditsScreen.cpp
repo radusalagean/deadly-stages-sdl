@@ -13,7 +13,7 @@ CreditsScreen::CreditsScreen()
         // Name
         CreditDrawable nameCreditDrawable {
             new TextDrawable(credit.name),
-            0.08f,
+            0.07f,
             0.0f,
             0.01f
         };
@@ -24,7 +24,7 @@ CreditsScreen::CreditsScreen()
         {
             CreditDrawable nicknameCreditDrawable {
                 new TextDrawable("(" + credit.nickname + ")"),
-                0.08f,
+                0.07f,
                 0.0f,
                 0.0f
             };
@@ -34,7 +34,7 @@ CreditsScreen::CreditsScreen()
         // Role
         CreditDrawable roleCreditDrawable {
             new TextDrawable(credit.role, {200, 200, 200, 255}),
-            0.06f,
+            0.045f,
             0.04f,
             0.3f
         };
@@ -44,7 +44,7 @@ CreditsScreen::CreditsScreen()
     // Footer
     CreditDrawable footerCreditDrawable {
         new TextDrawable(footerText),
-        0.1f,
+        0.08f,
         0.0f,
         0.0f
     };

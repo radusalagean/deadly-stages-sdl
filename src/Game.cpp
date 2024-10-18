@@ -6,10 +6,7 @@
 #include "ScreenManager/ScreenManager.hpp"
 #include "Core/PrimitiveShapeHelper.hpp"
 #include "Core/Constants.hpp"
-
-#define GAME_NAME "Deadly Stages Remix"
-#define WIDTH 480
-#define HEIGHT 272
+#include "Core/Config.hpp"
 
 namespace Game
 {
@@ -47,13 +44,13 @@ namespace Game
             GAME_NAME,
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
-            WIDTH,
-            HEIGHT,
+            MINIMUM_WINDOW_WIDTH,
+            MINIMUM_WINDOW_HEIGHT,
             SDL_WINDOW_RESIZABLE
         );
 
         // Set minimum window size
-        SDL_SetWindowMinimumSize(window, WIDTH, HEIGHT);
+        SDL_SetWindowMinimumSize(window, MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT);
 
         renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
         SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
