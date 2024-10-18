@@ -91,6 +91,7 @@ namespace Game
                 case SDL_WINDOWEVENT:
                     if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) 
                     {
+                        enforceMinimumAspectRatio();
                         syncRendererOutputSize();
                         logd("Renderer size changed to %dx%d", width, height);
                     }
@@ -129,6 +130,21 @@ namespace Game
         if (width != oldWidth || height != oldHeight)
         {
             screenManager.onRendererOutputSizeChanged();
+        }
+    }
+
+    void enforceMinimumAspectRatio()
+    {
+        int currentWidth, currentHeight;
+        SDL_GetWindowSize(window, &currentWidth, &currentHeight);
+
+        float currentAspectRatio = static_cast<float>(currentWidth) / currentHeight;
+        float targetAspectRatio = 4.0f / 3.0f;
+
+        if (currentAspectRatio < targetAspectRatio)
+        {
+            int newWidth = (currentHeight * 4) / 3;
+            SDL_SetWindowSize(window, newWidth, currentHeight);
         }
     }
 }
