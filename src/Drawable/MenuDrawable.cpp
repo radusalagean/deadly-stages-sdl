@@ -100,6 +100,8 @@ void MenuDrawable::selectCurrentMenuItem()
 
 void MenuDrawable::handleEvents()
 {
+    const PressedActionData* pressedActionData = nullptr;
+
     if (Game::control.isActionDown(CA_MENUS_UP))
     {
         if (navigationDebouncer.canPerformAction(NAVIGATION_ACTION_PREVIOUS))
@@ -124,8 +126,9 @@ void MenuDrawable::handleEvents()
         navigationDebouncer.resetAction(NAVIGATION_ACTION_NEXT);
     }
 
-    if (Game::control.isActionDown(CA_MENUS_SELECT))
+    if (Game::control.isActionDown(CA_MENUS_SELECT, &pressedActionData))
     {
         selectCurrentMenuItem();
+        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
     }
 }

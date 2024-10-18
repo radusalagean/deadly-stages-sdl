@@ -70,9 +70,11 @@ void LevelSelectScreen::handleEvents()
     {
         navigationDebouncer.resetAction(NAVIGATION_ACTION_NEXT);
     }
-    if (Game::control.isActionDown(CA_MENUS_SELECT))
+    const PressedActionData* pressedActionData = nullptr;
+    if (Game::control.isActionDown(CA_MENUS_SELECT, &pressedActionData))
     {
         levelPreviews[selectedIndex]->pick();
+        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
     }
 }
 

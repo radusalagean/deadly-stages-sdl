@@ -57,7 +57,7 @@ public:
 
     // Fire & Reload
     Debouncer fireDebouncer = Debouncer(fireRateDelayMillis);
-    void onFireRequest(std::function<void(const Vector2D&, float)> bulletCreationCallback);
+    void onFireRequest(const PressedActionData& pressedActionData, std::function<void(const Vector2D&, float)> bulletCreationCallback);
     float reloadProgress = 0.0f;
     FloatAnimator* reloadAnimator = nullptr;
     int availableMags = 0;

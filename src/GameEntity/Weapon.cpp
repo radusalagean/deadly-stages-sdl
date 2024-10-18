@@ -94,7 +94,7 @@ void Weapon::update(Level& level)
     updateReloadState();
 }
 
-void Weapon::onFireRequest(std::function<void(const Vector2D&, float)> bulletCreationCallback)
+void Weapon::onFireRequest(const PressedActionData& pressedActionData, std::function<void(const Vector2D&, float)> bulletCreationCallback)
 {
     if (isReloading())
         return;
@@ -113,7 +113,7 @@ void Weapon::onFireRequest(std::function<void(const Vector2D&, float)> bulletCre
             spread = angleBetweenBullets * i - spreadAngle;
         }
         if (!automatic)
-            Game::control.releaseAndBlockAction(CA_GAME_FIRE);
+            Game::control.releaseAssociatedActionsAndBlockActionTrigger(pressedActionData);
         bulletCreationCallback(position, rotation + spread);
         ammoInCurrentMag--;
     }

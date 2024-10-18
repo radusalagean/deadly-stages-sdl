@@ -6,6 +6,11 @@
 void Control::init()
 {
     gameController = SDL_GameControllerOpen(0);
+    #ifdef PLATFORM_GROUP_COMPUTER
+    currentControlSource = CS_KEYBOARD_AND_MOUSE;
+    #else
+    currentControlSource = CS_CONTROLLER;
+    #endif
 }
 
 void Control::handleEvent(SDL_Event& event)
@@ -43,111 +48,248 @@ void Control::handleEvent(SDL_Event& event)
     case SDL_CONTROLLERBUTTONUP:
         onControllerButtonUp(static_cast<SDL_GameControllerButton>(event.cbutton.button));
         break;
+
+    case SDL_CONTROLLERAXISMOTION:
+        onControllerAxisMotion(event.caxis);
+        break;
     }
     unlockIfReleased();
 }
 
 #pragma region Actions
-bool Control::isActionDown(int action)
+void Control::onActionDown(const PressedActionData data)
+{
+    pressedActions.insert(data);
+}
+
+void Control::onActionUp(const PressedActionData data)
+{
+    releaseAction(data);
+}
+
+bool Control::isActionDown(int action, const PressedActionData** pressedActionDataOut)
 {
     if (locked)
         return false;
-    return std::find(pressedActions.begin(), pressedActions.end(), action) != pressedActions.end();
+    for (auto& data : pressedActions)
+    {
+        if (data.action == action)
+        {
+            if (pressedActionDataOut != nullptr)
+                *pressedActionDataOut = &data;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Control::isAnyActionDown(const std::vector<int>& actions)
+{
+    if (locked)
+        return false;
+    for (const auto& action : actions) {
+        if (isActionDown(action, nullptr)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool Control::isActionUp(int action)
 {
-    return std::find(pressedActions.begin(), pressedActions.end(), action) == pressedActions.end();
+    return !isActionDown(action, nullptr);
+}
+
+void Control::releaseAction(const PressedActionData data)
+{
+    pressedActions.erase(data);
+}
+
+void Control::releaseAssociatedActionsAndBlockActionTrigger(const PressedActionData data)
+{
+    switch (data.trigger)
+    {
+    case TRIGGER_KEYBOARD:
+        for (auto& associatedAction : keyboardMap[static_cast<SDL_Scancode>(data.pressedActionTriggerId)])
+            releaseAction({associatedAction, data.trigger, data.pressedActionTriggerId});
+        blockedKeys.insert(data.pressedActionTriggerId);
+        break;
+    case TRIGGER_MOUSE_BUTTON:
+        for (auto& associatedAction : mouseMap[data.pressedActionTriggerId])
+            releaseAction({associatedAction, data.trigger, data.pressedActionTriggerId});
+        blockedMouseButtons.insert(data.pressedActionTriggerId);
+        break;
+    case TRIGGER_MOUSE_WHEEL_MOTION:
+        for (auto& associatedAction : mouseWheelMotionMap[data.pressedActionTriggerId])
+            releaseAction({associatedAction, data.trigger, data.pressedActionTriggerId});
+        blockedMouseWheelMotion = true;
+        break;
+    case TRIGGER_CONTROLLER_BUTTON:
+        for (auto& associatedAction : gameControllerMap[static_cast<SDL_GameControllerButton>(data.pressedActionTriggerId)])
+            releaseAction({associatedAction, data.trigger, data.pressedActionTriggerId});
+        blockedControllerButtons.insert(data.pressedActionTriggerId);
+        break;
+    case TRIGGER_CONTROLLER_AXIS_MOTION:
+        for (auto& associatedAction : controllerAxisMotionMap[data.pressedActionTriggerId])
+            releaseAction({associatedAction, data.trigger, data.pressedActionTriggerId});
+        blockedControllerAxisMotions.insert(data.pressedActionTriggerId);
+        break;
+    }
+}
+
+void Control::unblockActionTrigger(const PressedActionData data)
+{
+    switch (data.trigger)
+    {
+    case TRIGGER_KEYBOARD:
+        blockedKeys.erase(data.pressedActionTriggerId);
+        break;
+    case TRIGGER_MOUSE_BUTTON:
+        blockedMouseButtons.erase(data.pressedActionTriggerId);
+        break;
+    case TRIGGER_MOUSE_WHEEL_MOTION:
+        blockedMouseWheelMotion = false;
+        break;
+    case TRIGGER_CONTROLLER_BUTTON:
+        blockedControllerButtons.erase(data.pressedActionTriggerId);
+        break;
+    case TRIGGER_CONTROLLER_AXIS_MOTION:
+        blockedControllerAxisMotions.erase(data.pressedActionTriggerId);
+        break;
+    }
+}
+
+void Control::performAndScheduleActionTriggerRelease(const PressedActionData data, Uint32 delayMs)
+{
+    if (isActionDown(data.action, nullptr))
+        return;
+        
+    onActionDown(data);
+    
+    ScheduleTimerData* timerData = new ScheduleTimerData{data, this};
+
+    SDL_AddTimer(delayMs, [](Uint32 interval, void* param) -> Uint32 {
+        ScheduleTimerData* timerData = static_cast<ScheduleTimerData*>(param);
+        timerData->control->releaseAction(timerData->data);
+        timerData->control->unblockActionTrigger(timerData->data);
+        delete timerData;
+        return 0;  // Don't repeat the timer
+    }, timerData);
 }
 #pragma endregion
 
 #pragma region Keyboard
 void Control::onKeyDown(SDL_Scancode scancode)
 {
+    currentControlSource = CS_KEYBOARD_AND_MOUSE;
+    if (blockedKeys.find(scancode) != blockedKeys.end())
+        return;
     for (auto& action : keyboardMap[scancode])
-        onActionDown(action);
+        onActionDown({action, TRIGGER_KEYBOARD, scancode});
 }
 
 void Control::onKeyUp(SDL_Scancode scancode)
 {
+    blockedKeys.erase(scancode);
     for (auto& action : keyboardMap[scancode])
-        onActionUp(action);
+        onActionUp({action, TRIGGER_KEYBOARD, scancode});
 }   
 #pragma endregion
 
 #pragma region Mouse
 void Control::onMouseButtonDown(Uint8 button)
 {
+    currentControlSource = CS_KEYBOARD_AND_MOUSE;
+    if (blockedMouseButtons.find(button) != blockedMouseButtons.end())
+        return;
     for (auto& action : mouseMap[button])
-        onActionDown(action);
+        onActionDown({action, TRIGGER_MOUSE_BUTTON, button});
 }
 
 void Control::onMouseButtonUp(Uint8 button)
 {
+    blockedMouseButtons.erase(button);
     for (auto& action : mouseMap[button])
-        onActionUp(action);
+        onActionUp({action, TRIGGER_MOUSE_BUTTON, button});
 }
 
 void Control::onMouseWheelScroll(Sint32 y)
 {
-    if (y > 0)
-        performAndScheduleActionRelease(CA_GAME_NEXT_WEAPON);
-    else if (y < 0)
-        performAndScheduleActionRelease(CA_GAME_PREVIOUS_WEAPON);
+    currentControlSource = CS_KEYBOARD_AND_MOUSE;
+    if (y == 0)
+        blockedMouseWheelMotion = false;
+    if (blockedMouseWheelMotion)
+        return;
+    int triggerId = 0;
+    if (y > 0) 
+        triggerId = 1;
+    else if (y < 0) 
+        triggerId = -1;
+    for (auto& action : mouseWheelMotionMap[triggerId])
+        performAndScheduleActionTriggerRelease({action, TRIGGER_MOUSE_WHEEL_MOTION, triggerId});
 }
 #pragma endregion
 
 #pragma region Game Controller
 void Control::onControllerButtonDown(SDL_GameControllerButton button)
 {
+    currentControlSource = CS_CONTROLLER;
+    if (blockedControllerButtons.find(button) != blockedControllerButtons.end())
+        return;
     for (auto& action : gameControllerMap[button])
-        onActionDown(action);
+        onActionDown({action, TRIGGER_CONTROLLER_BUTTON, button});
 }
 
 void Control::onControllerButtonUp(SDL_GameControllerButton button)
 {
+    blockedControllerButtons.erase(button);
     for (auto& action : gameControllerMap[button])
-        onActionUp(action);
+        onActionUp({action, TRIGGER_CONTROLLER_BUTTON, button});
+}
+
+void Control::onControllerAxisMotion(const SDL_ControllerAxisEvent& axisEvent)
+{
+    currentControlSource = CS_CONTROLLER;
+    // Normalize the axis value to a range of -1.0 to 1.0
+    float value = static_cast<float>(axisEvent.value) / static_cast<float>(ANALOG_MAX_VALUE);
+
+    if (std::abs(value) < static_cast<float>(ANALOG_DEADZONE) / static_cast<float>(ANALOG_MAX_VALUE))
+    {
+        value = 0.0f;
+    }
+    if (value == 0.0f)
+    {
+        blockedControllerAxisMotions.erase(axisEvent.axis);
+    }
+    if (blockedControllerAxisMotions.find(axisEvent.axis) != blockedControllerAxisMotions.end())
+        return;
+    for (auto& action : controllerAxisMotionMap[axisEvent.axis])
+    {
+        if (std::abs(value) > 0.0f)
+            onActionDown({action, TRIGGER_CONTROLLER_AXIS_MOTION, axisEvent.axis});
+        else
+            onActionUp({action, TRIGGER_CONTROLLER_AXIS_MOTION, axisEvent.axis});
+    }
+    switch (axisEvent.axis)
+    {
+    case SDL_CONTROLLER_AXIS_LEFTX:
+        leftStickValue.x = value;
+        break;
+    case SDL_CONTROLLER_AXIS_LEFTY:
+        leftStickValue.y = value;
+        break;
+    case SDL_CONTROLLER_AXIS_RIGHTX:
+        rightStickValue.x = value;
+        break;
+    case SDL_CONTROLLER_AXIS_RIGHTY:
+        rightStickValue.y = value;
+        break;
+    case SDL_CONTROLLER_AXIS_TRIGGERLEFT:
+        leftTriggerValue = value;
+        break;
+    case SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
+        rightTriggerValue = value;
+        break;
+    }
 }
 #pragma endregion
-
-void Control::onActionDown(int action)
-{
-    if (blockedActions.find(action) != blockedActions.end())
-        return;
-    pressedActions.insert(action);
-}
-
-void Control::onActionUp(int action)
-{
-    pressedActions.erase(action);
-    blockedActions.erase(action);
-}
-
-void Control::releaseAction(int action)
-{
-    pressedActions.erase(action);
-}
-
-void Control::releaseAndBlockAction(int action)
-{
-    pressedActions.erase(action);
-    blockedActions.insert(action);
-}
-
-void Control::performAndScheduleActionRelease(int action, Uint32 delayMs)
-{
-    if (isActionDown(action))
-        return;
-        
-    onActionDown(action);
-    
-    ScheduleTimerData* data = new ScheduleTimerData{action, this};
-
-    SDL_AddTimer(delayMs, [](Uint32 interval, void* param) -> Uint32 {
-        ScheduleTimerData* data = static_cast<ScheduleTimerData*>(param);
-        data->control->onActionUp(data->action);
-        delete data;
-        return 0;  // Don't repeat the timer
-    }, data);
-}

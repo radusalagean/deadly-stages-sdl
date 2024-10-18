@@ -11,6 +11,12 @@ public:
     Player();
     ~Player();
 
+    const std::vector<int> digitalMovementActions = 
+    {
+        CA_GAME_MOVE_UP, CA_GAME_MOVE_DOWN, CA_GAME_MOVE_LEFT, CA_GAME_MOVE_RIGHT
+    };
+
+    void handleEvents(Level& level);
     void update(Level& level);
     void draw(Camera& camera);
 

@@ -52,10 +52,11 @@ void GameScreen::handleEvents()
         return;
     }
     level->handleEvents();
-    if (Game::control.isActionDown(CA_MENUS_BACK))
+    const PressedActionData* pressedActionData = nullptr;
+    if (Game::control.isActionDown(CA_GAME_PAUSE, &pressedActionData))
     {
         paused = true;
-        Game::control.releaseAndBlockAction(CA_MENUS_BACK);
+        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
     }
 }
 
@@ -92,12 +93,15 @@ void GameScreen::render()
     }
 
 #ifdef SUPPORTS_MOUSE_POINTER
-    // Custom cursor
-    cursorRect.w = USCALE(cursorWidth);
-    cursorRect.h = USCALE(cursorHeight);
-    // Center the crosshair on the cursor
-    cursorRect.x = cursorRect.x - cursorRect.w / 2;
-    cursorRect.y = cursorRect.y - cursorRect.h / 2;
-    SDL_RenderCopy(Game::renderer, cursorTexture, NULL, &cursorRect);
+    if (Game::control.getCurrentControlSource() == CS_KEYBOARD_AND_MOUSE)
+    {
+        // Custom cursor
+        cursorRect.w = USCALE(cursorWidth);
+        cursorRect.h = USCALE(cursorHeight);
+        // Center the crosshair on the cursor
+        cursorRect.x = cursorRect.x - cursorRect.w / 2;
+        cursorRect.y = cursorRect.y - cursorRect.h / 2;
+        SDL_RenderCopy(Game::renderer, cursorTexture, NULL, &cursorRect);
+    }
 #endif
 }

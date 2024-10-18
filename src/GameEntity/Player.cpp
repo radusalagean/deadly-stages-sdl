@@ -38,26 +38,80 @@ Player::~Player()
 
 }
 
+void Player::handleEvents(Level& level)
+{
+    Camera& camera = level.camera;
+
+    // Movement
+    bool isMoving = false;
+    bool isMovingWithDigitalInput = false;
+    if (Game::control.isAnyActionDown(digitalMovementActions))
+    {
+        isMoving = true;
+        isMovingWithDigitalInput = true;
+    }
+    else if (Game::control.isActionDown(CA_GAME_MOVE_ANALOG))
+    {
+        isMoving = true;
+    }
+
+    if (isMoving)
+    {
+        float speed = speedPxPerSecond * Game::latestLoopDeltaTimeSeconds;
+        Vector2D multiplier;
+        if (isMovingWithDigitalInput)
+        {
+            multiplier.x = Game::control.isActionDown(CA_GAME_MOVE_LEFT) ? -1.0f :
+                          Game::control.isActionDown(CA_GAME_MOVE_RIGHT) ? 1.0f : 
+                          0.0f;
+            multiplier.y = Game::control.isActionDown(CA_GAME_MOVE_UP) ? -1.0f :
+                          Game::control.isActionDown(CA_GAME_MOVE_DOWN) ? 1.0f : 
+                          0.0f;
+        }
+        else
+        {
+            const Vector2D& leftStick = Game::control.getLeftStickValue();
+            multiplier.x = leftStick.x;
+            multiplier.y = leftStick.y;
+        }
+        if (Game::control.isActionDown(CA_GAME_SPRINT) && stamina > 0.0f)
+        {
+            speed += sprintBoost * Game::latestLoopDeltaTimeSeconds;
+            stamina -= staminaDecreaseRatePerSecond * Game::latestLoopDeltaTimeSeconds;
+            if (stamina < 0.0f)
+                stamina = 0.0f;
+            lastStaminaDecreaseTime = std::chrono::steady_clock::now();
+        }
+        Vector2D velocity = multiplier * speed;
+
+        CollisionManager::processMovement(*this, velocity, level, nullptr, isJumping());
+        this->velocity = velocity;
+    }
+    else
+    {
+        this->velocity.reset();
+    }
+
+    // Aiming
+    if (Game::control.isActionDown(CA_GAME_AIM_ANALOG))
+    {
+        const Vector2D& rightStick = Game::control.getRightStickValue();
+        float angle = atan2(rightStick.y, rightStick.x);
+        setRotation(angle * (180 / M_PI) - 180);
+    }
+    else if (Game::control.getCurrentControlSource() == CS_KEYBOARD_AND_MOUSE)
+    {
+        int mouseX, mouseY;
+        SDL_GetMouseState(&mouseX, &mouseY);
+        float angle = atan2(mouseY - GSCALE(position.y + center.y) + camera.position.y, 
+            mouseX - GSCALE(position.x + center.x) + camera.position.x);
+        setRotation(angle * (180 / M_PI) - 180);
+    }
+}
+
 void Player::update(Level& level)
 {
     GameEntity::update(level);
-
-    Camera& camera = level.camera;
-
-    // Get the position of the mouse
-    int mouseX, mouseY;
-    SDL_GetMouseState(&mouseX, &mouseY);
-
-    // Calculate the angle between the player center point and the mouse relative to the camera position
-    float angle = atan2(mouseY - GSCALE(position.y + center.y) + camera.position.y, 
-        mouseX - GSCALE(position.x + center.x) + camera.position.x);
-
-    // Convert the angle from radians to degrees
-    angle = angle * (180 / M_PI) - 180;
-
-    // Set the rotation of the player
-    setRotation(angle);
-
     updateJumpState(level);
     crushEnemiesIfNeeded(level);
     collectPickupIfNeeded(level);

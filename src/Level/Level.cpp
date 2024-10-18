@@ -78,45 +78,21 @@ void Level::load()
 
 void Level::handleEvents()
 {
-    // Movement
-    if (Game::control.isActionDown(CA_GAME_MOVE_UP) || Game::control.isActionDown(CA_GAME_MOVE_DOWN) || 
-        Game::control.isActionDown(CA_GAME_MOVE_LEFT) || Game::control.isActionDown(CA_GAME_MOVE_RIGHT))
-    {
-        float speed = player->speedPxPerSecond * Game::latestLoopDeltaTimeSeconds;
-        if (Game::control.isActionDown(CA_GAME_SPRINT) && player->stamina > 0.0f)
-        {
-            speed += player->sprintBoost * Game::latestLoopDeltaTimeSeconds;
-            player->stamina -= player->staminaDecreaseRatePerSecond * Game::latestLoopDeltaTimeSeconds;
-            if (player->stamina < 0.0f)
-                player->stamina = 0.0f;
-            player->lastStaminaDecreaseTime = std::chrono::steady_clock::now();
-        }
-        Vector2D velocity;
-        velocity.y = Game::control.isActionDown(CA_GAME_MOVE_UP) ? -speed :
-                              Game::control.isActionDown(CA_GAME_MOVE_DOWN) ? speed : 0;
+    player->handleEvents(*this);
 
-        velocity.x = Game::control.isActionDown(CA_GAME_MOVE_LEFT) ? -speed :
-                              Game::control.isActionDown(CA_GAME_MOVE_RIGHT) ? speed : 0;
-
-        CollisionManager::processMovement(*player, velocity, *this, nullptr, player->isJumping());
-        player->velocity = velocity;
-    }
-    else
-    {
-        player->velocity.reset();
-    }
+    const PressedActionData* pressedActionData = nullptr;
 
     // Jump
-    if (Game::control.isActionDown(CA_GAME_JUMP))
+    if (Game::control.isActionDown(CA_GAME_JUMP, &pressedActionData))
     {
         player->onJumpRequest();
-        Game::control.releaseAndBlockAction(CA_GAME_JUMP);
+        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
     }
 
     // Fire
-    if (Game::control.isActionDown(CA_GAME_FIRE))
+    if (Game::control.isActionDown(CA_GAME_FIRE, &pressedActionData))
     {
-        currentPlayerWeapon->onFireRequest([this](const Vector2D& position, float rotation)
+        currentPlayerWeapon->onFireRequest(*pressedActionData, [this](const Vector2D& position, float rotation)
         {
             Bullet* bullet = new Bullet(position, rotation, texturePool);
             bullets.push_back(bullet);
@@ -124,38 +100,39 @@ void Level::handleEvents()
     }
 
     // Reload
-    if (Game::control.isActionDown(CA_GAME_RELOAD))
+    if (Game::control.isActionDown(CA_GAME_RELOAD, &pressedActionData))
     {
         currentPlayerWeapon->reloadIfPossible();
+        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
     }
 
     // Cycle weapon
-    if (Game::control.isActionDown(CA_GAME_PREVIOUS_WEAPON))
+    if (Game::control.isActionDown(CA_GAME_PREVIOUS_WEAPON, &pressedActionData))
     {
         cycleWeapon(-1);
-        Game::control.releaseAction(CA_GAME_PREVIOUS_WEAPON);
+        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
     }
-    else if (Game::control.isActionDown(CA_GAME_NEXT_WEAPON))
+    else if (Game::control.isActionDown(CA_GAME_NEXT_WEAPON, &pressedActionData))
     {
         cycleWeapon(1);
-        Game::control.releaseAction(CA_GAME_NEXT_WEAPON);
+        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
     }
 
     // Weapon manual selection
-    if (Game::control.isActionDown(CA_GAME_WEAPON_ID_1))
+    if (Game::control.isActionDown(CA_GAME_WEAPON_SLOT_1, &pressedActionData))
     {
-        selectWeaponId(WeaponId::WEAPON_PISTOL);
-        Game::control.releaseAndBlockAction(CA_GAME_WEAPON_ID_1);
+        selectWeaponId(0);
+        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
     }
-    if (Game::control.isActionDown(CA_GAME_WEAPON_ID_2))
+    if (Game::control.isActionDown(CA_GAME_WEAPON_SLOT_2, &pressedActionData))
     {
-        selectWeaponId(WeaponId::WEAPON_SHOTGUN);
-        Game::control.releaseAndBlockAction(CA_GAME_WEAPON_ID_2);
+        selectWeaponId(1);
+        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
     }
-    if (Game::control.isActionDown(CA_GAME_WEAPON_ID_3))
+    if (Game::control.isActionDown(CA_GAME_WEAPON_SLOT_3, &pressedActionData))
     {
-        selectWeaponId(WeaponId::WEAPON_SMG);
-        Game::control.releaseAndBlockAction(CA_GAME_WEAPON_ID_3);
+        selectWeaponId(2);
+        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
     }
 }
 
