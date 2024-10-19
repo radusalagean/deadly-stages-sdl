@@ -4,13 +4,14 @@
 #include "BloodParticle.hpp"
 #include <vector>
 #include "../Core/Vector2D.hpp"
+#include "../Level/Camera.hpp"
 
 class BloodParticleManager 
 {
 public:
     void createParticles(const Vector2D& position, int count);
     void update();
-    void render(const Vector2D& cameraPosition);
+    void render(const Camera& camera);
 
 private:
     std::vector<BloodParticle> particles;

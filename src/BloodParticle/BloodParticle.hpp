@@ -3,13 +3,14 @@
 
 #include "../Core/Vector2D.hpp"
 #include <SDL.h>
+#include "../Level/Camera.hpp"
 
 class BloodParticle 
 {
 public:
     BloodParticle(Vector2D position, Vector2D velocity, float lifetime);
     void update();
-    void render(const Vector2D& cameraPosition);
+    void render(const Camera& camera);
     float lifetime;
     static constexpr float MAX_LIFETIME_SECONDS = 0.7f;
 

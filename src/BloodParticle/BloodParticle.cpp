@@ -13,16 +13,16 @@ void BloodParticle::update()
     lifetime -= Game::latestLoopDeltaTimeSeconds;
 }
 
-void BloodParticle::render(const Vector2D& cameraPosition) 
+void BloodParticle::render(const Camera& camera) 
 {
     SDL_Renderer* renderer = Game::renderer;
     SDLUtils::pushTempRendererDrawColor();
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_Rect particleRect = {
-        static_cast<int>(GSCALE(position.x) - cameraPosition.x),
-        static_cast<int>(GSCALE(position.y) - cameraPosition.y),
-        static_cast<int>(ceil(GSCALE(2))),
-        static_cast<int>(ceil(GSCALE(2)))
+        static_cast<int>(camera.scale(position.x) - camera.position.x),
+        static_cast<int>(camera.scale(position.y) - camera.position.y),
+        static_cast<int>(ceil(camera.scale(2))),
+        static_cast<int>(ceil(camera.scale(2)))
     };
     SDL_RenderFillRect(renderer, &particleRect);
     SDLUtils::popTempRendererDrawColor();

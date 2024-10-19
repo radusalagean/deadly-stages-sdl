@@ -103,8 +103,8 @@ void Player::handleEvents(Level& level)
     {
         int mouseX, mouseY;
         SDL_GetMouseState(&mouseX, &mouseY);
-        float angle = atan2(mouseY - GSCALE(position.y + center.y) + camera.position.y, 
-            mouseX - GSCALE(position.x + center.x) + camera.position.x);
+        float angle = atan2(mouseY - camera.scale(position.y + center.y) + camera.position.y, 
+            mouseX - camera.scale(position.x + center.x) + camera.position.x);
         setRotation(angle * (180 / M_PI) - 180);
     }
 }

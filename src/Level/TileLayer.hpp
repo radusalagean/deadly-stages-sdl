@@ -6,7 +6,7 @@
 #include <SDL.h>
 #include "../Core/Config.hpp"
 
-class Camera;
+class Level;
 class Tile;
 
 class TileLayer
@@ -19,7 +19,7 @@ public:
     int verticalTilesCount = 0;
     std::vector<std::vector<Tile*>> tileMap{{}};
 
-    void render(Camera& camera, int renderFlags);
+    void render(Level& level, int renderFlags);
 };
 
 

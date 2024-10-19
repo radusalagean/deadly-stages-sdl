@@ -19,11 +19,11 @@ void Tile::load()
     texture = SDLUtils::loadTexture(path);
 }
 
-void Tile::draw(int x, int y)
+void Tile::draw(Camera& camera, int x, int y)
 {
     dstRect.x = x;
     dstRect.y = y;
-    dstRect.w = GSCALE(width);
-    dstRect.h = GSCALE(height);
+    dstRect.w = camera.scale(width);
+    dstRect.h = camera.scale(height);
     SDL_RenderCopy(Game::renderer, texture, NULL, &dstRect);
 }

@@ -134,6 +134,13 @@ void Level::handleEvents()
         selectWeaponId(2);
         Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
     }
+
+    // Zoom
+    if (Game::control.isActionDown(CA_GAME_ZOOM, &pressedActionData))
+    {
+        camera.toggleZoom();
+        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
+    }
 }
 
 void Level::update()
@@ -161,7 +168,7 @@ void Level::update()
 
 void Level::render()
 {
-    tileLayer.render(camera, TileLayer::RENDER_FLAG_NON_COLLIDABLE_TILES);
+    tileLayer.render(*this, TileLayer::RENDER_FLAG_NON_COLLIDABLE_TILES);
 
     for (auto& bloodPool : bloodPools)
     {
@@ -183,11 +190,11 @@ void Level::render()
         enemy->draw(camera);
     }
 
-    bloodParticleManager.render(camera.position);
+    bloodParticleManager.render(camera);
     
     player->draw(camera);
 
-    tileLayer.render(camera, TileLayer::RENDER_FLAG_COLLIDABLE_TILES);
+    tileLayer.render(*this, TileLayer::RENDER_FLAG_COLLIDABLE_TILES);
     
     #ifdef DEBUG_DRAW_COLLISION_RECTS
     renderDebugShapes(camera);
@@ -306,10 +313,10 @@ void Level::renderDebugShapes(Camera& camera)
     // Collided rects: Red
     for (const auto& collidedRect : collidedRects)
     {
-        int x = GSCALE(collidedRect.x) - camera.position.x;
-        int y = GSCALE(collidedRect.y) - camera.position.y;
-        int w = GSCALE(collidedRect.w);
-        int h = GSCALE(collidedRect.h);
+        int x = camera.scale(collidedRect.x) - camera.position.x;
+        int y = camera.scale(collidedRect.y) - camera.position.y;
+        int w = camera.scale(collidedRect.w);
+        int h = camera.scale(collidedRect.h);
         SDL_Rect collidedRectDst = { x, y, w, h };
         Game::primitiveShapeHelper.drawRectOutline(collidedRectDst, {255, 0, 0, 255}, 2);
     }
@@ -320,10 +327,10 @@ void Level::renderDebugShapes(Camera& camera)
     {
         SDL_Rect checkAreaRectDst = 
         {
-        static_cast<int>(GSCALE(checkAreaRect.x) - camera.position.x),
-        static_cast<int>(GSCALE(checkAreaRect.y) - camera.position.y),
-        static_cast<int>(GSCALE(checkAreaRect.w)),
-        static_cast<int>(GSCALE(checkAreaRect.h))
+            static_cast<int>(camera.scale(checkAreaRect.x) - camera.position.x),
+            static_cast<int>(camera.scale(checkAreaRect.y) - camera.position.y),
+            static_cast<int>(camera.scale(checkAreaRect.w)),
+            static_cast<int>(camera.scale(checkAreaRect.h))
         };
         Game::primitiveShapeHelper.drawRectOutline(checkAreaRectDst, {0, 255, 0, 255}, 1);
     }
@@ -334,10 +341,10 @@ void Level::renderDebugShapes(Camera& camera)
     {
         SDL_Rect checkAreaTileIndicesDst = 
         {
-            static_cast<int>(GSCALE(checkAreaTileIndicesRect.x) - camera.position.x),
-            static_cast<int>(GSCALE(checkAreaTileIndicesRect.y) - camera.position.y),
-            static_cast<int>(GSCALE(checkAreaTileIndicesRect.w)),
-            static_cast<int>(GSCALE(checkAreaTileIndicesRect.h))
+            static_cast<int>(camera.scale(checkAreaTileIndicesRect.x) - camera.position.x),
+            static_cast<int>(camera.scale(checkAreaTileIndicesRect.y) - camera.position.y),
+            static_cast<int>(camera.scale(checkAreaTileIndicesRect.w)),
+            static_cast<int>(camera.scale(checkAreaTileIndicesRect.h))
         };
         Game::primitiveShapeHelper.drawRectOutline(checkAreaTileIndicesDst, {255, 255, 0, 255}, 2);
     }

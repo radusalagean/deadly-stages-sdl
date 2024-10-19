@@ -6,6 +6,7 @@
 #include "../Game.hpp"
 #include <SDL_image.h>
 #include "../Core/Constants.hpp"
+#include "Camera.hpp"
 
 class Tile
 {
@@ -25,7 +26,7 @@ public:
     int height;
 
     void load();
-    void draw(int x, int y);
+    void draw(Camera& camera, int x, int y);
 
     bool isCollidable() const { return collidable; }
 };

@@ -3,8 +3,10 @@
 
 #include <chrono>
 
-class FloatAnimator {
+class FloatAnimator 
+{
 public:
+    FloatAnimator() = delete;
     FloatAnimator(float& value, float targetValue, int durationMs);
     
     void update();

@@ -11,12 +11,12 @@ void Camera::update()
     if (target != nullptr)
     {
         // Calculate new position
-        float newX = GSCALE(target->x) - Game::width / 2;
-        float newY = GSCALE(target->y) - Game::height / 2;
+        float newX = scale(target->x) - Game::width / 2;
+        float newY = scale(target->y) - Game::height / 2;
 
         // Map bounds
-        float mapWidth = GSCALE(mapBounds->x);
-        float mapHeight = GSCALE(mapBounds->y);
+        float mapWidth = scale(mapBounds->x);
+        float mapHeight = scale(mapBounds->y);
         float boundsX = std::max(0.0f, mapWidth - Game::width);
         float boundsY = std::max(0.0f, mapHeight - Game::height);
 
@@ -29,7 +29,6 @@ void Camera::update()
         position.y = newY;
     }
 
-    // Update shake effect
     updateShake();
 }
 
@@ -72,4 +71,9 @@ void Camera::updateShake()
     // Apply shake offset to camera position
     position.x += shakeOffset.x;
     position.y += shakeOffset.y;
+}
+
+void Camera::toggleZoom()
+{
+    currentZoom = currentZoom == ZOOM_1_0 ? ZOOM_0_5 : ZOOM_1_0;
 }

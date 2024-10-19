@@ -36,17 +36,17 @@ void GameEntity::draw(Camera& camera)
 {
     if (dstRectScale == 1.0f)
     {
-        dstRect.w = GSCALE(width);
-        dstRect.h = GSCALE(height);
-        dstRect.x = GSCALE(position.x) - camera.position.x;
-        dstRect.y = GSCALE(position.y) - camera.position.y;
+        dstRect.w = camera.scale(width);
+        dstRect.h = camera.scale(height);
+        dstRect.x = camera.scale(position.x) - camera.position.x;
+        dstRect.y = camera.scale(position.y) - camera.position.y;
     }
     else
     {
-        dstRect.w = GSCALE(width * dstRectScale);
-        dstRect.h = GSCALE(height * dstRectScale);
-        dstRect.x = GSCALE(positionPlusCenter.x - (dstRect.w / 2)) - camera.position.x;
-        dstRect.y = GSCALE(positionPlusCenter.y - (dstRect.h / 2)) - camera.position.y;
+        dstRect.w = camera.scale(width * dstRectScale);
+        dstRect.h = camera.scale(height * dstRectScale);
+        dstRect.x = camera.scale(positionPlusCenter.x) - dstRect.w / 2.0f - camera.position.x;
+        dstRect.y = camera.scale(positionPlusCenter.y) - dstRect.h / 2.0f - camera.position.y;
     }
 
     if (castShadow && shadowTexture != nullptr)
@@ -139,18 +139,18 @@ void GameEntity::drawCollisionRect(Camera& camera)
 {
     // Draw collision rect with blue
     SDL_Rect debugRect; 
-    debugRect.x = GSCALE(positionPlusCollisionRect.x) - camera.position.x;
-    debugRect.y = GSCALE(positionPlusCollisionRect.y) - camera.position.y;
-    debugRect.w = GSCALE(collisionRect.w);
-    debugRect.h = GSCALE(collisionRect.h);
+    debugRect.x = camera.scale(positionPlusCollisionRect.x) - camera.position.x;
+    debugRect.y = camera.scale(positionPlusCollisionRect.y) - camera.position.y;
+    debugRect.w = camera.scale(collisionRect.w);
+    debugRect.h = camera.scale(collisionRect.h);
     Game::primitiveShapeHelper.drawRectOutline(debugRect, {0, 0, 255, 255}, 2);
 
     // Draw collision line with red
     Line debugLine;
-    debugLine.start.x = GSCALE(positionPlusCollisionLine.start.x) - camera.position.x;
-    debugLine.start.y = GSCALE(positionPlusCollisionLine.start.y) - camera.position.y;
-    debugLine.end.x = GSCALE(positionPlusCollisionLine.end.x) - camera.position.x;
-    debugLine.end.y = GSCALE(positionPlusCollisionLine.end.y) - camera.position.y;
+    debugLine.start.x = camera.scale(positionPlusCollisionLine.start.x) - camera.position.x;
+    debugLine.start.y = camera.scale(positionPlusCollisionLine.start.y) - camera.position.y;
+    debugLine.end.x = camera.scale(positionPlusCollisionLine.end.x) - camera.position.x;
+    debugLine.end.y = camera.scale(positionPlusCollisionLine.end.y) - camera.position.y;
     Game::primitiveShapeHelper.drawLine(debugLine, {255, 0, 0, 255});
 }
 #endif
