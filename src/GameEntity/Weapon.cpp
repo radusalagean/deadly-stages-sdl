@@ -22,6 +22,8 @@ WeaponConfig Weapon::createWeaponConfig(int id)
             cfg.bulletsPerShot = 1;
             cfg.spreadAngle = 0;
             cfg.textureFileName = "pickup_pistol.png";
+            cfg.rumbleIntensity = 0.4f;
+            cfg.rumbleDurationMs = 64;
             break;
         case WeaponId::WEAPON_SHOTGUN:
             cfg.damagePerBullet = 3;
@@ -33,6 +35,8 @@ WeaponConfig Weapon::createWeaponConfig(int id)
             cfg.bulletsPerShot = 3;
             cfg.spreadAngle = 15;
             cfg.textureFileName = "pickup_shotgun.png";
+            cfg.rumbleIntensity = 0.8f;
+            cfg.rumbleDurationMs = 128;
             break;
         case WeaponId::WEAPON_SMG:
             cfg.damagePerBullet = 1;
@@ -44,6 +48,8 @@ WeaponConfig Weapon::createWeaponConfig(int id)
             cfg.bulletsPerShot = 1;
             cfg.spreadAngle = 0;
             cfg.textureFileName = "pickup_smg.png";
+            cfg.rumbleIntensity = 0.4f;
+            cfg.rumbleDurationMs = 96;
             break;
     }
     return cfg;
@@ -65,7 +71,9 @@ Weapon::Weapon(WeaponConfig config, TexturePool& texturePool) : GameEntity(),
     reloadTimeMillis(config.reloadTimeMillis),
     automatic(config.automatic),
     bulletsPerShot(config.bulletsPerShot),
-    spreadAngle(config.spreadAngle)
+    spreadAngle(config.spreadAngle),
+    rumbleIntensity(config.rumbleIntensity),
+    rumbleDurationMs(config.rumbleDurationMs)
 {
     if (bulletsPerShot > 1 && spreadAngle > 0)
         angleBetweenBullets = (2 * spreadAngle) / (bulletsPerShot - 1);
@@ -115,6 +123,7 @@ void Weapon::onFireRequest(const PressedActionData& pressedActionData, std::func
         if (!automatic)
             Game::control.releaseAssociatedActionsAndBlockActionTrigger(pressedActionData);
         bulletCreationCallback(position, rotation + spread);
+        Game::control.rumbleCurrentControllerIfActive({RUMBLE_TRIGGER, 0.0f, rumbleIntensity, rumbleDurationMs});
         ammoInCurrentMag--;
     }
 }

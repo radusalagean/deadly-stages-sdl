@@ -15,7 +15,7 @@ public:
 
     void update();
     
-    void startShake(int durationMs, float intensity);
+    void startShake(unsigned int durationMs, float intensity);
     void updateShake();
 
 private:

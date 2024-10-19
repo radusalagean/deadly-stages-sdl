@@ -1,16 +1,52 @@
 #include "Control.hpp"
 
 #include "../Game.hpp"
-
+#include <SDL.h>
 
 void Control::init()
 {
-    gameController = SDL_GameControllerOpen(0);
+    for (int i = 0; i < SDL_NumJoysticks(); i++)
+    {
+        initGameController(i);
+    }
     #ifdef PLATFORM_GROUP_COMPUTER
     currentControlSource = CS_KEYBOARD_AND_MOUSE;
     #else
     currentControlSource = CS_CONTROLLER;
     #endif
+}
+
+void Control::initGameController(int index)
+{
+    if (SDL_IsGameController(index))
+    {
+        logd("Game controller at index %d is supported", index);
+        SDL_GameController* gameController = SDL_GameControllerOpen(index);
+        SDL_JoystickID instanceId = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(gameController));
+        gameControllers[instanceId] = gameController;
+        logd("Game controller with instance id %d initialized", instanceId);
+        if (SDL_GameControllerHasRumble(gameController))
+            logd("Game controller with instance id %d has rumble", instanceId);
+        else
+            logd("Game controller with instance id %d does not have rumble", instanceId);
+        if (SDL_GameControllerHasRumbleTriggers(gameController))
+            logd("Game controller with instance id %d has rumble triggers", instanceId);
+        else
+            logd("Game controller with instance id %d does not have rumble triggers", instanceId);
+    }
+    else
+    {
+        logd("Game controller at index %d is not supported", index);
+        logSDLe();
+    }
+}
+
+void Control::disposeGameController(SDL_JoystickID instanceId, bool removeFromMap)
+{
+    SDL_GameControllerClose(gameControllers[instanceId]);
+    logd("Game controller with instance id %d disposed", instanceId);
+    if (removeFromMap)
+        gameControllers.erase(instanceId);
 }
 
 void Control::handleEvent(SDL_Event& event)
@@ -38,10 +74,15 @@ void Control::handleEvent(SDL_Event& event)
         break;
 
     case SDL_CONTROLLERDEVICEADDED:
-        gameController = SDL_GameControllerOpen(event.cdevice.which);
+        initGameController(event.cdevice.which);
+        break;
+
+    case SDL_CONTROLLERDEVICEREMOVED:
+        disposeGameController(event.cdevice.which);
         break;
 
     case SDL_CONTROLLERBUTTONDOWN:
+        currentGameController = gameControllers[event.cbutton.which];
         onControllerButtonDown(static_cast<SDL_GameControllerButton>(event.cbutton.button));
         break;
 
@@ -50,10 +91,19 @@ void Control::handleEvent(SDL_Event& event)
         break;
 
     case SDL_CONTROLLERAXISMOTION:
-        onControllerAxisMotion(event.caxis);
+        onControllerAxisMotion(event.caxis, event.caxis.which);
         break;
     }
     unlockIfReleased();
+}
+
+void Control::dispose()
+{
+    for (auto& gameController : gameControllers)
+    {
+        disposeGameController(gameController.first, false);
+    }
+    gameControllers.clear();
 }
 
 #pragma region Actions
@@ -247,7 +297,7 @@ void Control::onControllerButtonUp(SDL_GameControllerButton button)
         onActionUp({action, TRIGGER_CONTROLLER_BUTTON, button});
 }
 
-void Control::onControllerAxisMotion(const SDL_ControllerAxisEvent& axisEvent)
+void Control::onControllerAxisMotion(const SDL_ControllerAxisEvent& axisEvent, SDL_JoystickID instanceId)
 {
     currentControlSource = CS_CONTROLLER;
     // Normalize the axis value to a range of -1.0 to 1.0
@@ -260,6 +310,10 @@ void Control::onControllerAxisMotion(const SDL_ControllerAxisEvent& axisEvent)
     if (value == 0.0f)
     {
         blockedControllerAxisMotions.erase(axisEvent.axis);
+    }
+    else
+    {
+        currentGameController = gameControllers[instanceId];
     }
     if (blockedControllerAxisMotions.find(axisEvent.axis) != blockedControllerAxisMotions.end())
         return;
@@ -289,6 +343,26 @@ void Control::onControllerAxisMotion(const SDL_ControllerAxisEvent& axisEvent)
         break;
     case SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
         rightTriggerValue = value;
+        break;
+    }
+}
+
+void Control::rumbleCurrentControllerIfActive(ControllerRumbleConfig config)
+{
+    if (currentGameController == nullptr || currentControlSource != CS_CONTROLLER)
+        return;
+    ControllerRumbleTrigger trigger = config.trigger;
+    if (trigger == RUMBLE_TRIGGER && !SDL_GameControllerHasRumbleTriggers(currentGameController))
+        trigger = RUMBLE_DEFAULT;
+    switch (trigger)
+    {
+    case RUMBLE_DEFAULT:
+        SDL_GameControllerRumble(currentGameController, 0xFFFF * config.lowFrequencyRumbleIntensity, 
+            0xFFFF * config.highFrequencyRumbleIntensity, config.durationMs);
+        break;
+    case RUMBLE_TRIGGER:
+        SDL_GameControllerRumbleTriggers(currentGameController, 0xFFFF * config.lowFrequencyRumbleIntensity, 
+            0xFFFF * config.highFrequencyRumbleIntensity, config.durationMs);
         break;
     }
 }

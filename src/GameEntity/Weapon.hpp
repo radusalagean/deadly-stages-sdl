@@ -29,6 +29,8 @@ struct WeaponConfig
     int bulletsPerShot = 0;
     int spreadAngle = 0;
     std::string textureFileName = "";
+    float rumbleIntensity = 0.0f;
+    Uint32 rumbleDurationMs = 0;
 };
 
 class Weapon : public GameEntity
@@ -53,6 +55,8 @@ public:
     bool automatic;
     int bulletsPerShot;
     int spreadAngle;
+    float rumbleIntensity;
+    Uint32 rumbleDurationMs;
     float angleBetweenBullets = 0;
 
     // Fire & Reload

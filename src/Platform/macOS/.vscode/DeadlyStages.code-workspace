@@ -70,7 +70,13 @@
 			"__tree": "cpp",
 			"set": "cpp",
 			"map": "cpp",
-			"__memory": "cpp"
+			"__memory": "cpp",
+			"deque": "cpp",
+			"memory": "cpp",
+			"forward_list": "cpp",
+			"print": "cpp",
+			"queue": "cpp",
+			"stack": "cpp"
 		}
 	}
 }

@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <algorithm>
 #include <tuple>
+#include <map>
 #include "../Core/Vector2D.hpp"
 
 enum ControlSource
@@ -73,12 +74,27 @@ struct PressedActionData
     }
 };
 
+enum ControllerRumbleTrigger
+{
+    RUMBLE_DEFAULT = 1,
+    RUMBLE_TRIGGER
+};
+
+struct ControllerRumbleConfig
+{
+    ControllerRumbleTrigger trigger = RUMBLE_DEFAULT;
+    float lowFrequencyRumbleIntensity = 0.0f;
+    float highFrequencyRumbleIntensity = 0.0f;
+    Uint32 durationMs = 0;
+};
+
 class Control
 {
 private:
     bool locked = false;
 
-    SDL_GameController* gameController = nullptr;
+    std::map<SDL_JoystickID, SDL_GameController*> gameControllers;
+    SDL_GameController* currentGameController = nullptr;
 
     ControlSource currentControlSource;
 
@@ -185,7 +201,10 @@ private:
 
 public:
     void init();
+    void initGameController(int index);
+    void disposeGameController(SDL_JoystickID instanceId, bool removeFromMap = true);
     void handleEvent(SDL_Event& event);
+    void dispose();
 
     // Actions
     void onActionDown(const PressedActionData data);
@@ -210,7 +229,8 @@ public:
     // Game Controller
     void onControllerButtonDown(SDL_GameControllerButton button);
     void onControllerButtonUp(SDL_GameControllerButton button);
-    void onControllerAxisMotion(const SDL_ControllerAxisEvent& axisEvent);
+    void onControllerAxisMotion(const SDL_ControllerAxisEvent& axisEvent, SDL_JoystickID instanceId);
+    void rumbleCurrentControllerIfActive(ControllerRumbleConfig config);
 
     inline void lock() { locked = true; }
     

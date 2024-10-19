@@ -118,7 +118,7 @@ namespace Game
 
     void dispose()
     {
-        
+        control.dispose();
     }
 
     void syncRendererOutputSize()

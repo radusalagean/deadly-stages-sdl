@@ -33,8 +33,9 @@ void Camera::update()
     updateShake();
 }
 
-void Camera::startShake(int durationMs, float intensity)
+void Camera::startShake(unsigned int durationMs, float intensity)
 {
+    Game::control.rumbleCurrentControllerIfActive({RUMBLE_DEFAULT, 0.75f, 0.75f, durationMs});
     isShaking = true;
     shakeStartTime = std::chrono::steady_clock::now();
     shakeDuration = durationMs;
