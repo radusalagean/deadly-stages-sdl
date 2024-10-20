@@ -5,6 +5,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <cstdlib>
+#include "../Core/Config.hpp"
 
 #define logd Logger::logDebug
 #define logSDLe Logger::logSDLError

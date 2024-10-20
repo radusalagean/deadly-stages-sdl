@@ -299,7 +299,6 @@ void Control::onControllerButtonUp(SDL_GameControllerButton button)
 
 void Control::onControllerAxisMotion(const SDL_ControllerAxisEvent& axisEvent, SDL_JoystickID instanceId)
 {
-    currentControlSource = CS_CONTROLLER;
     // Normalize the axis value to a range of -1.0 to 1.0
     float value = static_cast<float>(axisEvent.value) / static_cast<float>(ANALOG_MAX_VALUE);
 
@@ -313,6 +312,7 @@ void Control::onControllerAxisMotion(const SDL_ControllerAxisEvent& axisEvent, S
     }
     else
     {
+        currentControlSource = CS_CONTROLLER;
         currentGameController = gameControllers[instanceId];
     }
     if (blockedControllerAxisMotions.find(axisEvent.axis) != blockedControllerAxisMotions.end())

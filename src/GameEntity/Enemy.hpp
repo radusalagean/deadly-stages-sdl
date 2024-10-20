@@ -3,6 +3,7 @@
 
 #include "GameEntity.hpp"
 #include "../Level/Level.hpp"
+#include "../Core/Config.hpp"
 
 class Enemy : public GameEntity
 {

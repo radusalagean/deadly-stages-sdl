@@ -86,6 +86,8 @@ public:
             (*this) *= 1 / l;
         }
     }
+
+    float magnitude() const { return sqrt(x * x + y * y); }
 };
 
 #endif // __SRC_CORE_VECTOR2D_HPP__

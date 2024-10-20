@@ -3,11 +3,12 @@
 
 #include <map>
 #include "Tile.hpp"
-#include "TileLayer.hpp"
 #include "../Core/TexturePool.hpp"
 #include "Camera.hpp"
 #include "../Core/Debouncer.hpp"
 #include "../BloodParticle/BloodParticleManager.hpp"
+#include "../Core/Config.hpp"
+#include "TileLayer.hpp"
 
 class Player;
 class Weapon;
@@ -79,6 +80,15 @@ public:
 
     void attemptToSpawnPickup(const Vector2D position);
     void collectPickup(Pickup* pickup);
+
+    #ifdef SUPPORTS_AIM_ASSIST
+    SDL_Texture* crosshairAimAssistTexture = nullptr;
+    int crosshairAimAssistWidth = 0;
+    int crosshairAimAssistHeight = 0;
+    SDL_Rect crosshairAimAssistDstRect;
+    void updateCrosshairAimAssistIfNeeded();
+    void drawCrosshairAimAssistIfNeeded();
+    #endif
 };
 
 #endif // __SRC_LEVEL_LEVEL_HPP_

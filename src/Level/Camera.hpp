@@ -28,6 +28,7 @@ public:
     void startShake(unsigned int durationMs, float intensity);
     void updateShake();
     void toggleZoom();
+    bool isTargetVisible(const Vector2D& targetPosition);
 
 private:
     bool isShaking = false;

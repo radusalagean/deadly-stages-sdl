@@ -134,6 +134,12 @@ void GameEntity::refreshCollisionData()
     positionPlusCollisionLine.end.y = position.y + collisionLine.end.y;
 }
 
+void GameEntity::rotateToTarget(Vector2D& target)
+{
+    float angle = atan2(target.y - positionPlusCenter.y, target.x - positionPlusCenter.x);
+    setRotation(angle * (180 / M_PI) - 180);
+}
+
 #ifdef DEBUG_DRAW_COLLISION_RECTS
 void GameEntity::drawCollisionRect(Camera& camera) 
 {

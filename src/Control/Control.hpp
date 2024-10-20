@@ -9,6 +9,7 @@
 #include <tuple>
 #include <map>
 #include "../Core/Vector2D.hpp"
+#include "../Core/Config.hpp"
 
 enum ControlSource
 {
@@ -42,9 +43,9 @@ enum ControlAction
     CA_GAME_WEAPON_SLOT_3,
     CA_GAME_PAUSE,
     CA_GAME_ZOOM,
-    #ifdef SUPPORTS_AUTOAIM
-    CA_GAME_AUTOAIM_RIGHT,
-    CA_GAME_AUTOAIM_LEFT
+    #ifdef SUPPORTS_AIM_ASSIST
+    CA_GAME_AIM_ASSIST_RIGHT,
+    CA_GAME_AIM_ASSIST_LEFT
     #endif
 };
 
@@ -146,9 +147,9 @@ private:
         {SDL_CONTROLLER_BUTTON_Y, {CA_GAME_SPRINT}},
         {SDL_CONTROLLER_BUTTON_BACK, {CA_GAME_ZOOM}},
         {SDL_CONTROLLER_BUTTON_START, {CA_GAME_PAUSE}},
-        #ifdef SUPPORTS_AUTOAIM
-        {SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, {CA_GAME_AUTOAIM_RIGHT}},
-        {SDL_CONTROLLER_BUTTON_LEFTSHOULDER, {CA_GAME_AUTOAIM_LEFT}}
+        #ifdef SUPPORTS_AIM_ASSIST
+        {SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, {CA_GAME_AIM_ASSIST_RIGHT}},
+        {SDL_CONTROLLER_BUTTON_LEFTSHOULDER, {CA_GAME_AIM_ASSIST_LEFT}}
         #endif
     }; // key: button, value: actions
 

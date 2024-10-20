@@ -4,11 +4,13 @@
 #include "../Game.hpp"
 #include "../Core/PrimitiveShapeHelper.hpp"
 #include <math.h>
+#include <cmath>
 #include "../Core/Config.hpp"
 #include "../Level/Level.hpp"
 #include "../Core/CollisionManager.hpp"
 #include "../GameEntity/Enemy.hpp"
 #include "../GameEntity/Pickup.hpp"
+#include "../Core/Config.hpp"
 
 Player::Player() : GameEntity()
 {
@@ -93,6 +95,37 @@ void Player::handleEvents(Level& level)
     }
 
     // Aiming
+    #ifdef SUPPORTS_AIM_ASSIST
+    const PressedActionData* pressedActionData = nullptr;
+    int scanDirection = 0;
+    if (Game::control.isActionDown(CA_GAME_AIM_ASSIST_LEFT, &pressedActionData))
+    {
+        scanDirection = -1;
+    }
+    else if (Game::control.isActionDown(CA_GAME_AIM_ASSIST_RIGHT, &pressedActionData))
+    {
+        scanDirection = 1;
+    }
+    if (scanDirection != 0)
+    {
+        if (Game::options.aimAssist)
+        {
+            assignTargetToNearestEnemy(level, scanDirection);
+        }
+        else
+        {
+            targetEnemy = nullptr;
+        }
+        if (targetEnemy == nullptr)
+        {
+            rotation += rotationSpeedDegreesPerSecond * scanDirection * Game::latestLoopDeltaTimeSeconds;
+        }
+        else
+        {
+            Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
+        }
+    }
+    #else
     if (Game::control.isActionDown(CA_GAME_AIM_ANALOG))
     {
         const Vector2D& rightStick = Game::control.getRightStickValue();
@@ -107,15 +140,30 @@ void Player::handleEvents(Level& level)
             mouseX - camera.scale(position.x + center.x) + camera.position.x);
         setRotation(angle * (180 / M_PI) - 180);
     }
+    #endif
 }
 
 void Player::update(Level& level)
 {
+    #ifdef SUPPORTS_AIM_ASSIST
+    if (targetEnemy != nullptr)
+    {
+        rotateToTarget(targetEnemy->positionPlusCenter);
+    }
+    #endif
     GameEntity::update(level);
     updateJumpState(level);
     crushEnemiesIfNeeded(level);
     collectPickupIfNeeded(level);
     increaseStaminaIfPossible();
+    #ifdef SUPPORTS_AIM_ASSIST
+    loseTargetIfNotVisible(level);
+    if (pendingAimAssistScan)
+    {
+        assignTargetToNearestEnemy(level, 0);
+        pendingAimAssistScan = false;
+    }
+    #endif
 }
 
 void Player::draw(Camera& camera)
@@ -181,3 +229,66 @@ void Player::collectPickupIfNeeded(Level& level)
         }
     }
 }
+
+#ifdef SUPPORTS_AIM_ASSIST
+/**
+ * scanDirection: 
+ *  -1 for 15 degree scan to the left, 
+ *   1 for 15 degree scan to the right, 
+ *   0 for a -15 to 15 degree scan
+ */
+void Player::assignTargetToNearestEnemy(Level& level, const int scanDirection)
+{
+    Enemy* nearestEnemy = nullptr;
+    float nearestDistance = std::numeric_limits<float>::max();
+    float playerAngleDegrees = fmod(rotation + 180, 360.0f);
+    if (playerAngleDegrees < 0) 
+        playerAngleDegrees += 360.0f;
+    float playerAngleRad = playerAngleDegrees * M_PI / 180.0f;
+    const float scanAngleRad = 15.0f * M_PI / 180.0f;
+    
+    for (auto& enemy : level.enemies)
+    {
+        if (!level.camera.isTargetVisible(enemy->positionPlusCenter) || enemy == targetEnemy)
+            continue;
+        Vector2D toEnemy = enemy->positionPlusCenter - positionPlusCenter;
+        float distance = toEnemy.magnitude();
+        float angle = atan2(toEnemy.y, toEnemy.x);
+        
+        // Normalize the angle difference to be between -PI and PI
+        float angleDiff = angle - playerAngleRad;
+        while (angleDiff > M_PI) angleDiff -= 2 * M_PI;
+        while (angleDiff < -M_PI) angleDiff += 2 * M_PI;
+        
+        // Check if the enemy is within the scan range
+        if ((scanDirection == 0 && std::abs(angleDiff) <= scanAngleRad) ||
+            (scanDirection == -1 && angleDiff >= -scanAngleRad && angleDiff <= 0) ||
+            (scanDirection == 1 && angleDiff >= 0 && angleDiff <= scanAngleRad))
+        {
+            if (distance < nearestDistance)
+            {
+                nearestDistance = distance;
+                nearestEnemy = enemy;
+            }
+        }
+    }
+    targetEnemy = nearestEnemy;
+}
+
+void Player::loseTargetIfNotVisible(Level& level)
+{
+    if (targetEnemy == nullptr)
+        return;
+    if (!level.camera.isTargetVisible(targetEnemy->positionPlusCenter))
+    {
+        targetEnemy = nullptr;
+        pendingAimAssistScan = true;
+    }
+}
+
+void Player::onTargetEnemyRemoved(Level& level)
+{
+    targetEnemy = nullptr;
+    pendingAimAssistScan = true;
+}
+#endif

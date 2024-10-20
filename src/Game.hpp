@@ -8,6 +8,7 @@
 #include "Control/Control.hpp"
 #include "Core/Options.hpp"
 #include "Core/FramerateIndicator.hpp"
+#include "Core/Config.hpp"
 
 class FontManager;
 class ScreenManager;

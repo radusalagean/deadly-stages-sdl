@@ -57,6 +57,7 @@ public:
     void setSize(int width, int height);
     void setRotation(float angle);
     void refreshCollisionData();
+    void rotateToTarget(Vector2D& target);
 
     #ifdef DEBUG_DRAW_COLLISION_RECTS
     void drawCollisionRect(Camera& camera);

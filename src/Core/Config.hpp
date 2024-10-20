@@ -14,7 +14,7 @@
 #if defined(__PSP__)
     #define PLATFORM_GROUP_CONSOLE
     #define PLATFORM_PSP
-    #define SUPPORTS_AUTOAIM
+    #define SUPPORTS_AIM_ASSIST
 #endif
 
 #if defined(PLATFORM_PSP)

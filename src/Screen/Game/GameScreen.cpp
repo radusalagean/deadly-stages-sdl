@@ -35,7 +35,7 @@ void GameScreen::init()
 
 #ifdef SUPPORTS_MOUSE_POINTER
     SDL_ShowCursor(SDL_DISABLE);
-    cursorTexture = SDLUtils::loadTexture("res/image/cursor.png");
+    cursorTexture = SDLUtils::loadTexture("res/image/crosshair.png");
     SDL_QueryTexture(cursorTexture, NULL, NULL, &cursorWidth, &cursorHeight);
 #endif
 }

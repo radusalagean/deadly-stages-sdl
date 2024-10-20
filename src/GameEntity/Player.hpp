@@ -5,6 +5,8 @@
 #include "../Core/Debouncer.hpp"
 #include "../Core/FloatAnimator.hpp"
 
+class Enemy;
+
 class Player : public GameEntity
 {
 public:
@@ -49,6 +51,16 @@ public:
     inline bool isJumping() { return jumpAnimator != nullptr; }
     void crushEnemiesIfNeeded(Level& level);
     void collectPickupIfNeeded(Level& level);
+
+    // Aim assist
+    #ifdef SUPPORTS_AIM_ASSIST
+    Enemy* targetEnemy = nullptr;
+    void assignTargetToNearestEnemy(Level& level, const int scanDirection);
+    void loseTargetIfNotVisible(Level& level);
+    void onTargetEnemyRemoved(Level& level);
+    bool pendingAimAssistScan = false;
+    float rotationSpeedDegreesPerSecond = 360.0f;
+    #endif
 };
 
 #endif // __SRC_GAMEENTITY_PLAYER_HPP__

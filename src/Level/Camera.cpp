@@ -77,3 +77,11 @@ void Camera::toggleZoom()
 {
     currentZoom = currentZoom == ZOOM_1_0 ? ZOOM_0_5 : ZOOM_1_0;
 }
+
+bool Camera::isTargetVisible(const Vector2D& targetPosition)
+{
+    float scaledTargetX = scale(targetPosition.x);
+    float scaledTargetY = scale(targetPosition.y);
+    return scaledTargetX >= position.x && scaledTargetX <= position.x + Game::width && 
+            scaledTargetY >= position.y && scaledTargetY <= position.y + Game::height;
+}

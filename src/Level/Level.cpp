@@ -74,6 +74,12 @@ void Level::load()
     camera.target = &player->positionPlusCenter; // The camera will follow the player
 
     onWeaponOrMagReceived(WeaponId::WEAPON_PISTOL);
+
+    #ifdef SUPPORTS_AIM_ASSIST
+    auto texturePair = texturePool.loadIfNeededAndGet("res/image/crosshair.png", false);
+    crosshairAimAssistTexture = texturePair.first;
+    SDL_QueryTexture(crosshairAimAssistTexture, NULL, NULL, &crosshairAimAssistWidth, &crosshairAimAssistHeight);
+    #endif
 }
 
 void Level::handleEvents()
@@ -164,6 +170,9 @@ void Level::update()
     spawnEnemiesIfNeeded();
     handleGameEntityPendingRemovals();
     bloodParticleManager.update();
+    #ifdef SUPPORTS_AIM_ASSIST
+    updateCrosshairAimAssistIfNeeded();
+    #endif
 }
 
 void Level::render()
@@ -193,6 +202,10 @@ void Level::render()
     bloodParticleManager.render(camera);
     
     player->draw(camera);
+
+    #ifdef SUPPORTS_AIM_ASSIST
+    drawCrosshairAimAssistIfNeeded();
+    #endif
 
     tileLayer.render(*this, TileLayer::RENDER_FLAG_COLLIDABLE_TILES);
     
@@ -357,6 +370,12 @@ void Level::handleGameEntityPendingRemovals()
     VectorUtils::removeFromVectorIf(enemies, [this](Enemy* enemy) {
         if (enemy->pendingRemoval)
         {
+            #ifdef SUPPORTS_AIM_ASSIST
+            if (player != nullptr && player->targetEnemy == enemy)
+            {
+                player->onTargetEnemyRemoved(*this);
+            }
+            #endif
             if (enemy->bounty > 0)
                 score += enemy->bounty;
             attemptToSpawnPickup(enemy->position);
@@ -428,3 +447,23 @@ void Level::collectPickup(Pickup* pickup)
     }
     pickup->pendingRemoval = true;
 }
+
+#ifdef SUPPORTS_AIM_ASSIST
+void Level::updateCrosshairAimAssistIfNeeded()
+{
+    if (player->targetEnemy == nullptr)
+        return;
+    Vector2D targetEnemyPositionCenter = player->targetEnemy->positionPlusCenter;
+    crosshairAimAssistDstRect.x = camera.scale(targetEnemyPositionCenter.x - crosshairAimAssistWidth / 2) - camera.position.x;
+    crosshairAimAssistDstRect.y = camera.scale(targetEnemyPositionCenter.y - crosshairAimAssistHeight / 2) - camera.position.y;
+    crosshairAimAssistDstRect.w = camera.scale(crosshairAimAssistWidth);
+    crosshairAimAssistDstRect.h = camera.scale(crosshairAimAssistHeight);
+}
+
+void Level::drawCrosshairAimAssistIfNeeded()
+{
+    if (player->targetEnemy == nullptr)
+        return;
+    SDL_RenderCopy(Game::renderer, crosshairAimAssistTexture, NULL, &crosshairAimAssistDstRect);
+}
+#endif
