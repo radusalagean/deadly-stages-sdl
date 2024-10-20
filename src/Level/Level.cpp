@@ -92,7 +92,7 @@ void Level::handleEvents()
     if (Game::control.isActionDown(CA_GAME_JUMP, &pressedActionData))
     {
         player->onJumpRequest();
-        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
+        Game::control.releaseAssociatedActionsAndHandleActionTriggerBlockedStatus(*pressedActionData);
     }
 
     // Fire
@@ -109,43 +109,47 @@ void Level::handleEvents()
     if (Game::control.isActionDown(CA_GAME_RELOAD, &pressedActionData))
     {
         currentPlayerWeapon->reloadIfPossible();
-        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
+        Game::control.releaseAssociatedActionsAndHandleActionTriggerBlockedStatus(*pressedActionData);
     }
 
     // Cycle weapon
+    int cycleWeaponOffset = 0;
     if (Game::control.isActionDown(CA_GAME_PREVIOUS_WEAPON, &pressedActionData))
     {
-        cycleWeapon(-1);
-        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
+        cycleWeaponOffset = -1;
     }
     else if (Game::control.isActionDown(CA_GAME_NEXT_WEAPON, &pressedActionData))
     {
-        cycleWeapon(1);
-        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
+        cycleWeaponOffset = 1;
+    }
+    if (cycleWeaponOffset != 0)
+    {
+        cycleWeapon(cycleWeaponOffset);
+        Game::control.releaseAssociatedActionsAndHandleActionTriggerBlockedStatus(*pressedActionData);
     }
 
     // Weapon manual selection
     if (Game::control.isActionDown(CA_GAME_WEAPON_SLOT_1, &pressedActionData))
     {
         selectWeaponId(0);
-        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
+        Game::control.releaseAssociatedActionsAndHandleActionTriggerBlockedStatus(*pressedActionData);
     }
     if (Game::control.isActionDown(CA_GAME_WEAPON_SLOT_2, &pressedActionData))
     {
         selectWeaponId(1);
-        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
+        Game::control.releaseAssociatedActionsAndHandleActionTriggerBlockedStatus(*pressedActionData);
     }
     if (Game::control.isActionDown(CA_GAME_WEAPON_SLOT_3, &pressedActionData))
     {
         selectWeaponId(2);
-        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
+        Game::control.releaseAssociatedActionsAndHandleActionTriggerBlockedStatus(*pressedActionData);
     }
 
     // Zoom
     if (Game::control.isActionDown(CA_GAME_ZOOM, &pressedActionData))
     {
         camera.toggleZoom();
-        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
+        Game::control.releaseAssociatedActionsAndHandleActionTriggerBlockedStatus(*pressedActionData);
     }
 }
 

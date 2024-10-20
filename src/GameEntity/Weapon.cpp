@@ -121,7 +121,7 @@ void Weapon::onFireRequest(const PressedActionData& pressedActionData, std::func
             spread = angleBetweenBullets * i - spreadAngle;
         }
         if (!automatic)
-            Game::control.releaseAssociatedActionsAndBlockActionTrigger(pressedActionData);
+            Game::control.releaseAssociatedActionsAndHandleActionTriggerBlockedStatus(pressedActionData);
         bulletCreationCallback(position, rotation + spread);
         Game::control.rumbleCurrentControllerIfActive({RUMBLE_TRIGGER, 0.0f, rumbleIntensity, rumbleDurationMs});
         ammoInCurrentMag--;

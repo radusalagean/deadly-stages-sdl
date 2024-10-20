@@ -62,7 +62,7 @@ void PauseOverlay::handleEvents()
     if (Game::control.isActionDown(CA_MENUS_BACK, &pressedActionData))
     {
         menuContinue();
-        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
+        Game::control.releaseAssociatedActionsAndHandleActionTriggerBlockedStatus(*pressedActionData);
     }
 }
 

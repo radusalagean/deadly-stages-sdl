@@ -155,7 +155,7 @@ void Control::releaseAction(const PressedActionData data)
     pressedActions.erase(data);
 }
 
-void Control::releaseAssociatedActionsAndBlockActionTrigger(const PressedActionData data)
+void Control::releaseAssociatedActionsAndHandleActionTriggerBlockedStatus(const PressedActionData data)
 {
     switch (data.trigger)
     {
@@ -172,7 +172,7 @@ void Control::releaseAssociatedActionsAndBlockActionTrigger(const PressedActionD
     case TRIGGER_MOUSE_WHEEL_MOTION:
         for (auto& associatedAction : mouseWheelMotionMap[data.pressedActionTriggerId])
             releaseAction({associatedAction, data.trigger, data.pressedActionTriggerId});
-        blockedMouseWheelMotion = true;
+        blockedMouseWheelMotion = false; // Mouse wheel motion is blocked when the action is triggered, and unblocked here
         break;
     case TRIGGER_CONTROLLER_BUTTON:
         for (auto& associatedAction : gameControllerMap[static_cast<SDL_GameControllerButton>(data.pressedActionTriggerId)])
@@ -277,6 +277,7 @@ void Control::onMouseWheelScroll(Sint32 y)
         triggerId = -1;
     for (auto& action : mouseWheelMotionMap[triggerId])
         performAndScheduleActionTriggerRelease({action, TRIGGER_MOUSE_WHEEL_MOTION, triggerId});
+    blockedMouseWheelMotion = true;
 }
 #pragma endregion
 

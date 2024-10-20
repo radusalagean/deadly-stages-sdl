@@ -214,7 +214,7 @@ public:
     bool isAnyActionDown(const std::vector<int>& actions);
     bool isActionUp(int action);
     void releaseAction(const PressedActionData data);
-    void releaseAssociatedActionsAndBlockActionTrigger(const PressedActionData data);
+    void releaseAssociatedActionsAndHandleActionTriggerBlockedStatus(const PressedActionData data);
     void unblockActionTrigger(const PressedActionData data);
     void performAndScheduleActionTriggerRelease(const PressedActionData data, Uint32 delayMs = 1000);
 

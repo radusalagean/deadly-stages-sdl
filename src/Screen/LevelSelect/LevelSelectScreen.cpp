@@ -74,7 +74,7 @@ void LevelSelectScreen::handleEvents()
     if (Game::control.isActionDown(CA_MENUS_SELECT, &pressedActionData))
     {
         levelPreviews[selectedIndex]->pick();
-        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
+        Game::control.releaseAssociatedActionsAndHandleActionTriggerBlockedStatus(*pressedActionData);
     }
 }
 

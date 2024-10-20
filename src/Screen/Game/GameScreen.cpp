@@ -56,7 +56,7 @@ void GameScreen::handleEvents()
     if (Game::control.isActionDown(CA_GAME_PAUSE, &pressedActionData))
     {
         paused = true;
-        Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
+        Game::control.releaseAssociatedActionsAndHandleActionTriggerBlockedStatus(*pressedActionData);
     }
 }
 
