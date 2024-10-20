@@ -2,7 +2,7 @@
 
 source "$(dirname "${BASH_SOURCE[0]}")/pre-run.sh"
 
-psp-cmake -DCMAKE_BUILD_TYPE=Debug -B build/psp-debug src/Platform/PSP
-echo $PROJECT_ROOT_DIR
+mkdir -p build/psp-debug/cmake-output
+psp-cmake -DCMAKE_BUILD_TYPE=Debug -B build/psp-debug/cmake-output src/Platform/PSP
 cd "$PROJECT_ROOT_DIR/build/psp-debug"
-make
+make -C cmake-output

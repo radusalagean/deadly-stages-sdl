@@ -122,7 +122,7 @@ void Player::handleEvents(Level& level)
         }
         else
         {
-            Game::control.releaseAssociatedActionsAndBlockActionTrigger(*pressedActionData);
+            Game::control.releaseAssociatedActionsAndHandleActionTriggerBlockedStatus(*pressedActionData);
         }
     }
     #else

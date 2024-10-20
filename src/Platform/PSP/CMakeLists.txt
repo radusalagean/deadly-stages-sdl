@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.22.1)
 project(DeadlyStagesRemix)
 
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/../..")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/..)
 
 # Find all .cpp files recursively in the base directory
 file(GLOB_RECURSE SOURCES "${SRC_DIR}/*.cpp")
@@ -34,11 +35,12 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     SDL2main SDL2_ttf SDL2 GL freetype png z pspvram pspdisplay pspvfpu pspgu pspge pspdebug psphprm pspctrl pspaudio harfbuzz bz2 SDL2_image jpeg png16
 )
 
-set(BUILD_PRX 1)
 create_pbp_file(
     TARGET ${PROJECT_NAME}
-    ICON_PATH NULL
-    BACKGROUND_PATH NULL
+    ICON_PATH ${CMAKE_SOURCE_DIR}/ICON0.PNG
+    BACKGROUND_PATH ${CMAKE_SOURCE_DIR}/PIC1.PNG
     PREVIEW_PATH NULL
-    TITLE ${PROJECT_NAME}
+    TITLE "Deadly Stages Remix"
+    BUILD_PRX 1
+    ENC_PRX 1
 )

@@ -35,9 +35,9 @@ Behavior:
         bash <(curl -s https://raw.githubusercontent.com/pspdev/pspdev/v20240901/prepare.sh)
         ```
         ```bash
-        sudo apt install make cmake
+        sudo apt install make cmake genisoimage
         ```
-    - Get the [`v20240901`](https://github.com/pspdev/pspdev/releases/tag/v20240901) `pspdev-ubuntu-latest-x86_64.tar.gz` archive from the releases page and extract it
+    - Get the [`v20241001`](https://github.com/pspdev/pspdev/releases/tag/v20241001) `pspdev-ubuntu-latest-x86_64.tar.gz` archive from the releases page and extract it
     - Move the `pspdev` directory to `~/pspdev`
     - Add in `~/.bashrc`:
         ```bash

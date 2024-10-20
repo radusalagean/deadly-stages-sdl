@@ -1,18 +1,17 @@
 {
     "version": "2.0.0",
     "tasks": [
-        // Setup
-        {
-            "label": "setup-env-debug",
-            "type": "shell",
-            "command": "${workspaceFolder:PSP}/scripts/setup-env-debug.sh",
-            "problemMatcher": []
-        },
         // Copy res
         {
             "label": "copy-res-debug",
             "type": "shell",
             "command": "${workspaceFolder:PSP}/scripts/copy-res-debug.sh",
+            "problemMatcher": []
+        },
+        {
+            "label": "copy-res-release",
+            "type": "shell",
+            "command": "${workspaceFolder:PSP}/scripts/copy-res-release.sh",
             "problemMatcher": []
         },
         // Compile
@@ -23,11 +22,24 @@
             "group": "build",
             "problemMatcher": []
         },
+        {
+            "label": "compile-release",
+            "type": "shell",
+            "command": "${workspaceFolder:PSP}/scripts/compile-release.sh",
+            "group": "build",
+            "problemMatcher": []
+        },
         // Clean
         {
             "label": "clean-debug",
             "type": "shell",
             "command": "${workspaceFolder:PSP}/scripts/clean-debug.sh",
+            "problemMatcher": []
+        },
+        {
+            "label": "clean-release",
+            "type": "shell",
+            "command": "${workspaceFolder:PSP}/scripts/clean-release.sh",
             "problemMatcher": []
         },
         // Debug
