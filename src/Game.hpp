@@ -9,6 +9,9 @@
 #include "Core/Options.hpp"
 #include "Core/FramerateIndicator.hpp"
 #include "Core/Config.hpp"
+#include <string>
+
+extern std::string resDirPathPrefix;
 
 class FontManager;
 class ScreenManager;

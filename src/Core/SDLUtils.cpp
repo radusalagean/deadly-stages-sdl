@@ -1,12 +1,15 @@
 #include "SDLUtils.hpp"
+
 #include "../Game.hpp"
+#include "Macros.hpp"
 
 SDL_Texture* SDLUtils::loadTexture(const std::string& path)
 {
-    SDL_Surface* surface = IMG_Load(path.c_str());
+    std::string fullPath = RPATH(path);
+    SDL_Surface* surface = IMG_Load(fullPath.c_str());
     if (surface == nullptr)
     {
-        logd("Failed to load image at path: %s", path.c_str());
+        logd("Failed to load image at path: %s", fullPath.c_str());
         logSDLe();
         return nullptr;
     }

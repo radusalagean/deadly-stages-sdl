@@ -19,9 +19,17 @@ ISO_VOLUME_NAME="DeadlyStagesRemixPSP"
 ISO_FILE_NAME="$ISO_VOLUME_NAME.iso"
 PLATFORM_IDENTIFIER="PSP GAME"
 PUBLISHER="Shadowz Games"
-mkisofs -U -xa -A "$PLATFORM_IDENTIFIER" -V "$ISO_VOLUME_NAME" \
+mkisofs -iso-level 4 -xa -A "$PLATFORM_IDENTIFIER" -V "$ISO_VOLUME_NAME" \
     -sysid "$PLATFORM_IDENTIFIER" -volset "" -publisher "$PUBLISHER" \
     -o "$ISO_FILE_NAME" ISO_ROOT
+
+# TODO: Remove if not needed
+# mkisofs -U -xa -A "$PLATFORM_IDENTIFIER" -V "$ISO_VOLUME_NAME" \
+#     -sysid "$PLATFORM_IDENTIFIER" -volset "" -p "" -publisher "$PUBLISHER" \
+#     -max-iso9660-filenames -relaxed-filenames -pad \
+#     -o "$ISO_FILE_NAME" ISO_ROOT
+
 echo "Created $ISO_FILE_NAME"
-find . -type f ! -name "DeadlyStagesRemixPSP.iso" -exec rm -rf {} \;
+find . -mindepth 1 ! -name "DeadlyStagesRemixPSP.iso" -type f -exec rm {} +
+find . -mindepth 1 -type d -empty -delete
 echo "Cleaned up intermediate build files"

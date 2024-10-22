@@ -3,13 +3,16 @@
 #include "Level.hpp"
 #include <sstream>
 #include "../GameEntity/Player.hpp"
+#include "../Core/Macros.hpp"
 
-#define LEVEL_PATH "res/level/"
+#define LEVEL_RELATIVE_PATH "res/level/"
+#define LEVEL_ABSOLUTE_PATH RPATH(LEVEL_RELATIVE_PATH)
+
 
 Level* LevelParser::parseLevel(std::string levelId)
 {
     tinyxml2::XMLDocument levelDocument;
-    levelDocument.LoadFile((LEVEL_PATH + levelId + "/map.tmx").c_str());
+    levelDocument.LoadFile((LEVEL_ABSOLUTE_PATH + levelId + "/map.tmx").c_str());
 
     Level* level = new Level(levelId);
     tinyxml2::XMLElement* root = levelDocument.RootElement();
@@ -37,7 +40,7 @@ Level* LevelParser::parseLevel(std::string levelId)
 
 void LevelParser::parseTileset(std::string levelId, const char* tilesetFile, std::map<int, Tile>& tileset)
 {
-    std::string tilesetPath = std::string(LEVEL_PATH) + levelId + "/" + tilesetFile;
+    std::string tilesetPath = std::string(LEVEL_ABSOLUTE_PATH) + levelId + "/" + tilesetFile;
     tinyxml2::XMLDocument tilesetDocument;
     tilesetDocument.LoadFile(tilesetPath.c_str());
     tinyxml2::XMLElement* tilesRoot = tilesetDocument.RootElement();
@@ -56,7 +59,7 @@ void LevelParser::parseTileset(std::string levelId, const char* tilesetFile, std
                 const char* value = tileSubElement->Value();
                 if (value == std::string("image"))
                 {
-                    path = LEVEL_PATH + levelId + "/" + tileSubElement->Attribute("source");
+                    path = LEVEL_RELATIVE_PATH + levelId + "/" + tileSubElement->Attribute("source");
                     width = tileSubElement->IntAttribute("width");
                     height = tileSubElement->IntAttribute("height");
                 }

@@ -32,7 +32,7 @@ Behavior:
 - Dev environmnent setup on Ubuntu Linux:
     - Install the required dependencies:
         ```bash
-        bash <(curl -s https://raw.githubusercontent.com/pspdev/pspdev/v20240901/prepare.sh)
+        bash <(curl -s https://raw.githubusercontent.com/pspdev/pspdev/v20241001/prepare.sh)
         ```
         ```bash
         sudo apt install make cmake genisoimage

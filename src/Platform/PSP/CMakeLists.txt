@@ -42,5 +42,4 @@ create_pbp_file(
     PREVIEW_PATH NULL
     TITLE "Deadly Stages Remix"
     BUILD_PRX 1
-    ENC_PRX 1
 )

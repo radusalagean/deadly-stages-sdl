@@ -1,5 +1,7 @@
 #include "../../Game.hpp"
 
+std::string resDirPathPrefix = "";
+
 // Reference: https://groups.csail.mit.edu/cag/raw/documents/R4400_Uman_book_Ed2.pdf (page 160 in book - 190 in PDF)
 void disableFPUExceptions() {
 
@@ -45,9 +47,25 @@ void disableFPUExceptions() {
     printf("\n");
 }
 
-int main(int argc, char *argv[])
+
+void setResDirPathPrefix(char* argv0) {
+    if (!argv0)
+        return;
+    resDirPathPrefix.clear();
+    std::string argv0Str(argv0);
+    std::transform(argv0Str.begin(), argv0Str.end(), argv0Str.begin(), ::toupper);
+    
+    if (argv0Str.find("/SYSDIR/") != std::string::npos) // We are in the context of a PSP ISO
+    {
+        resDirPathPrefix = "../USRDIR/";
+    }
+}
+
+int main(int argc, char* argv[])
 {
     disableFPUExceptions();
+    setResDirPathPrefix(argv[0]);
+
     Game::init();
     while (Game::isRunning)
     {
