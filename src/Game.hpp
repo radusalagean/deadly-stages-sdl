@@ -50,7 +50,6 @@ namespace Game
     void dispose();
 
     void syncRendererOutputSize();
-    void enforceMinimumAspectRatio();
 };
 
 #endif // __SRC_GAME_HPP__
