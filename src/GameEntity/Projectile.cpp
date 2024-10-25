@@ -1,25 +1,35 @@
-#include "Bullet.hpp"
+#include "Projectile.hpp"
 
 #include "../Game.hpp"
 #include "../Core/CollisionManager.hpp"
 #include "Enemy.hpp"
 
-Bullet::Bullet(Vector2D weaponPosition, float rotation, TexturePool& texturePool) : GameEntity()
+Projectile::Projectile(Vector2D weaponPosition, ProjectileType projectileType, int damage, float rotation, TexturePool& texturePool) : GameEntity()
 {
-    this->setSize(8, 16);
     this->setPosition(weaponPosition - this->center);
     this->setRotation(rotation);
-    this->texturePath = "res/game_entity/bullet.png";
+    switch (projectileType)
+    {
+        case ProjectileType::PROJECTILE_TYPE_9MM_BULLET:
+            this->setSize(8, 16);
+            this->texturePath = "res/game_entity/bullet.png";
+            break;
+
+        case ProjectileType::PROJECTILE_TYPE_00_BUCK_SHELL_PELLET:
+            this->setSize(8, 8);
+            this->texturePath = "res/game_entity/pellet.png";
+            break;
+    }
     this->load(texturePool);
-    this->damageAmount = 1;
+    this->damageAmount = damage;
 }
 
-Bullet::~Bullet()
+Projectile::~Projectile()
 {
 
 }
 
-void Bullet::update(Level& level)
+void Projectile::update(Level& level)
 {
     this->velocity = Vector2D(cos((rotation - 90) * M_PI / 180.0f), sin((rotation - 90) * M_PI / 180.0f)) * speedPxPerSecond * Game::latestLoopDeltaTimeSeconds;
     GameEntity* firstCollidedEntity = nullptr;
@@ -36,7 +46,7 @@ void Bullet::update(Level& level)
     GameEntity::update(level);
 }
 
-void Bullet::draw(Camera& camera)
+void Projectile::draw(Camera& camera)
 {
     GameEntity::draw(camera);
 }

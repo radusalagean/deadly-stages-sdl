@@ -9,8 +9,7 @@
 #include "../ScreenManager/ScreenManager.hpp"
 #include "../Core/PrimitiveShapeHelper.hpp"
 #include "../GameEntity/Player.hpp"
-#include "../GameEntity/Weapon.hpp"
-#include "../GameEntity/Bullet.hpp"
+#include "../GameEntity/Projectile.hpp"
 #include "../GameEntity/Enemy.hpp"
 #include "../GameEntity/BloodPool.hpp"
 #include "../GameEntity/Pickup.hpp"
@@ -36,11 +35,11 @@ Level::~Level()
         player = nullptr;
     }
 
-    for (auto& bullet : bullets)
+    for (auto& projectile : projectiles)
     {
-        delete bullet;
+        delete projectile;
     }
-    bullets.clear();
+    projectiles.clear();
 
     for (auto& enemy : enemies)
     {
@@ -98,10 +97,10 @@ void Level::handleEvents()
     // Fire
     if (Game::control.isActionDown(CA_GAME_FIRE, &pressedActionData))
     {
-        currentPlayerWeapon->onFireRequest(*pressedActionData, [this](const Vector2D& position, float rotation)
+        currentPlayerWeapon->onFireRequest(*pressedActionData, [this](const Vector2D& position, ProjectileType projectileType, int damage, float rotation)
         {
-            Bullet* bullet = new Bullet(position, rotation, texturePool);
-            bullets.push_back(bullet);
+            Projectile* projectile = new Projectile(position, projectileType, damage, rotation, texturePool);
+            projectiles.push_back(projectile);
         });
     }
 
@@ -131,17 +130,17 @@ void Level::handleEvents()
     // Weapon manual selection
     if (Game::control.isActionDown(CA_GAME_WEAPON_SLOT_1, &pressedActionData))
     {
-        selectWeaponId(0);
+        selectWeaponId(WeaponId::WEAPON_PISTOL);
         Game::control.releaseAssociatedActionsAndHandleActionTriggerBlockedStatus(*pressedActionData);
     }
     if (Game::control.isActionDown(CA_GAME_WEAPON_SLOT_2, &pressedActionData))
     {
-        selectWeaponId(1);
+        selectWeaponId(WeaponId::WEAPON_SHOTGUN);
         Game::control.releaseAssociatedActionsAndHandleActionTriggerBlockedStatus(*pressedActionData);
     }
     if (Game::control.isActionDown(CA_GAME_WEAPON_SLOT_3, &pressedActionData))
     {
-        selectWeaponId(2);
+        selectWeaponId(WeaponId::WEAPON_SMG);
         Game::control.releaseAssociatedActionsAndHandleActionTriggerBlockedStatus(*pressedActionData);
     }
 
@@ -158,9 +157,9 @@ void Level::update()
     player->update(*this);
     camera.update();
     currentPlayerWeapon->update(*this);
-    for (auto& bullet : bullets)
+    for (auto& projectile : projectiles)
     {
-        bullet->update(*this);
+        projectile->update(*this);
     }
     for (auto& enemy : enemies)
     {
@@ -193,9 +192,9 @@ void Level::render()
         pickup->draw(camera);
     }
 
-    for (auto& bullet : bullets)
+    for (auto& projectile : projectiles)
     {
-        bullet->draw(camera);
+        projectile->draw(camera);
     }
     
     for (auto& enemy : enemies)
@@ -228,7 +227,7 @@ SDL_Rect Level::buildTileRect(int column, int row) const
     return tileRect;
 }
 
-void Level::onWeaponOrMagReceived(int weaponId)
+void Level::onWeaponOrMagReceived(WeaponId weaponId)
 {
     auto found = std::find_if(playerWeapons.begin(), playerWeapons.end(), [weaponId](const Weapon* weapon) {
         return weapon->id == weaponId;
@@ -253,11 +252,11 @@ void Level::onWeaponOrMagReceived(int weaponId)
         currentPlayerWeapon = targetWeapon;
     }
 
-    if (!targetWeapon->hasInfiniteMags)
-        targetWeapon->availableMags += wave;
+    if (!targetWeapon->hasInfiniteAmmo)
+        targetWeapon->ammoInInventory += targetWeapon->ammoPerReloadCycle * wave;
 }
 
-void Level::selectWeaponId(int weaponId)
+void Level::selectWeaponId(WeaponId weaponId)
 {
     if (weaponId < 0 || weaponId >= WeaponId::WEAPON_ENUM_COUNT)
         return;
@@ -389,10 +388,10 @@ void Level::handleGameEntityPendingRemovals()
         return false;
     });
 
-    VectorUtils::removeFromVectorIf(bullets, [](Bullet* bullet) {
-        if (bullet->pendingRemoval)
+    VectorUtils::removeFromVectorIf(projectiles, [](Projectile* projectile) {
+        if (projectile->pendingRemoval)
         {
-            delete bullet;
+            delete projectile;
             return true;
         }
         return false;

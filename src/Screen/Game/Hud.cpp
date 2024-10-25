@@ -123,31 +123,31 @@ void Hud::layoutWeaponStats()
     { // Ammo in current mag
         float textHeight = weaponIconDrawable->dstRect.h * 0.5;
         int height = textHeight;
-        int width = height * ammoInCurrentMagTextDrawable->getAspectRatio();
+        int width = height * ammoInWeaponTextDrawable->getAspectRatio();
         int x = weaponIconDrawable->dstRect.x + weaponIconDrawable->dstRect.w + horizontalSpacing;
         int y = weaponIconDrawable->dstRect.y;
-        ammoInCurrentMagTextDrawable->layout(x, y, width, height);
+        ammoInWeaponTextDrawable->layout(x, y, width, height);
     }
-    // Available mags
-    layoutAvailableMagsText();
-    { // Infinite mags
-        infiniteMagsRect.h = availableMagsTextDrawable->dstRect.h;
-        infiniteMagsRect.w = 2.5 * infiniteMagsRect.h;
-        infiniteMagsRect.x = playerHudVisibleTopLeftXPadded - infiniteMagsRect.w;
-        infiniteMagsRect.y = availableMagsTextDrawable->dstRect.y;
-        infiniteMagsWidth = std::ceil(infiniteMagsRect.h * 0.1);
+    // Available ammo
+    layoutAvailableAmmoText();
+    { // Infinite ammo
+        infiniteAmmoRect.h = availableAmmoTextDrawable->dstRect.h;
+        infiniteAmmoRect.w = 2.5 * infiniteAmmoRect.h;
+        infiniteAmmoRect.x = playerHudVisibleTopLeftXPadded - infiniteAmmoRect.w;
+        infiniteAmmoRect.y = availableAmmoTextDrawable->dstRect.y;
+        infiniteAmmoWidth = std::ceil(infiniteAmmoRect.h * 0.1);
     }
 }
 
-void Hud::layoutAvailableMagsText()
+void Hud::layoutAvailableAmmoText()
 {
     float textHeight = weaponIconDrawable->dstRect.h * 0.5;
     int height = textHeight;
-    int width = height * availableMagsTextDrawable->getAspectRatio();
+    int width = height * availableAmmoTextDrawable->getAspectRatio();
     playerHudVisibleTopLeftXPadded = playerHudDrawable->dstRect.x + playerHudDrawable->dstRect.w * 0.3648 - playerHudPadding;
     int x = playerHudVisibleTopLeftXPadded - width;
     int y = weaponIconDrawable->dstRect.y + weaponIconDrawable->dstRect.h - height;
-    availableMagsTextDrawable->layout(x, y, width, height);
+    availableAmmoTextDrawable->layout(x, y, width, height);
 }
 
 void Hud::update()
@@ -182,9 +182,9 @@ void Hud::render()
         drawable->draw();
     }
     Game::primitiveShapeHelper.drawRect(staminaBarRect, Constants::COLOR_YELLOW_ACCENT);
-    if (level.currentPlayerWeapon->hasInfiniteMags)
+    if (level.currentPlayerWeapon->hasInfiniteAmmo)
     {
-        Game::primitiveShapeHelper.drawInfinitySymbol(infiniteMagsRect, Constants::COLOR_YELLOW_ACCENT, infiniteMagsWidth);
+        Game::primitiveShapeHelper.drawInfinitySymbol(infiniteAmmoRect, Constants::COLOR_YELLOW_ACCENT, infiniteAmmoWidth);
     }
 }
 
@@ -210,53 +210,53 @@ void Hud::refreshWeaponStats()
         weaponIconDrawable->load();
         drawables.push_back(weaponIconDrawable);
 
-        // Delete info about ammo in current mag
-        if (ammoInCurrentMagTextDrawable != nullptr)
+        // Delete info about ammo in weapon
+        if (ammoInWeaponTextDrawable != nullptr)
         {
-            drawables.erase(std::remove(drawables.begin(), drawables.end(), ammoInCurrentMagTextDrawable), drawables.end());
-            delete ammoInCurrentMagTextDrawable;
-            ammoInCurrentMagTextDrawable = nullptr;
-            lastProcessedAmmoInCurrentMag = -1;
+            drawables.erase(std::remove(drawables.begin(), drawables.end(), ammoInWeaponTextDrawable), drawables.end());
+            delete ammoInWeaponTextDrawable;
+            ammoInWeaponTextDrawable = nullptr;
+            lastProcessedAmmoInWeapon = -1;
         }
 
-        // Delete info about available mags
-        if (availableMagsTextDrawable != nullptr)
+        // Delete info about available ammo
+        if (availableAmmoTextDrawable != nullptr)
         {
-            drawables.erase(std::remove(drawables.begin(), drawables.end(), availableMagsTextDrawable), drawables.end());
-            delete availableMagsTextDrawable;
-            availableMagsTextDrawable = nullptr;
-            lastProcessedAvailableMags = -1;
+            drawables.erase(std::remove(drawables.begin(), drawables.end(), availableAmmoTextDrawable), drawables.end());
+            delete availableAmmoTextDrawable;
+            availableAmmoTextDrawable = nullptr;
+            lastProcessedAvailablAmmo = -1;
         }
     }
     
-    // Ammo in current mag
-    std::string ammoInCurrentMagString = std::to_string(level.currentPlayerWeapon->ammoInCurrentMag);
-    if (ammoInCurrentMagTextDrawable == nullptr)
+    // Ammo in weapon
+    std::string ammoInWeaponString = std::to_string(level.currentPlayerWeapon->ammoInWeapon);
+    if (ammoInWeaponTextDrawable == nullptr)
     {
-        ammoInCurrentMagTextDrawable = new TextDrawable(ammoInCurrentMagString);
-        ammoInCurrentMagTextDrawable->load();
-        drawables.push_back(ammoInCurrentMagTextDrawable);
+        ammoInWeaponTextDrawable = new TextDrawable(ammoInWeaponString);
+        ammoInWeaponTextDrawable->load();
+        drawables.push_back(ammoInWeaponTextDrawable);
     }
-    else if (lastProcessedAmmoInCurrentMag != level.currentPlayerWeapon->ammoInCurrentMag)
+    else if (lastProcessedAmmoInWeapon != level.currentPlayerWeapon->ammoInWeapon)
     {
-        ammoInCurrentMagTextDrawable->setText(ammoInCurrentMagString);
+        ammoInWeaponTextDrawable->setText(ammoInWeaponString);
     }
-    lastProcessedAmmoInCurrentMag = level.currentPlayerWeapon->ammoInCurrentMag;
+    lastProcessedAmmoInWeapon = level.currentPlayerWeapon->ammoInWeapon;
 
-    // Available mags
-    std::string availableMagsString = level.currentPlayerWeapon->hasInfiniteMags ? "" : std::to_string(level.currentPlayerWeapon->availableMags);
-    if (availableMagsTextDrawable == nullptr)
+    // Ammo in inventory
+    std::string ammoInInventoryString = level.currentPlayerWeapon->hasInfiniteAmmo ? "" : std::to_string(level.currentPlayerWeapon->ammoInInventory);
+    if (availableAmmoTextDrawable == nullptr)
     {
-        availableMagsTextDrawable = new TextDrawable(availableMagsString, Constants::COLOR_YELLOW_ACCENT, "PressStart2P.ttf");
-        availableMagsTextDrawable->load();
-        drawables.push_back(availableMagsTextDrawable);
+        availableAmmoTextDrawable = new TextDrawable(ammoInInventoryString, Constants::COLOR_YELLOW_ACCENT, "PressStart2P.ttf");
+        availableAmmoTextDrawable->load();
+        drawables.push_back(availableAmmoTextDrawable);
     }
-    else if (lastProcessedAvailableMags != level.currentPlayerWeapon->availableMags)
+    else if (lastProcessedAvailablAmmo != level.currentPlayerWeapon->ammoInInventory)
     {
-        availableMagsTextDrawable->setText(availableMagsString);
-        layoutAvailableMagsText();
+        availableAmmoTextDrawable->setText(ammoInInventoryString);
+        layoutAvailableAmmoText();
     }
-    lastProcessedAvailableMags = level.currentPlayerWeapon->availableMags;
+    lastProcessedAvailablAmmo = level.currentPlayerWeapon->ammoInInventory;
 
     // Update last processed weapon id
     lastProcessedWeaponId = level.currentPlayerWeapon->id;

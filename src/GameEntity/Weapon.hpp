@@ -17,17 +17,34 @@ enum WeaponId
     WEAPON_ENUM_COUNT
 };
 
+enum AmmoType // What gets loaded in the weapon // TODO Remove if not needed
+{
+    AMMO_TYPE_UNDEFINED = -1,
+    AMMO_TYPE_9MM_BULLET,
+    AMMO_TYPE_00_BUCK_SHELL
+};
+
+enum ProjectileType // What gets fired from the weapon
+{
+    PROJECTILE_TYPE_UNDEFINED = -1,
+    PROJECTILE_TYPE_9MM_BULLET,
+    PROJECTILE_TYPE_00_BUCK_SHELL_PELLET
+};
+
 struct WeaponConfig
 {
-    int id = WeaponId::WEAPON_UNDEFINED;
-    int damagePerBullet = 0;
-    int bulletsPerMag = 0;
-    bool hasInfiniteMags = false;
+    WeaponId id = WeaponId::WEAPON_UNDEFINED;
+    AmmoType ammoType = AMMO_TYPE_UNDEFINED;
+    ProjectileType projectileType = PROJECTILE_TYPE_UNDEFINED;
+    int damagePerProjectile = 0;
+    int maxAmmoCapacity = 0;
+    bool hasInfiniteAmmo = false;
     int fireRateDelayMillis = 0;
     int reloadTimeMillis = 0;
     bool automatic = false;
-    int bulletsPerShot = 0;
+    int projectilesPerShot = 0;
     int spreadAngle = 0;
+    int ammoPerReloadCycle = 0;
     std::string textureFileName = "";
     float rumbleIntensity = 0.0f;
     Uint32 rumbleDurationMs = 0;
@@ -37,8 +54,8 @@ class Weapon : public GameEntity
 {
 public:
     static const std::map<int, WeaponConfig> weaponConfigs;
-    static WeaponConfig createWeaponConfig(int id);
-    static Weapon* createWeapon(int id, TexturePool& texturePool);
+    static WeaponConfig createWeaponConfig(WeaponId id);
+    static Weapon* createWeapon(WeaponId id, TexturePool& texturePool);
 
     Weapon(WeaponConfig config, TexturePool& texturePool);
     ~Weapon();
@@ -46,26 +63,30 @@ public:
     void update(Level& level);
 
     // Config
-    int id;
-    int damagePerBullet;
-    int bulletsPerMag;
-    bool hasInfiniteMags;
+    WeaponId id;
+    AmmoType ammoType;
+    ProjectileType projectileType;
+    int damagePerProjectile;
+    int maxAmmoCapacity;
+    bool hasInfiniteAmmo;
     int fireRateDelayMillis;
     int reloadTimeMillis;
     bool automatic;
-    int bulletsPerShot;
+    int projectilesPerShot;
     int spreadAngle;
+    int ammoPerReloadCycle;
     float rumbleIntensity;
     Uint32 rumbleDurationMs;
-    float angleBetweenBullets = 0;
+    float angleBetweenProjectiles = 0;
 
     // Fire & Reload
     Debouncer fireDebouncer = Debouncer(fireRateDelayMillis);
-    void onFireRequest(const PressedActionData& pressedActionData, std::function<void(const Vector2D&, float)> bulletCreationCallback);
+    void onFireRequest(const PressedActionData& pressedActionData, 
+        std::function<void(const Vector2D&, ProjectileType, int, float)> projectileCreationCallback);
     float reloadProgress = 0.0f;
     FloatAnimator* reloadAnimator = nullptr;
-    int availableMags = 0;
-    int ammoInCurrentMag = 0;
+    int ammoInInventory = 0;
+    int ammoInWeapon = 0;
     bool isOutOfAmmo();
     void autoReloadIfNeeded();
     void reloadIfPossible();

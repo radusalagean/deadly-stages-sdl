@@ -45,16 +45,16 @@ private:
 
     int lastProcessedWeaponId = WeaponId::WEAPON_UNDEFINED;
     ImageDrawable* weaponIconDrawable = nullptr;
-    TextDrawable* ammoInCurrentMagTextDrawable = nullptr;
-    int lastProcessedAmmoInCurrentMag = -1;
-    TextDrawable* availableMagsTextDrawable = nullptr;
-    int lastProcessedAvailableMags = -1;
+    TextDrawable* ammoInWeaponTextDrawable = nullptr;
+    int lastProcessedAmmoInWeapon = -1;
+    TextDrawable* availableAmmoTextDrawable = nullptr;
+    int lastProcessedAvailablAmmo = -1;
     void layoutWeaponStats();
-    void layoutAvailableMagsText();
+    void layoutAvailableAmmoText();
 
     SDL_Rect staminaBarRect;
-    SDL_Rect infiniteMagsRect;
-    int infiniteMagsWidth = 0;
+    SDL_Rect infiniteAmmoRect;
+    int infiniteAmmoWidth = 0;
 
     std::string buildScoreText();
     std::string buildWaveText();

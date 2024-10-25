@@ -6,7 +6,7 @@
 #include "../Core/PrimitiveShapeHelper.hpp"
 #include "../GameEntity/Enemy.hpp"
 #include "../GameEntity/Player.hpp"
-#include "../GameEntity/Bullet.hpp"
+#include "../GameEntity/Projectile.hpp"
 #include <sstream>
 #include <algorithm>
 #include <functional>
@@ -235,7 +235,7 @@ namespace CollisionManager
         float tHitFar = 0;
         std::vector<CollisionInfo> collisions;
 
-        bool isSubjectEntityBullet = dynamic_cast<Bullet*>(&subjectEntity);
+        bool isSubjectEntityProjectile = dynamic_cast<Projectile*>(&subjectEntity);
 
         SDL_Rect& subjectBoundsRect = subjectEntity.positionPlusCollisionRect;
         SDL_Rect proposedRect = 
@@ -320,7 +320,7 @@ namespace CollisionManager
                 if (&subjectEntity == enemy)
                     continue;
                 SDL_Rect& enemyRect = enemy->positionPlusCollisionRect;
-                if (isSubjectEntityBullet)
+                if (isSubjectEntityProjectile)
                 {
                     float contactTime = 0.0f;
                     if (sweptRectangleVsLine(subjectBoundsRect, proposedRect, enemy->positionPlusCollisionLine, intersectionPoint, contactTime))
@@ -356,7 +356,7 @@ namespace CollisionManager
             {
                 *firstCollidedEntity = collision.collidedEntity;
             }
-            if (isSubjectEntityBullet)
+            if (isSubjectEntityProjectile)
             {
                 subjectEntity.pendingRemoval = true;
                 proposedVelocity.reset();

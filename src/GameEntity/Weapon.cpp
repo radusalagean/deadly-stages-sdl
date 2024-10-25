@@ -6,47 +6,56 @@
 #include "../Game.hpp"
 #include "../Core/TexturePool.hpp"
 
-WeaponConfig Weapon::createWeaponConfig(int id)
+WeaponConfig Weapon::createWeaponConfig(WeaponId id)
 {
     WeaponConfig cfg;
     cfg.id = id;
     switch (id)
     {
         case WeaponId::WEAPON_PISTOL:
-            cfg.damagePerBullet = 1;
-            cfg.bulletsPerMag = 8;
-            cfg.hasInfiniteMags = true;
+            cfg.ammoType = AmmoType::AMMO_TYPE_9MM_BULLET;
+            cfg.projectileType = ProjectileType::PROJECTILE_TYPE_9MM_BULLET;
+            cfg.damagePerProjectile = 1;
+            cfg.maxAmmoCapacity = 8;
+            cfg.hasInfiniteAmmo = true;
             cfg.fireRateDelayMillis = 50;
             cfg.reloadTimeMillis = 2000;
             cfg.automatic = false;
-            cfg.bulletsPerShot = 1;
+            cfg.projectilesPerShot = 1;
             cfg.spreadAngle = 0;
+            cfg.ammoPerReloadCycle = cfg.maxAmmoCapacity; // A full mag is loaded per reload cycle
             cfg.textureFileName = "pickup_pistol.png";
             cfg.rumbleIntensity = 0.4f;
             cfg.rumbleDurationMs = 64;
             break;
         case WeaponId::WEAPON_SHOTGUN:
-            cfg.damagePerBullet = 3;
-            cfg.bulletsPerMag = 3;
-            cfg.hasInfiniteMags = false;
-            cfg.fireRateDelayMillis = 0;
-            cfg.reloadTimeMillis = 3000;
+            cfg.ammoType = AmmoType::AMMO_TYPE_00_BUCK_SHELL;
+            cfg.projectileType = ProjectileType::PROJECTILE_TYPE_00_BUCK_SHELL_PELLET;
+            cfg.damagePerProjectile = 1;
+            cfg.maxAmmoCapacity = 5;
+            cfg.hasInfiniteAmmo = false;
+            cfg.fireRateDelayMillis = 640;
+            cfg.reloadTimeMillis = 800;
             cfg.automatic = false;
-            cfg.bulletsPerShot = 3;
+            cfg.projectilesPerShot = 9; // A 00 Buck shotgun shell fires 9 pellets (I looked it up on YouTube)
             cfg.spreadAngle = 15;
+            cfg.ammoPerReloadCycle = 1; // A single shell is loaded per reload cycle
             cfg.textureFileName = "pickup_shotgun.png";
             cfg.rumbleIntensity = 0.8f;
             cfg.rumbleDurationMs = 128;
             break;
         case WeaponId::WEAPON_SMG:
-            cfg.damagePerBullet = 1;
-            cfg.bulletsPerMag = 30;
-            cfg.hasInfiniteMags = false;
+            cfg.ammoType = AmmoType::AMMO_TYPE_9MM_BULLET;
+            cfg.projectileType = ProjectileType::PROJECTILE_TYPE_9MM_BULLET;
+            cfg.damagePerProjectile = 1;
+            cfg.maxAmmoCapacity = 30;
+            cfg.hasInfiniteAmmo = false;
             cfg.fireRateDelayMillis = 50;
             cfg.reloadTimeMillis = 2000;
             cfg.automatic = true;
-            cfg.bulletsPerShot = 1;
+            cfg.projectilesPerShot = 1;
             cfg.spreadAngle = 0;
+            cfg.ammoPerReloadCycle = cfg.maxAmmoCapacity; // A full mag is loaded per reload cycle
             cfg.textureFileName = "pickup_smg.png";
             cfg.rumbleIntensity = 0.4f;
             cfg.rumbleDurationMs = 96;
@@ -64,20 +73,23 @@ const std::map<int, WeaponConfig> Weapon::weaponConfigs =
 
 Weapon::Weapon(WeaponConfig config, TexturePool& texturePool) : GameEntity(),
     id(config.id), 
-    damagePerBullet(config.damagePerBullet), 
-    bulletsPerMag(config.bulletsPerMag),
-    hasInfiniteMags(config.hasInfiniteMags),
+    ammoType(config.ammoType),
+    projectileType(config.projectileType),
+    damagePerProjectile(config.damagePerProjectile), 
+    maxAmmoCapacity(config.maxAmmoCapacity),
+    hasInfiniteAmmo(config.hasInfiniteAmmo),
     fireRateDelayMillis(config.fireRateDelayMillis),
     reloadTimeMillis(config.reloadTimeMillis),
     automatic(config.automatic),
-    bulletsPerShot(config.bulletsPerShot),
+    projectilesPerShot(config.projectilesPerShot),
     spreadAngle(config.spreadAngle),
+    ammoPerReloadCycle(config.ammoPerReloadCycle),
     rumbleIntensity(config.rumbleIntensity),
     rumbleDurationMs(config.rumbleDurationMs)
 {
-    if (bulletsPerShot > 1 && spreadAngle > 0)
-        angleBetweenBullets = (2 * spreadAngle) / (bulletsPerShot - 1);
-    texturePath = "res/image/" + config.textureFileName;
+    if (projectilesPerShot > 1 && spreadAngle > 0)
+        angleBetweenProjectiles = (2 * spreadAngle) / (projectilesPerShot - 1);
+    texturePath = "res/game_entity/" + config.textureFileName;
     load(texturePool);
 }
 
@@ -102,33 +114,31 @@ void Weapon::update(Level& level)
     updateReloadState();
 }
 
-void Weapon::onFireRequest(const PressedActionData& pressedActionData, std::function<void(const Vector2D&, float)> bulletCreationCallback)
+void Weapon::onFireRequest(const PressedActionData& pressedActionData, 
+    std::function<void(const Vector2D&, ProjectileType, int, float)> projectileCreationCallback)
 {
     if (isReloading())
         return;
-    if (ammoInCurrentMag == 0)
+    if (ammoInWeapon == 0)
         return;
     if (!fireDebouncer.canPerformAction())
         return;
-
-    for (int i = 0; i < bulletsPerShot; i++)
+    for (int i = 0; i < projectilesPerShot; i++)
     {
-        if (ammoInCurrentMag == 0)
-            break;
         float spread = 0.0f;
-        if (spreadAngle > 0 && bulletsPerShot > 1)
+        if (spreadAngle > 0 && projectilesPerShot > 1)
         {
-            spread = angleBetweenBullets * i - spreadAngle;
+            spread = angleBetweenProjectiles * i - spreadAngle;
         }
         if (!automatic)
             Game::control.releaseAssociatedActionsAndHandleActionTriggerBlockedStatus(pressedActionData);
-        bulletCreationCallback(position, rotation + spread);
-        Game::control.rumbleCurrentControllerIfActive({RUMBLE_TRIGGER, 0.0f, rumbleIntensity, rumbleDurationMs});
-        ammoInCurrentMag--;
+        projectileCreationCallback(position, projectileType, damagePerProjectile, rotation + spread);
     }
+    ammoInWeapon--;
+    Game::control.rumbleCurrentControllerIfActive({RUMBLE_TRIGGER, 0.0f, rumbleIntensity, rumbleDurationMs});
 }
 
-Weapon* Weapon::createWeapon(int id, TexturePool& texturePool)
+Weapon* Weapon::createWeapon(WeaponId id, TexturePool& texturePool)
 {
     auto config = weaponConfigs.find(id);
     if (config == weaponConfigs.end())
@@ -138,21 +148,21 @@ Weapon* Weapon::createWeapon(int id, TexturePool& texturePool)
 
 bool Weapon::isOutOfAmmo()
 {
-    return ammoInCurrentMag == 0 && availableMags == 0 && !hasInfiniteMags;
+    return ammoInWeapon == 0 && ammoInInventory == 0 && !hasInfiniteAmmo;
 }
 
 void Weapon::autoReloadIfNeeded()
 {
-    if (ammoInCurrentMag == 0)
+    if (ammoInWeapon == 0)
         reloadIfPossible();
 }
 
 void Weapon::reloadIfPossible()
 {
-    if (ammoInCurrentMag == bulletsPerMag || isReloading() || Game::control.isActionDown(CA_GAME_FIRE))
+    if (ammoInWeapon == maxAmmoCapacity || isReloading() || Game::control.isActionDown(CA_GAME_FIRE))
         return;
-    bool hasAvailableMags = hasInfiniteMags || availableMags > 0;
-    if (!hasAvailableMags)
+    bool hasAvailableAmmo = hasInfiniteAmmo || ammoInInventory >= ammoPerReloadCycle;
+    if (!hasAvailableAmmo)
         return;
 
     reloadAnimator = new FloatAnimator(reloadProgress, 1.0f, reloadTimeMillis);
@@ -168,8 +178,12 @@ void Weapon::updateReloadState()
         delete reloadAnimator;
         reloadAnimator = nullptr;
         reloadProgress = 0.0f;
-        ammoInCurrentMag = bulletsPerMag;
-        availableMags--;
+        ammoInWeapon = std::min(ammoInWeapon + ammoPerReloadCycle, maxAmmoCapacity);
+        ammoInInventory -= ammoPerReloadCycle;
+        if (ammoInWeapon < maxAmmoCapacity)
+        {
+            reloadIfPossible();
+        }
     }
 }
 

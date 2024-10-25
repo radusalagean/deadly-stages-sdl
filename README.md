@@ -19,7 +19,7 @@ Behavior:
 	- Enemies slow down as they get hurt
 	- Enemy bounty is raised as you complete waves
 	- More realistic weapon behavior
-		- Ammo is split into mags
+		- Shotguns fire pellets
 		- Reload mechanism
 		- Each shot requires a re-press of the "fire" action for semi-automatic weapons
 	- Player starts receiving damage from an enemy only after being in continuous contact for 300ms

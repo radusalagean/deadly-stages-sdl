@@ -9,10 +9,11 @@
 #include "../BloodParticle/BloodParticleManager.hpp"
 #include "../Core/Config.hpp"
 #include "TileLayer.hpp"
+#include "../GameEntity/Weapon.hpp"
 
 class Player;
 class Weapon;
-class Bullet;
+class Projectile;
 class Enemy;
 class BloodPool;
 class Pickup;
@@ -38,7 +39,7 @@ public:
     Camera camera;
     std::vector<Weapon*> playerWeapons{};
     Weapon* currentPlayerWeapon = nullptr;
-    std::vector<Bullet*> bullets{};
+    std::vector<Projectile*> projectiles{};
     std::vector<Enemy*> enemies{};
     std::vector<BloodPool*> bloodPools;
     std::vector<Pickup*> pickups{};
@@ -63,8 +64,8 @@ public:
 
     SDL_Rect buildTileRect(int x, int y) const;
 
-    void onWeaponOrMagReceived(int weaponId);
-    void selectWeaponId(int weaponId);
+    void onWeaponOrMagReceived(WeaponId weaponId);
+    void selectWeaponId(WeaponId weaponId);
     void cycleWeapon(int offset);
 
     #ifdef DEBUG_DRAW_COLLISION_RECTS

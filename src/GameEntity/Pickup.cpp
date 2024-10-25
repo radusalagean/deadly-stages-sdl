@@ -7,13 +7,13 @@ Pickup::Pickup(int id, Vector2D position, TexturePool& texturePool) : GameEntity
     switch (id)
     {
         case PICKUP_HEALTH:
-            texturePath = "res/image/pickup_hp.png";
+            texturePath = "res/game_entity/pickup_hp.png";
             break;
         case PICKUP_SHOTGUN:
-            texturePath = "res/image/pickup_shotgun.png";
+            texturePath = "res/game_entity/pickup_shotgun.png";
             break;
         case PICKUP_SMG:
-            texturePath = "res/image/pickup_smg.png";
+            texturePath = "res/game_entity/pickup_smg.png";
             break;
 
         default:
