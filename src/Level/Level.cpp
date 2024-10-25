@@ -13,6 +13,7 @@
 #include "../GameEntity/Enemy.hpp"
 #include "../GameEntity/BloodPool.hpp"
 #include "../GameEntity/Pickup.hpp"
+#include "../Core/AudioManager.hpp"
 
 Level::Level(std::string id)
 {
@@ -62,6 +63,7 @@ Level::~Level()
 
 void Level::load()
 {
+    loadAudio();
     for (auto& [id, tile] : tileset) 
     {
         tile.load();
@@ -449,6 +451,7 @@ void Level::collectPickup(Pickup* pickup)
         break;
     }
     pickup->pendingRemoval = true;
+    Game::audioManager.playSound(AudioSFXId::PICKUP);
 }
 
 #ifdef SUPPORTS_AIM_ASSIST
@@ -470,3 +473,37 @@ void Level::drawCrosshairAimAssistIfNeeded()
     SDL_RenderCopy(Game::renderer, crosshairAimAssistTexture, NULL, &crosshairAimAssistDstRect);
 }
 #endif
+
+void Level::loadAudio() 
+{
+    std::vector<AudioSFXId> levelSounds = 
+    {
+        // Pistol
+        AudioSFXId::PISTOL_FIRE,
+        AudioSFXId::PISTOL_DRY_FIRE,
+        AudioSFXId::PISTOL_RELOAD,
+        // Shotgun
+        AudioSFXId::SHOTGUN_FIRE,
+        AudioSFXId::SHOTGUN_DRY_FIRE,
+        AudioSFXId::SHOTGUN_PUMP,
+        AudioSFXId::SHOTGUN_RELOAD,
+        // SMG
+        AudioSFXId::SMG_FIRE,
+        AudioSFXId::SMG_DRY_FIRE,
+        AudioSFXId::SMG_RELOAD,
+        // Mobs
+        AudioSFXId::JUMP,
+        AudioSFXId::LAND_FROM_JUMP,
+        AudioSFXId::CRUSH,
+        // Pickup
+        AudioSFXId::PICKUP
+    };
+
+    std::vector<AudioMusicId> levelMusic = 
+    {
+        
+    };
+
+    Game::audioManager.loadSoundList(levelSounds);
+    Game::audioManager.loadMusicList(levelMusic);
+}

@@ -190,6 +190,7 @@ void Player::onJumpRequest()
     stamina -= jumpStaminaCost;
     lastStaminaDecreaseTime = std::chrono::steady_clock::now();
     jumpAnimator = new FloatAnimator(dstRectScale, maxDstRectScale, jumpDurationMs);
+    Game::audioManager.playSound(AudioSFXId::JUMP);
 }
 
 void Player::updateJumpState(Level& level)
@@ -203,6 +204,7 @@ void Player::updateJumpState(Level& level)
         jumpAnimator = nullptr;
         dstRectScale = 1.0f;
         level.camera.startShake(300, 2.0f);
+        Game::audioManager.playSound(AudioSFXId::LAND_FROM_JUMP);
     }
 }
 
@@ -215,6 +217,7 @@ void Player::crushEnemiesIfNeeded(Level& level)
         if (CollisionManager::rectVsRect(positionPlusCollisionRect, enemy->positionPlusCollisionRect))
         {
             enemy->crush(level);
+            Game::audioManager.playSound(AudioSFXId::CRUSH);
         }
     }
 }

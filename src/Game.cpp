@@ -23,6 +23,7 @@ namespace Game
     ScreenManager screenManager;
     PrimitiveShapeHelper primitiveShapeHelper;
     Options options;
+    AudioManager audioManager;
     FramerateIndicator framerateIndicator;
 
     float latestLoopDeltaTimeMs = 0;
@@ -60,6 +61,7 @@ namespace Game
 
         screenManager.init();
         framerateIndicator.init();
+        audioManager.init();
     }
 
     void loop()
@@ -117,6 +119,7 @@ namespace Game
 
     void dispose()
     {
+        audioManager.dispose();
         control.dispose();
     }
 

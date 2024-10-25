@@ -1,6 +1,8 @@
 #ifndef __SRC_CORE_CONSTANTS_HPP__
 #define __SRC_CORE_CONSTANTS_HPP__
 
+#include <SDL.h>
+
 namespace Constants
 {
     const std::string VERSION = "1.0.0-dev";

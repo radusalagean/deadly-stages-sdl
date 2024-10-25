@@ -5,6 +5,7 @@
 #include "../Control/Control.hpp"
 #include "../Game.hpp"
 #include "../Core/TexturePool.hpp"
+#include "../Core/AudioManager.hpp"
 
 WeaponConfig Weapon::createWeaponConfig(WeaponId id)
 {
@@ -19,7 +20,7 @@ WeaponConfig Weapon::createWeaponConfig(WeaponId id)
             cfg.maxAmmoCapacity = 8;
             cfg.hasInfiniteAmmo = true;
             cfg.fireRateDelayMillis = 50;
-            cfg.reloadTimeMillis = 2000;
+            cfg.reloadTimeMillis = 1739;
             cfg.automatic = false;
             cfg.projectilesPerShot = 1;
             cfg.spreadAngle = 0;
@@ -27,6 +28,8 @@ WeaponConfig Weapon::createWeaponConfig(WeaponId id)
             cfg.textureFileName = "pickup_pistol.png";
             cfg.rumbleIntensity = 0.4f;
             cfg.rumbleDurationMs = 64;
+            cfg.chamberNeedsManualFill = false;
+            cfg.chamberManualFillPostFireDelayMillis = 0;
             break;
         case WeaponId::WEAPON_SHOTGUN:
             cfg.ammoType = AmmoType::AMMO_TYPE_00_BUCK_SHELL;
@@ -34,8 +37,8 @@ WeaponConfig Weapon::createWeaponConfig(WeaponId id)
             cfg.damagePerProjectile = 1;
             cfg.maxAmmoCapacity = 5;
             cfg.hasInfiniteAmmo = false;
-            cfg.fireRateDelayMillis = 640;
-            cfg.reloadTimeMillis = 800;
+            cfg.fireRateDelayMillis = 859;
+            cfg.reloadTimeMillis = 300;
             cfg.automatic = false;
             cfg.projectilesPerShot = 9; // A 00 Buck shotgun shell fires 9 pellets (I looked it up on YouTube)
             cfg.spreadAngle = 15;
@@ -43,6 +46,8 @@ WeaponConfig Weapon::createWeaponConfig(WeaponId id)
             cfg.textureFileName = "pickup_shotgun.png";
             cfg.rumbleIntensity = 0.8f;
             cfg.rumbleDurationMs = 128;
+            cfg.chamberNeedsManualFill = true;
+            cfg.chamberManualFillPostFireDelayMillis = 150;
             break;
         case WeaponId::WEAPON_SMG:
             cfg.ammoType = AmmoType::AMMO_TYPE_9MM_BULLET;
@@ -51,7 +56,7 @@ WeaponConfig Weapon::createWeaponConfig(WeaponId id)
             cfg.maxAmmoCapacity = 30;
             cfg.hasInfiniteAmmo = false;
             cfg.fireRateDelayMillis = 50;
-            cfg.reloadTimeMillis = 2000;
+            cfg.reloadTimeMillis = 1740;
             cfg.automatic = true;
             cfg.projectilesPerShot = 1;
             cfg.spreadAngle = 0;
@@ -59,6 +64,12 @@ WeaponConfig Weapon::createWeaponConfig(WeaponId id)
             cfg.textureFileName = "pickup_smg.png";
             cfg.rumbleIntensity = 0.4f;
             cfg.rumbleDurationMs = 96;
+            cfg.chamberNeedsManualFill = false;
+            cfg.chamberManualFillPostFireDelayMillis = 0;
+            break;
+            
+        default:
+            logd("Unknown weapon id: %d", id);
             break;
     }
     return cfg;
@@ -85,7 +96,9 @@ Weapon::Weapon(WeaponConfig config, TexturePool& texturePool) : GameEntity(),
     spreadAngle(config.spreadAngle),
     ammoPerReloadCycle(config.ammoPerReloadCycle),
     rumbleIntensity(config.rumbleIntensity),
-    rumbleDurationMs(config.rumbleDurationMs)
+    rumbleDurationMs(config.rumbleDurationMs),
+    chamberNeedsManualFill(config.chamberNeedsManualFill),
+    chamberManualFillPostFireDelayMillis(config.chamberManualFillPostFireDelayMillis)
 {
     if (projectilesPerShot > 1 && spreadAngle > 0)
         angleBetweenProjectiles = (2 * spreadAngle) / (projectilesPerShot - 1);
@@ -112,6 +125,7 @@ void Weapon::update(Level& level)
 
     autoReloadIfNeeded();
     updateReloadState();
+    fillChamberIfNeeded();
 }
 
 void Weapon::onFireRequest(const PressedActionData& pressedActionData, 
@@ -119,9 +133,30 @@ void Weapon::onFireRequest(const PressedActionData& pressedActionData,
 {
     if (isReloading())
         return;
-    if (ammoInWeapon == 0)
-        return;
     if (!fireDebouncer.canPerformAction())
+        return;
+    if (ammoInWeapon == 0)
+    {
+        switch (id)
+        {
+        case WeaponId::WEAPON_PISTOL:
+            Game::audioManager.playSound(AudioSFXId::PISTOL_DRY_FIRE);
+            break;
+
+        case WeaponId::WEAPON_SHOTGUN:
+            Game::audioManager.playSound(AudioSFXId::SHOTGUN_DRY_FIRE);
+            break;
+
+        case WeaponId::WEAPON_SMG:
+            Game::audioManager.playSound(AudioSFXId::SMG_DRY_FIRE);
+            break;
+
+        default:
+            break;
+        }
+        return;
+    }
+    if (chamberNeedsManualFill && !chamberFilledManually)
         return;
     for (int i = 0; i < projectilesPerShot; i++)
     {
@@ -136,6 +171,25 @@ void Weapon::onFireRequest(const PressedActionData& pressedActionData,
     }
     ammoInWeapon--;
     Game::control.rumbleCurrentControllerIfActive({RUMBLE_TRIGGER, 0.0f, rumbleIntensity, rumbleDurationMs});
+    lastFireTime = std::chrono::steady_clock::now();
+    chamberFilledManually = false;
+    switch (id)
+    {
+    case WeaponId::WEAPON_PISTOL:
+        Game::audioManager.playSound(AudioSFXId::PISTOL_FIRE);
+        break;
+
+    case WeaponId::WEAPON_SHOTGUN:
+        Game::audioManager.playSound(AudioSFXId::SHOTGUN_FIRE);
+        break;
+
+    case WeaponId::WEAPON_SMG:
+        Game::audioManager.playSound(AudioSFXId::SMG_FIRE);
+        break;
+
+    default:
+        break;
+    }
 }
 
 Weapon* Weapon::createWeapon(WeaponId id, TexturePool& texturePool)
@@ -166,6 +220,23 @@ void Weapon::reloadIfPossible()
         return;
 
     reloadAnimator = new FloatAnimator(reloadProgress, 1.0f, reloadTimeMillis);
+    switch (id)
+    {
+    case WeaponId::WEAPON_PISTOL:
+        Game::audioManager.playSound(AudioSFXId::PISTOL_RELOAD);
+        break;
+
+    case WeaponId::WEAPON_SHOTGUN:
+        Game::audioManager.playSound(AudioSFXId::SHOTGUN_RELOAD);
+        break;
+
+    case WeaponId::WEAPON_SMG:
+        Game::audioManager.playSound(AudioSFXId::SMG_RELOAD);
+        break;
+
+    default:
+        break;
+    }
 }
 
 void Weapon::updateReloadState()
@@ -184,6 +255,18 @@ void Weapon::updateReloadState()
         {
             reloadIfPossible();
         }
+    }
+}
+
+void Weapon::fillChamberIfNeeded()
+{
+    if (!chamberNeedsManualFill || ammoInWeapon == 0 || isReloading() || chamberFilledManually)
+        return;
+    if (std::chrono::steady_clock::now() - lastFireTime > std::chrono::milliseconds(chamberManualFillPostFireDelayMillis))
+    {
+        chamberFilledManually = true;
+        if (id == WeaponId::WEAPON_SHOTGUN)
+            Game::audioManager.playSound(AudioSFXId::SHOTGUN_PUMP);
     }
 }
 

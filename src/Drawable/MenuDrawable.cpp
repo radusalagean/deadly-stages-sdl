@@ -52,6 +52,7 @@ void MenuDrawable::layout(int x, int y, int w, int h)
 
 void MenuDrawable::load()
 {
+    loadAudio();
     for (auto menuItem : menuItems)
     {
         menuItem->load();
@@ -80,6 +81,15 @@ void MenuDrawable::setMenuItems(const std::vector<MenuItemDrawable*>& menuItems)
     this->menuItems = menuItems;
 }
 
+void MenuDrawable::loadAudio()
+{
+    std::vector<AudioSFXId> menuSounds =
+    {
+        AudioSFXId::MENU_SELECT
+    };
+    Game::audioManager.loadSoundList(menuSounds);
+}
+
 void MenuDrawable::previousMenuItem()
 {
     if (menuItems.empty()) return;
@@ -96,6 +106,7 @@ void MenuDrawable::selectCurrentMenuItem()
 {
     if (menuItems.empty()) return;
     menuItems[selectedIndex]->pick();
+    Game::audioManager.playSound(AudioSFXId::MENU_SELECT);
 }
 
 void MenuDrawable::handleEvents()

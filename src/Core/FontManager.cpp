@@ -14,11 +14,13 @@ FontManager::~FontManager() {
 
 TTF_Font* FontManager::getFont(const std::string& fontFileName, int size) {
     std::string key = fontFileName + std::to_string(size);
-    if (fonts.find(key) == fonts.end()) {
+    if (fonts.find(key) == fonts.end()) 
+    {
         std::string path = RPATH("res/font/" + fontFileName);
         fonts[key] = TTF_OpenFont(path.c_str(), size);
-        if (!fonts[key]) {
-            std::cerr << "Failed to load font: " << fontFileName << " with size " << size << ". TTF_GetError(): " << TTF_GetError() << std::endl;
+        if (!fonts[key]) 
+        {
+            logd("Failed to load font: %s with size %d. TTF_GetError(): %s", fontFileName.c_str(), size, TTF_GetError());
         }
     }
     return fonts[key];

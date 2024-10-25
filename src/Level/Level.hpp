@@ -90,6 +90,8 @@ public:
     void updateCrosshairAimAssistIfNeeded();
     void drawCrosshairAimAssistIfNeeded();
     #endif
+
+    void loadAudio();
 };
 
 #endif // __SRC_LEVEL_LEVEL_HPP_

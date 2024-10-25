@@ -19,6 +19,10 @@ Projectile::Projectile(Vector2D weaponPosition, ProjectileType projectileType, i
             this->setSize(8, 8);
             this->texturePath = "res/game_entity/pellet.png";
             break;
+
+        default:
+            logd("Unknown projectile type: %d", projectileType);
+            break;
     }
     this->load(texturePool);
     this->damageAmount = damage;

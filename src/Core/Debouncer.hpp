@@ -19,7 +19,8 @@ public:
     bool canPerformAction(int action = -1) 
     {
         auto now = std::chrono::steady_clock::now();
-        if (now - lastActionTimes[action] >= debounceTime) {
+        if (now - lastActionTimes[action] >= debounceTime) 
+        {
             lastActionTimes[action] = now;
             return true;
         }

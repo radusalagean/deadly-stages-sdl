@@ -48,6 +48,8 @@ struct WeaponConfig
     std::string textureFileName = "";
     float rumbleIntensity = 0.0f;
     Uint32 rumbleDurationMs = 0;
+    bool chamberNeedsManualFill = false;
+    int chamberManualFillPostFireDelayMillis = 0;
 };
 
 class Weapon : public GameEntity
@@ -77,6 +79,8 @@ public:
     int ammoPerReloadCycle;
     float rumbleIntensity;
     Uint32 rumbleDurationMs;
+    bool chamberNeedsManualFill;
+    int chamberManualFillPostFireDelayMillis;
     float angleBetweenProjectiles = 0;
 
     // Fire & Reload
@@ -87,11 +91,14 @@ public:
     FloatAnimator* reloadAnimator = nullptr;
     int ammoInInventory = 0;
     int ammoInWeapon = 0;
+    bool chamberFilledManually = false;
+    std::chrono::steady_clock::time_point lastFireTime;
     bool isOutOfAmmo();
     void autoReloadIfNeeded();
     void reloadIfPossible();
     inline bool isReloading() { return reloadAnimator != nullptr; }
     void updateReloadState();
+    void fillChamberIfNeeded();
 
     // Owner
     void setOwner(GameEntity& owner);

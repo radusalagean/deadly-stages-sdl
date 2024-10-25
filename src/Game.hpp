@@ -9,6 +9,7 @@
 #include "Core/Options.hpp"
 #include "Core/FramerateIndicator.hpp"
 #include "Core/Config.hpp"
+#include "Core/AudioManager.hpp"
 #include <string>
 
 extern std::string resDirPathPrefix;
@@ -35,6 +36,7 @@ namespace Game
     extern PrimitiveShapeHelper primitiveShapeHelper;
     extern Options options;
     extern FramerateIndicator framerateIndicator;
+    extern AudioManager audioManager;
 
     // Time
     extern float latestLoopDeltaTimeMs;

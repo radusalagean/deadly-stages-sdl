@@ -32,6 +32,7 @@ private:
     int selectedIndex = 0;
     Debouncer navigationDebouncer;
 
+    void loadAudio();
     void previousMenuItem();
     void nextMenuItem();
     void selectCurrentMenuItem();
