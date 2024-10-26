@@ -13,13 +13,13 @@
 LevelSelectScreen::LevelSelectScreen() : Screen()
 {
    {
-        std::string id = "devtest";
-        std::string name = "DevTest Level";
+        std::string id = "openfield";
+        std::string name = "Open Field";
         levelPreviews.push_back(new LevelPreview(id, name, std::bind(&LevelSelectScreen::selectLevel, this, id)));
     }
     {
-        std::string id = "demons";
-        std::string name = "Demons Level";
+        std::string id = "hell";
+        std::string name = "Hell";
         levelPreviews.push_back(new LevelPreview(id, name, std::bind(&LevelSelectScreen::selectLevel, this, id)));
     }
 }
@@ -103,7 +103,7 @@ void LevelSelectScreen::layoutPass()
     int selectionRectOutlineThickness = USCALE(Game::height * 0.02);
     int selectionRectSpacing = USCALE(Game::height * 0.02);
     int textSpacing = USCALE(Game::height * 0.025);
-    { // DevTest Level
+    { // Open Field Level
         LevelPreview* levelPreview = levelPreviews[0];
         int imageWidth = imageHeight * levelPreview->imageDrawable->getAspectRatio();
         levelPreview->selectionRect.x = Constants::WINDOW_PADDING_PX;
@@ -119,7 +119,7 @@ void LevelSelectScreen::layoutPass()
         int textY = levelPreview->selectionRect.y + levelPreview->selectionRect.h + textSpacing;
         levelPreview->nameTextDrawable->layout(textX, textY, textWidth, textHeight);
     }
-    { // Demons Level
+    { // Hell Level
         LevelPreview* levelPreview = levelPreviews[1];
         int imageWidth = imageHeight * levelPreview->imageDrawable->getAspectRatio();
         levelPreview->selectionRect.w = 2 * (selectionRectOutlineThickness + selectionRectSpacing) + imageWidth;

@@ -281,7 +281,7 @@ namespace CollisionManager
             for (int x = startX; x <= endX; ++x) 
             {
                 Tile* tile = level.tileLayer.tileMap[y][x];
-                if (tile->isCollidable()) 
+                if (tile != nullptr && tile->isCollidable()) 
                 {
                     SDL_Rect tileRect = level.buildTileRect(x, y);
                     if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, tileRect, &intersectionPoint, &intersectionNormal, tHitNear, tHitFar, tHitNear)) 

@@ -14,6 +14,7 @@
 
 Player::Player() : GameEntity()
 {
+    texturePath = "res/game_entity/player.png";
     maxHealth = 14;
     currentHealth = maxHealth;
     castShadow = true;

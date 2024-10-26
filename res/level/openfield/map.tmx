@@ -56,11 +56,7 @@
 </data>
  </layer>
  <objectgroup id="2" name="Object Layer 1">
-  <object id="1" name="Player" type="Player" x="784" y="784" width="32" height="32">
-   <properties>
-    <property name="path" value="res/game_entity/player.png"/>
-   </properties>
-  </object>
+  <object id="1" name="Player" type="Player" x="784" y="784" width="32" height="32"/>
   <object id="2" name="SpawnPoint" type="SpawnPoint" x="1408" y="160" width="32" height="32"/>
   <object id="3" name="SpawnPoint" type="SpawnPoint" x="160" y="160" width="32" height="32"/>
   <object id="4" name="SpawnPoint" type="SpawnPoint" x="1408" y="1408" width="32" height="32"/>

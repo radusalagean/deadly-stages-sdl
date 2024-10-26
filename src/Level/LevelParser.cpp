@@ -141,12 +141,6 @@ void LevelParser::parseObjectLayer(tinyxml2::XMLElement* layerElement, Level& le
                 Player* player = new Player();
                 player->setPosition(Vector2D(e->IntAttribute("x"), e->IntAttribute("y")));
                 player->setSize(e->IntAttribute("width"), e->IntAttribute("height"));
-                tinyxml2::XMLElement* properties = e->FirstChildElement("properties");
-                for (tinyxml2::XMLElement* property = properties->FirstChildElement(); property != nullptr; property = property->NextSiblingElement())
-                {
-                    if (property->Attribute("name") == std::string("path"))
-                        player->texturePath = property->Attribute("value");
-                }
                 level.player = player;
             }
             // SpawnPoint
