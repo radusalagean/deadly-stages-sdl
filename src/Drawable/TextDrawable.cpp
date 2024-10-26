@@ -55,7 +55,7 @@ void TextDrawable::refreshTexture()
     {
         SDL_DestroyTexture(texture);
     }
-    SDL_Surface* surface = TTF_RenderText_Blended(font, text.c_str(), color);
+    SDL_Surface* surface = TTF_RenderUTF8_Blended(font, text.c_str(), color);
     texture = SDL_CreateTextureFromSurface(Game::renderer, surface);
     SDL_FreeSurface(surface);
     
