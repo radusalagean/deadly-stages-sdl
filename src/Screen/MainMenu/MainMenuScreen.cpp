@@ -96,14 +96,14 @@ void MainMenuScreen::layoutPass()
         mainMenuDrawable->layout(x, y, width, height);
     }
     { // Version Label
-        int height = USCALE(Game::height * 0.04);
+        int height = USCALE(Game::height * 0.035);
         int width = height * versionLabelTextDrawable->getAspectRatio();
         int x = Constants::WINDOW_PADDING_PX;
         int y = Game::height - height - Constants::WINDOW_PADDING_PX;
         versionLabelTextDrawable->layout(x, y, width, height);
     }
     { // Copyright Label
-        int height = USCALE(Game::height * 0.04);
+        int height = USCALE(Game::height * 0.035);
         int width = height * copyrightLabelTextDrawable->getAspectRatio();
         int x = Game::width - width - Constants::WINDOW_PADDING_PX;
         int y = Game::height - height - Constants::WINDOW_PADDING_PX;
