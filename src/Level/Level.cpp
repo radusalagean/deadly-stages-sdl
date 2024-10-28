@@ -79,7 +79,7 @@ void Level::load()
     #ifdef SUPPORTS_AIM_ASSIST
     auto texturePair = texturePool.loadIfNeededAndGet("res/image/crosshair.png", false);
     crosshairAimAssistTexture = texturePair.first;
-    SDL_QueryTexture(crosshairAimAssistTexture, NULL, NULL, &crosshairAimAssistWidth, &crosshairAimAssistHeight);
+    SDL_QueryTexture(crosshairAimAssistTexture, nullptr, nullptr, &crosshairAimAssistWidth, &crosshairAimAssistHeight);
     #endif
 }
 
@@ -416,7 +416,7 @@ void Level::handleGameEntityPendingRemovals()
 
 void Level::createBloodPool(const Vector2D& position)
 {
-    BloodPool* bloodPool = new BloodPool(position);
+    BloodPool* bloodPool = new BloodPool(position, bloodPoolManager.getRandomBloodPoolTexture());
     bloodPools.push_back(bloodPool);
 }
 
@@ -470,7 +470,7 @@ void Level::drawCrosshairAimAssistIfNeeded()
 {
     if (player->targetEnemy == nullptr)
         return;
-    SDL_RenderCopy(Game::renderer, crosshairAimAssistTexture, NULL, &crosshairAimAssistDstRect);
+    SDL_RenderCopy(Game::renderer, crosshairAimAssistTexture, nullptr, &crosshairAimAssistDstRect);
 }
 #endif
 

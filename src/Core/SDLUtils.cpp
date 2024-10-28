@@ -30,7 +30,7 @@ SDL_Texture* SDLUtils::createShadowTexture(SDL_Texture* originalTexture)
 
     int width, height;
     Uint32 format;
-    SDL_QueryTexture(originalTexture, &format, NULL, &width, &height);
+    SDL_QueryTexture(originalTexture, &format, nullptr, &width, &height);
 
     // Create a target texture with a known format
     SDL_Texture* shadowTexture = SDL_CreateTexture(Game::renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, width, height);

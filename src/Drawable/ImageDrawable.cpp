@@ -27,7 +27,7 @@ void ImageDrawable::load()
         texture = SDLUtils::loadTexture(path);
     }
 
-    SDL_QueryTexture(texture, NULL, NULL, &sourceWidth, &sourceHeight);
+    SDL_QueryTexture(texture, nullptr, nullptr, &sourceWidth, &sourceHeight);
     aspectRatio = (float)sourceWidth / (float)sourceHeight;
 }
 
@@ -46,6 +46,6 @@ void ImageDrawable::draw()
     Uint8 initialAlpha;
     SDL_GetTextureAlphaMod(texture, &initialAlpha);
     SDL_SetTextureAlphaMod(texture, transparency);
-    SDL_RenderCopy(Game::renderer, texture, NULL, &dstRect);
+    SDL_RenderCopy(Game::renderer, texture, nullptr, &dstRect);
     SDL_SetTextureAlphaMod(texture, initialAlpha);
 }

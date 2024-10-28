@@ -59,6 +59,6 @@ void TextDrawable::refreshTexture()
     texture = SDL_CreateTextureFromSurface(Game::renderer, surface);
     SDL_FreeSurface(surface);
     
-    SDL_QueryTexture(texture, NULL, NULL, &sourceWidth, &sourceHeight);
+    SDL_QueryTexture(texture, nullptr, nullptr, &sourceWidth, &sourceHeight);
     aspectRatio = (float)sourceWidth / (float)sourceHeight;
 }

@@ -59,10 +59,10 @@ void GameEntity::draw(Camera& camera)
         shadowDstRect.x = dstRect.x + (dstRect.w - shadowDstRect.w) / 2;
         shadowDstRect.y = dstRect.y + (dstRect.h - shadowDstRect.h) / 2;
 
-        SDL_RenderCopyEx(Game::renderer, shadowTexture, NULL, &shadowDstRect, rotation, NULL, SDL_FLIP_NONE);
+        SDL_RenderCopyEx(Game::renderer, shadowTexture, nullptr, &shadowDstRect, rotation, nullptr, SDL_FLIP_NONE);
     }
 
-    SDL_RenderCopyEx(Game::renderer, texture, NULL, &dstRect, rotation, NULL, SDL_FLIP_NONE);
+    SDL_RenderCopyEx(Game::renderer, texture, nullptr, &dstRect, rotation, nullptr, SDL_FLIP_NONE);
 }
 
 void GameEntity::setPosition(Vector2D position)

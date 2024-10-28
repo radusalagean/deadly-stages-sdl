@@ -25,5 +25,5 @@ void Tile::draw(Camera& camera, int x, int y)
     dstRect.y = y;
     dstRect.w = camera.scale(width);
     dstRect.h = camera.scale(height);
-    SDL_RenderCopy(Game::renderer, texture, NULL, &dstRect);
+    SDL_RenderCopy(Game::renderer, texture, nullptr, &dstRect);
 }

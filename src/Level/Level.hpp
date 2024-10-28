@@ -10,6 +10,7 @@
 #include "../Core/Config.hpp"
 #include "TileLayer.hpp"
 #include "../GameEntity/Weapon.hpp"
+#include "../BloodPoolManager/BloodPoolManager.hpp"
 
 class Player;
 class Weapon;
@@ -35,6 +36,7 @@ public:
 
     TileLayer tileLayer;
     TexturePool texturePool;
+    BloodPoolManager bloodPoolManager;
     Player* player = nullptr;
     Camera camera;
     std::vector<Weapon*> playerWeapons{};

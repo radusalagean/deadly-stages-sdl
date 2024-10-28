@@ -36,7 +36,7 @@ void GameScreen::init()
 #ifdef SUPPORTS_MOUSE_POINTER
     SDL_ShowCursor(SDL_DISABLE);
     cursorTexture = SDLUtils::loadTexture("res/image/crosshair.png");
-    SDL_QueryTexture(cursorTexture, NULL, NULL, &cursorWidth, &cursorHeight);
+    SDL_QueryTexture(cursorTexture, nullptr, nullptr, &cursorWidth, &cursorHeight);
 #endif
 }
 
@@ -101,7 +101,7 @@ void GameScreen::render()
         // Center the crosshair on the cursor
         cursorRect.x = cursorRect.x - cursorRect.w / 2;
         cursorRect.y = cursorRect.y - cursorRect.h / 2;
-        SDL_RenderCopy(Game::renderer, cursorTexture, NULL, &cursorRect);
+        SDL_RenderCopy(Game::renderer, cursorTexture, nullptr, &cursorRect);
     }
 #endif
 }
