@@ -1,6 +1,7 @@
 #ifndef __SRC_GAME_HPP__
 #define __SRC_GAME_HPP__
 
+#include "Core/Config.hpp"
 #include <SDL.h>
 #include "Screen/Screen.hpp"
 #include "Screen/MainMenu/MainMenuScreen.hpp"
@@ -8,7 +9,6 @@
 #include "Control/Control.hpp"
 #include "Core/Options.hpp"
 #include "Core/FramerateIndicator.hpp"
-#include "Core/Config.hpp"
 #include "Core/AudioManager.hpp"
 #include <string>
 

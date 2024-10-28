@@ -17,7 +17,7 @@ public:
     Vector2D* mapBounds = nullptr;
 
     static constexpr float ZOOM_0_5 = 0.5f;
-    static constexpr float ZOOM_1_0 = 1.0f;
+    static constexpr float ZOOM_1_0 = 1.0f; // TODO Add 2.0f zoom
     static constexpr int ZOOM_ANIMATION_DURATION_MS = 1000;
     float currentZoom = ZOOM_1_0;
 

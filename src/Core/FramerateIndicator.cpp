@@ -43,7 +43,11 @@ void FramerateIndicator::update()
     }
 
     framerateTextDrawable->setText(std::to_string(lastCycleFramerate));
-    int height = USCALE(Game::height * 0.03);
+    #ifdef PLATFORM_PSP
+        const float height = USCALE(Game::height * 0.04);
+    #else
+        const float height = USCALE(Game::height * 0.035);
+    #endif
     int width = height * framerateTextDrawable->getAspectRatio();
     int x = Game::width - width - Constants::WINDOW_PADDING_PX;
     int y = Constants::WINDOW_PADDING_PX;

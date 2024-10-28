@@ -32,7 +32,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE ~/pspdev/psp/sdk/include/)
 target_include_directories(${PROJECT_NAME} PRIVATE ${SRC_DIR}/../vendor/tinyxml2)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    SDL2main SDL2_ttf SDL2 GL freetype png z pspvram pspdisplay pspvfpu pspgu pspge pspdebug psphprm pspctrl pspaudio harfbuzz bz2 SDL2_image jpeg png16
+    SDL2main SDL2_ttf SDL2_mixer SDL2 GL freetype png z pspvram pspdisplay pspvfpu pspgu pspge pspdebug psphprm pspctrl pspaudio harfbuzz bz2 SDL2_image jpeg png16 modplug vorbis vorbisfile vorbisenc ogg
 )
 
 create_pbp_file(

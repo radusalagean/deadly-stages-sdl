@@ -2,6 +2,7 @@
 
 #include "../Game.hpp"
 #include "Macros.hpp"
+#include "Config.hpp"
 
 SDL_Texture* SDLUtils::loadTexture(const std::string& path)
 {
@@ -23,62 +24,64 @@ SDL_Texture* SDLUtils::loadTexture(const std::string& path)
  */
 SDL_Texture* SDLUtils::createShadowTexture(SDL_Texture* originalTexture)
 {
+    #ifndef SUPPORTS_SHADOWS
+    return nullptr;
+    #endif
+
     int width, height;
     Uint32 format;
     SDL_QueryTexture(originalTexture, &format, NULL, &width, &height);
 
-    SDL_Surface* surface = SDL_CreateRGBSurface(0, width, height, 32, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
-    if (!surface)
+    // Create a target texture with a known format
+    SDL_Texture* shadowTexture = SDL_CreateTexture(Game::renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, width, height);
+    if (!shadowTexture) 
     {
         logSDLe();
         return nullptr;
     }
 
-    SDL_Texture* tempTexture = SDL_CreateTexture(Game::renderer, format, SDL_TEXTUREACCESS_TARGET, width, height);
-    if (!tempTexture) 
-    {
+    // Set the shadow texture as the render target
+    if (SDL_SetRenderTarget(Game::renderer, shadowTexture) != 0) {
         logSDLe();
-        SDL_FreeSurface(surface);
+        SDL_DestroyTexture(shadowTexture);
         return nullptr;
     }
 
-    SDL_SetRenderTarget(Game::renderer, tempTexture);
-    SDL_RenderCopy(Game::renderer, originalTexture, NULL, NULL);
-    SDL_RenderReadPixels(Game::renderer, NULL, SDL_PIXELFORMAT_RGBA8888, surface->pixels, surface->pitch);
-    SDL_SetRenderTarget(Game::renderer, NULL);
+    // Clear the shadow texture with transparent black
+    SDL_SetRenderDrawColor(Game::renderer, 0, 0, 0, 0);
+    SDL_RenderClear(Game::renderer);
 
-    SDL_Surface* shadowSurface = SDL_CreateRGBSurface(0, width, height, 32, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
-    if (!shadowSurface) 
-    {
+    // Copy the original texture to the shadow texture
+    if (SDL_RenderCopy(Game::renderer, originalTexture, nullptr, nullptr) != 0) {
         logSDLe();
-        SDL_FreeSurface(surface);
-        SDL_DestroyTexture(tempTexture);
+        SDL_SetRenderTarget(Game::renderer, nullptr);
+        SDL_DestroyTexture(shadowTexture);
         return nullptr;
     }
 
-    SDL_LockSurface(surface);
-    SDL_LockSurface(shadowSurface);
+    // Reset the render target
+    SDL_SetRenderTarget(Game::renderer, nullptr);
 
-    Uint32* srcPixels = (Uint32*)surface->pixels;
-    Uint32* dstPixels = (Uint32*)shadowSurface->pixels;
-
-    for (int i = 0; i < width * height; ++i) {
-        Uint8 r, g, b, a;
-        Uint32 pixel = srcPixels[i];
-        SDL_GetRGBA(pixel, surface->format, &r, &g, &b, &a);
-        dstPixels[i] = SDL_MapRGBA(shadowSurface->format, 0, 0, 0, a);
+    // Set the blend mode to allow alpha blending
+    if (SDL_SetTextureBlendMode(shadowTexture, SDL_BLENDMODE_BLEND) != 0) {
+        logSDLe();
+        SDL_DestroyTexture(shadowTexture);
+        return nullptr;
     }
 
-    SDL_UnlockSurface(shadowSurface);
-    SDL_UnlockSurface(surface);
+    // Set the color mod to black
+    if (SDL_SetTextureColorMod(shadowTexture, 0, 0, 0) != 0) {
+        logSDLe();
+        SDL_DestroyTexture(shadowTexture);
+        return nullptr;
+    }
 
-    SDL_Texture* shadowTexture = SDL_CreateTextureFromSurface(Game::renderer, shadowSurface);
-
-    SDL_FreeSurface(surface);
-    SDL_FreeSurface(shadowSurface);
-    SDL_DestroyTexture(tempTexture);
-
-    SDL_SetTextureAlphaMod(shadowTexture, 50);
+    // Set the alpha modulation for the shadow effect
+    if (SDL_SetTextureAlphaMod(shadowTexture, 64) != 0) {
+        logSDLe();
+        SDL_DestroyTexture(shadowTexture);
+        return nullptr;
+    }
 
     return shadowTexture;
 }

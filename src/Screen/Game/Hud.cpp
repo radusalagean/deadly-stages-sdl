@@ -62,7 +62,11 @@ std::string Hud::buildEnemiesLeftText()
 void Hud::layoutPass()
 {
     const int midSeparation = USCALE(Game::width * 0.05);
-    const float textHeight = USCALE(Game::height * 0.03);
+    #ifdef PLATFORM_PSP
+        const float textHeight = USCALE(Game::height * 0.04);
+    #else
+        const float textHeight = USCALE(Game::height * 0.035);
+    #endif
     playerHudPadding = USCALE(Game::height * 0.025);
     const float playerHudBarSpacing = USCALE(Game::height * 0.01);
     { // Score
