@@ -75,7 +75,7 @@ void Camera::updateShake()
 
 void Camera::toggleZoom()
 {
-    currentZoom = currentZoom == ZOOM_1_0 ? ZOOM_0_5 : ZOOM_1_0;
+    currentZoomIndex = (currentZoomIndex + 1) % zoomOptions.size();
 }
 
 bool Camera::isTargetVisible(const Vector2D& targetPosition)

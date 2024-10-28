@@ -4,6 +4,7 @@
 #include "../Core/Vector2D.hpp"
 #include <chrono>
 #include "../Core/FloatAnimator.hpp"
+#include <vector>
 
 #define GSCALE(value) (value * Constants::GAMEPLAY_SCALE)
 
@@ -17,11 +18,13 @@ public:
     Vector2D* mapBounds = nullptr;
 
     static constexpr float ZOOM_0_5 = 0.5f;
-    static constexpr float ZOOM_1_0 = 1.0f; // TODO Add 2.0f zoom
-    static constexpr int ZOOM_ANIMATION_DURATION_MS = 1000;
-    float currentZoom = ZOOM_1_0;
+    static constexpr float ZOOM_1_0 = 1.0f;
+    static constexpr float ZOOM_2_0 = 2.0f;
 
-    inline float scale(float value) const { return value * currentZoom; }
+    std::vector<float> zoomOptions = { ZOOM_0_5, ZOOM_1_0, ZOOM_2_0 };
+    int currentZoomIndex = 1;
+
+    inline float scale(float value) const { return value * getCurrentZoom(); }
 
     void update();
     
@@ -36,6 +39,7 @@ private:
     int shakeDuration = 0;
     float shakeIntensity = 0.0f;
     Vector2D shakeOffset;
+    inline float getCurrentZoom() const { return zoomOptions[currentZoomIndex]; }
 };
 
 #endif // __SRC_LEVEL_CAMERA_HPP__
