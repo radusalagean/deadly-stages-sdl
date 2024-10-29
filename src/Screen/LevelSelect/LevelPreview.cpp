@@ -7,25 +7,21 @@ LevelPreview::LevelPreview(const std::string& id, const std::string& name, std::
     : id(id), name(name), selected(false), callback(callback)
 {
     this->imageDrawable = new ImageDrawable("preview.png", "res/level/" + id + "/");
-    this->nameTextDrawable = new TextDrawable(name);
 }
 
 LevelPreview::~LevelPreview()
 {
     delete imageDrawable;
-    delete nameTextDrawable;
 }
 
 void LevelPreview::load()
 {
     imageDrawable->load();
-    nameTextDrawable->load();
 }
 
 void LevelPreview::update()
 {
     imageDrawable->update();
-    nameTextDrawable->update();
 }
 
 void LevelPreview::draw()
@@ -35,7 +31,6 @@ void LevelPreview::draw()
         Game::primitiveShapeHelper.drawRectOutline(selectionRect, {255, 0, 0, 255}, selectionRectOutlineThickness);
     }
     imageDrawable->draw();
-    nameTextDrawable->draw();
 }
 
 void LevelPreview::pick()

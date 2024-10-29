@@ -28,6 +28,7 @@ public:
     void update();
     void draw();
     void setText(const std::string& text);
+    inline std::string getText() const { return text; }
 };
 
 #endif // __SRC_DRAWABLE_TEXTDRAWABLE_HPP__

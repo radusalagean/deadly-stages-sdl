@@ -1,14 +1,6 @@
 {
     "version": "2.0.0",
     "tasks": [
-        // Setup
-        {
-            "label": "setup-env-debug",
-            "type": "shell",
-            "command": "${workspaceFolder:Linux}/scripts/setup-env-debug.sh",
-            "problemMatcher": []
-        },
-
         // Copy res
         {
             "label": "copy-res-debug",

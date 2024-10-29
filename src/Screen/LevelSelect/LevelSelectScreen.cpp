@@ -12,7 +12,7 @@
 
 LevelSelectScreen::LevelSelectScreen() : Screen()
 {
-   {
+    {
         std::string id = "openfield";
         std::string name = "Open Field";
         levelPreviews.push_back(new LevelPreview(id, name, std::bind(&LevelSelectScreen::selectLevel, this, id)));
@@ -20,6 +20,11 @@ LevelSelectScreen::LevelSelectScreen() : Screen()
     {
         std::string id = "hell";
         std::string name = "Hell";
+        levelPreviews.push_back(new LevelPreview(id, name, std::bind(&LevelSelectScreen::selectLevel, this, id)));
+    }
+    {
+        std::string id = "future";
+        std::string name = "Future";
         levelPreviews.push_back(new LevelPreview(id, name, std::bind(&LevelSelectScreen::selectLevel, this, id)));
     }
 }
@@ -36,6 +41,8 @@ LevelSelectScreen::~LevelSelectScreen()
 void LevelSelectScreen::init()
 {
     loadLevelPreviews();
+    levelNameTextDrawable.load();
+    loadingTextDrawable.load();
 }
 
 void LevelSelectScreen::loadLevelPreviews()
@@ -48,6 +55,9 @@ void LevelSelectScreen::loadLevelPreviews()
 
 void LevelSelectScreen::handleEvents()
 {
+    if (!pendingLevelLoadId.empty()) 
+        return;
+    
     if (Game::control.isActionDown(CA_MENUS_BACK))
     {
         Game::screenManager.popScreen();
@@ -80,8 +90,7 @@ void LevelSelectScreen::handleEvents()
 
 void LevelSelectScreen::selectLevel(const std::string& id)
 {
-    logd("Selected level: %s", id.c_str());
-    Game::screenManager.setScreen(new GameScreen(id));
+    pendingLevelLoadId = id;
 }
 
 void LevelSelectScreen::previousLevel()
@@ -98,59 +107,84 @@ void LevelSelectScreen::nextLevel()
 
 void LevelSelectScreen::layoutPass()
 {
-    int textHeight = USCALE(Game::height * 0.045);
-    int imageHeight = USCALE(Game::height * 0.4);
-    int selectionRectOutlineThickness = USCALE(Game::height * 0.02);
-    int selectionRectSpacing = USCALE(Game::height * 0.02);
-    int textSpacing = USCALE(Game::height * 0.025);
-    { // Open Field Level
-        LevelPreview* levelPreview = levelPreviews[0];
-        int imageWidth = imageHeight * levelPreview->imageDrawable->getAspectRatio();
-        levelPreview->selectionRect.x = Constants::WINDOW_PADDING_PX;
-        levelPreview->selectionRect.y = Constants::WINDOW_PADDING_PX;
+    int availableSpacePerLevelPreview = Game::width / levelPreviews.size();
+    int imageWidth = availableSpacePerLevelPreview * 0.75;
+    int imageHeight = imageWidth; // All preview images should be square
+    int selectionRectOutlineThickness = (availableSpacePerLevelPreview - imageWidth) * 0.15;
+    int selectionRectSpacing = selectionRectOutlineThickness;
+    int remainingFreeSpacePerLevelPreview = availableSpacePerLevelPreview - (2 * selectionRectOutlineThickness + 2 * selectionRectSpacing) - imageWidth;
+    int freeSpacePerSide = remainingFreeSpacePerLevelPreview / 2;
+    int currentX = freeSpacePerSide;
+    for (unsigned i = 0; i < levelPreviews.size(); i++)
+    {
+        LevelPreview* levelPreview = levelPreviews[i];
+        levelPreview->selectionRect.y = Game::height / 2 - imageHeight / 2 - selectionRectOutlineThickness - selectionRectSpacing;
+        levelPreview->selectionRect.x = currentX;
         levelPreview->selectionRect.w = 2 * (selectionRectOutlineThickness + selectionRectSpacing) + imageWidth;
         levelPreview->selectionRect.h = 2 * (selectionRectOutlineThickness + selectionRectSpacing) + imageHeight;
         levelPreview->selectionRectOutlineThickness = selectionRectOutlineThickness;
         int imageX = levelPreview->selectionRect.x + selectionRectOutlineThickness + selectionRectSpacing;
         int imageY = levelPreview->selectionRect.y + selectionRectOutlineThickness + selectionRectSpacing;
         levelPreview->imageDrawable->layout(imageX, imageY, imageWidth, imageHeight);
-        int textWidth = textHeight * levelPreview->nameTextDrawable->getAspectRatio();
-        int textX = std::max(Constants::WINDOW_PADDING_PX, std::min(Game::width - Constants::WINDOW_PADDING_PX - textWidth, imageX + (imageWidth - textWidth) / 2));
-        int textY = levelPreview->selectionRect.y + levelPreview->selectionRect.h + textSpacing;
-        levelPreview->nameTextDrawable->layout(textX, textY, textWidth, textHeight);
+        currentX += levelPreview->selectionRect.w + freeSpacePerSide;
     }
-    { // Hell Level
-        LevelPreview* levelPreview = levelPreviews[1];
-        int imageWidth = imageHeight * levelPreview->imageDrawable->getAspectRatio();
-        levelPreview->selectionRect.w = 2 * (selectionRectOutlineThickness + selectionRectSpacing) + imageWidth;
-        levelPreview->selectionRect.h = 2 * (selectionRectOutlineThickness + selectionRectSpacing) + imageHeight;
-        levelPreview->selectionRect.x = Game::width - Constants::WINDOW_PADDING_PX - levelPreview->selectionRect.w;
-        levelPreview->selectionRect.y = Game::height - Constants::WINDOW_PADDING_PX - levelPreview->selectionRect.h;
-        levelPreview->selectionRectOutlineThickness = selectionRectOutlineThickness;
-        int imageY = Game::height - Constants::WINDOW_PADDING_PX - selectionRectOutlineThickness - selectionRectSpacing - imageHeight;
-        int imageX = Game::width - Constants::WINDOW_PADDING_PX - selectionRectOutlineThickness - selectionRectSpacing - imageWidth;
-        levelPreview->imageDrawable->layout(imageX, imageY, imageWidth, imageHeight);
-        int textWidth = textHeight * levelPreview->nameTextDrawable->getAspectRatio();
-        int textX = std::max(Constants::WINDOW_PADDING_PX, std::min(Game::width - Constants::WINDOW_PADDING_PX - textWidth, imageX + (imageWidth - textWidth) / 2));
-        int textY = levelPreview->selectionRect.y - textHeight - textSpacing;
-        levelPreview->nameTextDrawable->layout(textX, textY, textWidth, textHeight);
+
+    layoutText();
+
+    { // Loading...
+        int textHeight = USCALE(Game::height * 0.045);
+        int textWidth = textHeight * loadingTextDrawable.getAspectRatio();
+        loadingTextDrawable.layout(
+            Game::width / 2 - textWidth / 2, 
+            Game::height / 2 - textHeight / 2,
+            textWidth, 
+            textHeight
+        );
     }
     layoutInvalidated = false;
 }
 
+void LevelSelectScreen::layoutText()
+{
+    int textHeight = USCALE(Game::height * 0.045);
+    int textWidth = textHeight * levelNameTextDrawable.getAspectRatio();
+    int textX = Game::width / 2 - textWidth / 2;
+    int textY = Game::height - Constants::WINDOW_PADDING_PX - textHeight;
+    levelNameTextDrawable.layout(textX, textY, textWidth, textHeight);
+}
+
 void LevelSelectScreen::update()
 {
+    if (!pendingLevelLoadId.empty() && loadingIndicatorRendered)
+    {
+        Game::screenManager.setScreen(new GameScreen(pendingLevelLoadId));
+        return;
+    }
     for (unsigned i = 0; i < levelPreviews.size(); i++)
     {
         levelPreviews[i]->selected = i == selectedIndex;
         levelPreviews[i]->update();
     }
+    if (levelNameTextDrawable.getText() != levelPreviews[selectedIndex]->name)
+    {
+        levelNameTextDrawable.setText(levelPreviews[selectedIndex]->name);
+        layoutText();
+    }
+    levelNameTextDrawable.update();
+    loadingTextDrawable.update();
 }
 
 void LevelSelectScreen::render()
 {
+    if (!pendingLevelLoadId.empty())
+    {
+        loadingTextDrawable.draw();
+        loadingIndicatorRendered = true;
+        return;
+    }
     for (auto levelPreview : levelPreviews)
     {
         levelPreview->draw();
     }
+    levelNameTextDrawable.draw();
 }

@@ -3,6 +3,7 @@
 
 #include "../Screen.hpp"
 #include "../../Core/Debouncer.hpp"
+#include "../../Drawable/TextDrawable.hpp"
 #include <functional>
 #include <string>
 #include <vector>
@@ -20,6 +21,12 @@ private:
     };
     
     std::vector<LevelPreview*> levelPreviews{};
+    TextDrawable levelNameTextDrawable = TextDrawable("");
+    TextDrawable loadingTextDrawable = TextDrawable("Loading...", {255, 0, 0, 255});
+    bool loadingIndicatorRendered = false;
+    std::string pendingLevelLoadId = "";
+
+    void layoutText();
 
     void loadLevelPreviews();
     void selectLevel(const std::string& id);

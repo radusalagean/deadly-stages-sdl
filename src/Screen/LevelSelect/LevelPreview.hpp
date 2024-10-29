@@ -13,7 +13,6 @@ public:
     std::string id;
     std::string name;
     ImageDrawable* imageDrawable;
-    TextDrawable* nameTextDrawable;
     bool selected;
     std::function<void()> callback;
     SDL_Rect selectionRect;
