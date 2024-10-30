@@ -9,9 +9,11 @@ class CreditsScreen : public Screen
 private:
     struct Credit
     {
-        std::string name;
-        std::string nickname;
+        std::string creditOwner;
+        std::string nickname = "";
         std::string role;
+        std::string link = "";
+        std::string license = "";
     };
 
     struct CreditDrawable
@@ -23,11 +25,17 @@ private:
         int absoluteY = 0;
     };
 
-    std::vector<CreditDrawable> drawables{};
+    std::vector<std::vector<CreditDrawable>> drawables{};
     const std::vector<Credit> credits{
         {"Madalin-Iulian Popa", "XtremePrime", "2015 Original Version Programmer"},
         {"Andrei-Sabin Popescu", "Popica23", "Graphics Artwork"},
-        {"Radu Salagean", "", "2024 Remix Version Programmer"}
+        {"Radu Salagean", "", "2024 Remix Programmer & SFX"},
+        {"Stefania Pruteanu", "09RZW", "DVD & Case design"},
+        {"Michel Baradari", "", "SFX", "apollo-music.de", "Licensed under CC BY 3.0"},
+        {"Guns by Gary", "", "SFX", "fossilrecords.net", "Licensed under CC BY-SA 3.0"},
+        {"Tim Mortimer", "", "SFX", "archive.org/details/TimMortimer", "Licensed under CC BY 3.0"},
+        {"pixbay.com", "", "SFX", "", "Licensed under Pixbay Content License"},
+        {"One Man Symphony", "", "Music", "onemansymphony.bandcamp.com", "Reflective District - Licensed under CC BY 4.0"}
     };
     const std::string footerText = "Thanks for playing!";
 
