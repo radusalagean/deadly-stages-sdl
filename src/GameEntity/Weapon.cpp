@@ -55,7 +55,7 @@ WeaponConfig Weapon::createWeaponConfig(WeaponId id)
             cfg.damagePerProjectile = 1;
             cfg.maxAmmoCapacity = 30;
             cfg.hasInfiniteAmmo = false;
-            cfg.fireRateDelayMillis = 50;
+            cfg.fireRateDelayMillis = 76;
             cfg.reloadTimeMillis = 1740;
             cfg.automatic = true;
             cfg.projectilesPerShot = 1;
