@@ -495,6 +495,7 @@ void Level::loadAudio()
         AudioSFXId::JUMP,
         AudioSFXId::LAND_FROM_JUMP,
         AudioSFXId::CRUSH,
+        AudioSFXId::PLAYER_HURT,
         // Pickup
         AudioSFXId::PICKUP
     };

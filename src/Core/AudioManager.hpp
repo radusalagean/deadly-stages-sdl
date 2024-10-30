@@ -36,6 +36,7 @@ enum class AudioSFXId
     JUMP,
     LAND_FROM_JUMP,
     CRUSH,
+    PLAYER_HURT,
 
     // Pickup
     PICKUP

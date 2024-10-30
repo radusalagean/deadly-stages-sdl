@@ -181,6 +181,7 @@ void Player::receiveDamage(const int amount, Level& level)
     if (!hurtDebouncer.canPerformAction())
         return;
     GameEntity::receiveDamage(amount, level);
+    Game::audioManager.playSound(AudioSFXId::PLAYER_HURT);
 }
 
 void Player::onJumpRequest()

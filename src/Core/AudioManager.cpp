@@ -28,6 +28,7 @@ const std::unordered_map<const AudioSFXId, AudioConfig> AudioManager::audioConfi
     {AudioSFXId::JUMP, {"res/sfx/jump.wav"}},
     {AudioSFXId::LAND_FROM_JUMP, {"res/sfx/land_from_jump.wav"}},
     {AudioSFXId::CRUSH, {"res/sfx/crush.wav"}},
+    {AudioSFXId::PLAYER_HURT, {"res/sfx/player_hurt.wav"}},
 
     // Pickup
     {AudioSFXId::PICKUP, {"res/sfx/pickup.wav"}}
