@@ -69,6 +69,7 @@ void PauseOverlay::handleEvents()
 void PauseOverlay::menuContinue()
 {
     paused = false;
+    Game::audioManager.resumeMusic();
 }
 
 void PauseOverlay::menuOptions()

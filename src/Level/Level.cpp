@@ -18,6 +18,7 @@
 Level::Level(std::string id)
 {
     this->id = id;
+    levelMusicPath = RPATH("res/level/" + id + "/music.ogg");
 }
 
 Level::~Level()
@@ -500,11 +501,7 @@ void Level::loadAudio()
         AudioSFXId::PICKUP
     };
 
-    std::vector<AudioMusicId> levelMusic = 
-    {
-        
-    };
-
     Game::audioManager.loadSoundList(levelSounds);
-    Game::audioManager.loadMusicList(levelMusic);
+    Game::audioManager.loadMusic(levelMusicPath);
+    Game::audioManager.playMusic(levelMusicPath);
 }

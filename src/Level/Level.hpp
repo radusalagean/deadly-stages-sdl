@@ -11,6 +11,7 @@
 #include "TileLayer.hpp"
 #include "../GameEntity/Weapon.hpp"
 #include "../BloodPoolManager/BloodPoolManager.hpp"
+#include "../Core/Macros.hpp"
 
 class Player;
 class Weapon;
@@ -31,6 +32,7 @@ public:
     void render();
 
     std::string id;
+    std::string levelMusicPath;
 
     std::map<int, Tile> tileset{};
 

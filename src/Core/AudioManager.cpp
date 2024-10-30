@@ -36,7 +36,7 @@ const std::unordered_map<const AudioSFXId, AudioConfig> AudioManager::audioConfi
 
 const std::unordered_map<const AudioMusicId, AudioConfig> AudioManager::musicConfigs =
 {
-
+    {AudioMusicId::MENUS, {"res/music/menus.ogg"}}
 };
 
 AudioManager::AudioManager() : 
@@ -63,11 +63,7 @@ void AudioManager::dispose() {
     }
     sounds.clear();
 
-    for (auto& music : music) 
-    {
-        Mix_FreeMusic(music.second);
-    }
-    music.clear();
+    disposeAllLoadedMusic();
 
     Mix_CloseAudio();
 }
@@ -88,15 +84,27 @@ bool AudioManager::loadSound(const AudioSFXId id)
 
 bool AudioManager::loadMusic(const AudioMusicId id) 
 {
-    if (music.find(id) != music.end())
-        return true;
+    disposeAllLoadedMusic();
     Mix_Music* music = Mix_LoadMUS(RPATH(musicConfigs.at(id).filename).c_str());
     if (!music) 
     {
         logd("Failed to load music! SDL_mixer Error: %s", Mix_GetError());
         return false;
     }
-    this->music[id] = music;
+    predefinedMusic[id] = music;
+    return true;
+}
+
+bool AudioManager::loadMusic(const std::string path)
+{
+    disposeAllLoadedMusic();
+    Mix_Music* music = Mix_LoadMUS(RPATH(path).c_str());
+    if (!music)
+    {
+        logd("Failed to load music! SDL_mixer Error: %s", Mix_GetError());
+        return false;
+    }
+    customMusic[path] = music;
     return true;
 }
 
@@ -111,8 +119,17 @@ void AudioManager::playSound(const AudioSFXId id, int loops)
 
 void AudioManager::playMusic(const AudioMusicId id, int loops) 
 {
-    auto it = music.find(id);
-    if (it != music.end()) 
+    auto it = predefinedMusic.find(id);
+    if (it != predefinedMusic.end()) 
+    {
+        Mix_PlayMusic(it->second, loops);
+    }
+}
+
+void AudioManager::playMusic(const std::string path, int loops)
+{
+    auto it = customMusic.find(path);
+    if (it != customMusic.end())
     {
         Mix_PlayMusic(it->second, loops);
     }
@@ -158,14 +175,17 @@ bool AudioManager::loadSoundList(const std::vector<AudioSFXId>& soundList)
     return success;
 }
 
-bool AudioManager::loadMusicList(const std::vector<AudioMusicId>& musicList) {
-    bool success = true;
-    for (const auto& music : musicList) 
+void AudioManager::disposeAllLoadedMusic()
+{
+    for (auto& music : predefinedMusic) 
     {
-        if (!loadMusic(music)) 
-        {
-            success = false;
-        }
+        Mix_FreeMusic(music.second);
     }
-    return success;
+    predefinedMusic.clear();
+
+    for (auto& music : customMusic) 
+    {
+        Mix_FreeMusic(music.second);
+    }
+    customMusic.clear();
 }

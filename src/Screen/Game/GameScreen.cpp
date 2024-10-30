@@ -57,6 +57,7 @@ void GameScreen::handleEvents()
     {
         paused = true;
         Game::control.releaseAssociatedActionsAndHandleActionTriggerBlockedStatus(*pressedActionData);
+        Game::audioManager.pauseMusic();
     }
 }
 
