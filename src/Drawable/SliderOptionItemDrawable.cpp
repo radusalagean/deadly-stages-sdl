@@ -12,11 +12,12 @@ SliderOptionItemDrawable::SliderOptionItemDrawable(const std::string& text, floa
 void SliderOptionItemDrawable::layout(int x, int y, int w, int h)
 {
     OptionItemDrawable::layout(x, y, w, h);
-    sliderFullRect.w = w * 0.4f;
+    sliderFullRect.w = w * 0.3f;
     sliderFullRect.h = h;
-    sliderFullRect.x = x + w - sliderFullRect.w;
+    sliderFullRect.x = x + w - sliderFullRect.w - contentPadding;
     sliderFullRect.y = y;
     sliderRect = sliderFullRect;
+    sliderOutlineThickness = std::max(1, static_cast<int>(h * 0.2f));
     refreshSliderRectWidth();
 }
 
@@ -63,6 +64,7 @@ void SliderOptionItemDrawable::draw()
     OptionItemDrawable::draw();
     SDL_Color color = selected ? Constants::COLOR_YELLOW_ACCENT : Constants::COLOR_WHITE;
     Game::primitiveShapeHelper.drawRect(sliderRect, color);
+    Game::primitiveShapeHelper.drawRectOutline(sliderFullRect, color, sliderOutlineThickness);
 }
 
 void SliderOptionItemDrawable::refreshSliderRectWidth()

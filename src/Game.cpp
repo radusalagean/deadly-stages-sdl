@@ -28,12 +28,32 @@ namespace Game
     float latestLoopDeltaTimeMs = 0;
     float latestLoopDeltaTimeSeconds = 0;
 
+    // Framerate
+    std::vector<int> framerateLimitOptions = { 30, 60 };
+    std::vector<std::string> framerateLimitOptionLabels = { "30 FPS", "60 FPS" };
+    int framerateLimitIndex = 1;
+    int minMillisPerFrame = 0;
     bool showFramerate = false;
+    
+    void setFramerateLimitIndex(int index)
+    {
+        framerateLimitIndex = index;
+        int currentFramerateLimit = framerateLimitOptions[framerateLimitIndex];
+        minMillisPerFrame = currentFramerateLimit > 0 ? 1000 / currentFramerateLimit : 0;
+    }
+
+    const int getFramerateLimitIndex()
+    {
+        return framerateLimitIndex;
+    }
 
     void init()
     {
         // Init Logger
         Logger::init();
+
+        // Framerate
+        setFramerateLimitIndex(framerateLimitIndex);
 
         // Init Control
         control.init();
@@ -77,8 +97,8 @@ namespace Game
         render();
 
         Uint32 effectiveDeltaTimeMs = SDL_GetTicks() - start;
-        if (effectiveDeltaTimeMs < Constants::MIN_MILLIS_PER_FRAME) {
-            SDL_Delay(Constants::MIN_MILLIS_PER_FRAME - effectiveDeltaTimeMs);
+        if (effectiveDeltaTimeMs < minMillisPerFrame) {
+            SDL_Delay(minMillisPerFrame - effectiveDeltaTimeMs);
         }
         latestLoopDeltaTimeMs = SDL_GetTicks() - start;
         latestLoopDeltaTimeSeconds = latestLoopDeltaTimeMs / 1000.0f;

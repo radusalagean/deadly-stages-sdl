@@ -21,7 +21,9 @@ void OptionItemDrawable::layout(int x, int y, int w, int h)
     selectionRect.y = y;
     selectionRect.w = selctionRectSize;
     selectionRect.h = selctionRectSize;
-    int textX = x + selctionRectSize + selctionRectSize * 0.5f;
+    int selectionRectPadding = selctionRectSize * 0.5f;
+    contentPadding = selctionRectSize + selectionRectPadding;
+    int textX = x + selctionRectSize + selectionRectPadding;
     int textHeight = h;
     int textWidth = h * textDrawable->getAspectRatio();
     textDrawable->layout(textX, y, textWidth, textHeight);

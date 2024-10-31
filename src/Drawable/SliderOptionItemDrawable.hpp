@@ -16,6 +16,7 @@ private:
     std::function<void(float)> callback;
     SDL_Rect sliderRect;
     SDL_Rect sliderFullRect;
+    int sliderOutlineThickness;
     float sliderValue;
     void refreshSliderRectWidth();
     void onSliderValueChangeRequest(float offset);

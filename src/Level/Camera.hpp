@@ -21,8 +21,12 @@ public:
     static constexpr float ZOOM_1_0 = 1.0f;
     static constexpr float ZOOM_2_0 = 2.0f;
 
-    std::vector<float> zoomOptions = { ZOOM_0_5, ZOOM_1_0, ZOOM_2_0 };
-    int currentZoomIndex = 1;
+    static std::vector<float> zoomOptions;
+    static std::vector<std::string> zoomOptionLabels;
+
+    static int defaultZoomIndex;
+
+    int currentZoomIndex = defaultZoomIndex;
 
     inline float scale(float value) const { return value * getCurrentZoom(); }
 
@@ -39,7 +43,7 @@ private:
     int shakeDuration = 0;
     float shakeIntensity = 0.0f;
     Vector2D shakeOffset;
-    inline float getCurrentZoom() const { return zoomOptions[currentZoomIndex]; }
+    float getCurrentZoom() const;
 };
 
 #endif // __SRC_LEVEL_CAMERA_HPP__

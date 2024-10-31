@@ -13,6 +13,9 @@ private:
     SDL_Rect selectionRect;
     TextDrawable* textDrawable = nullptr;
 
+protected:
+    int contentPadding = 0;
+
 public:
     OptionItemDrawable(const std::string& text);
     virtual ~OptionItemDrawable();

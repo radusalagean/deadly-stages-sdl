@@ -15,7 +15,7 @@ void BooleanOptionItemDrawable::layout(int x, int y, int w, int h)
     OptionItemDrawable::layout(x, y, w, h);
     checkboxRect.h = h;
     checkboxRect.w = h;
-    checkboxRect.x = x + w - checkboxRect.w;
+    checkboxRect.x = x + w - checkboxRect.w - contentPadding;
     checkboxRect.y = y;
     checkboxOutlineThickness = std::max(1, static_cast<int>(h * 0.2f));
 }

@@ -40,8 +40,12 @@ namespace Game
     extern float latestLoopDeltaTimeMs;
     extern float latestLoopDeltaTimeSeconds;
 
-    // Debug
+    // Framerate
+    extern std::vector<int> framerateLimitOptions;
+    extern std::vector<std::string> framerateLimitOptionLabels;
     extern bool showFramerate;
+    void setFramerateLimitIndex(int index);
+    const int getFramerateLimitIndex();
 
     void init();
 

@@ -6,6 +6,15 @@
 #include <algorithm>
 #include <random>
 
+std::vector<float> Camera::zoomOptions = { Camera::ZOOM_0_5, Camera::ZOOM_1_0, Camera::ZOOM_2_0 };
+std::vector<std::string> Camera::zoomOptionLabels = { "0.5x", "1.0x", "2.0x" };
+
+#ifdef PLATFORM_PSP
+int Camera::defaultZoomIndex = 1;
+#else
+int Camera::defaultZoomIndex = 2;
+#endif
+
 void Camera::update()
 {
     if (target != nullptr)
@@ -85,3 +94,5 @@ bool Camera::isTargetVisible(const Vector2D& targetPosition)
     return scaledTargetX >= position.x && scaledTargetX <= position.x + Game::width && 
             scaledTargetY >= position.y && scaledTargetY <= position.y + Game::height;
 }
+
+float Camera::getCurrentZoom() const { return zoomOptions[currentZoomIndex]; }
