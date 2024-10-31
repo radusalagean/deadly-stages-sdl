@@ -50,8 +50,11 @@ namespace Game
             SDL_WINDOW_RESIZABLE
         );
 
-        // Set minimum window size
         SDL_SetWindowMinimumSize(window, MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT);
+
+        #ifdef PLATFORM_GROUP_COMPUTER
+        SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+        #endif
 
         renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
         SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
