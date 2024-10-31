@@ -4,8 +4,8 @@
 #include "../Game.hpp"
 #include "../Core/PrimitiveShapeHelper.hpp"
 
-SliderOptionItemDrawable::SliderOptionItemDrawable(const std::string& text, float currentValue, std::function<void(float)> callback)
-    : OptionItemDrawable(text), callback(callback), sliderValue(currentValue)
+SliderOptionItemDrawable::SliderOptionItemDrawable(const std::string& text, float currentValue, float defaultValue, std::function<void(float)> callback)
+    : OptionItemDrawable(text), callback(callback), sliderValue(currentValue), defaultValue(defaultValue)
 {
 }
 
@@ -75,6 +75,17 @@ void SliderOptionItemDrawable::refreshSliderRectWidth()
 void SliderOptionItemDrawable::onSliderValueChangeRequest(float offset)
 {
     sliderValue = std::min(std::max(sliderValue + offset, 0.0f), 1.0f);
+    sync();
+}
+
+void SliderOptionItemDrawable::restoreDefaultValue()
+{
+    sliderValue = defaultValue;
+    sync();
+}
+
+void SliderOptionItemDrawable::sync()
+{
     refreshSliderRectWidth();
     callback(sliderValue);
 }

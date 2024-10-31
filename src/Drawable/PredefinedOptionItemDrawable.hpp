@@ -23,6 +23,7 @@ private:
     std::function<void(int)> callback;
     std::vector<std::string> options;
     int selectedOptionIndex;
+    int defaultOptionIndex;
     Debouncer navigationDebouncer;
     TextDrawable valueTextDrawable = TextDrawable("");
     SDL_Rect layoutRect;
@@ -31,12 +32,14 @@ private:
 
 public:
     PredefinedOptionItemDrawable(const std::string& text, const std::vector<std::string>& options, 
-        int selectedOptionIndex, std::function<void(int)> callback);
+        int selectedOptionIndex, int defaultOptionIndex, std::function<void(int)> callback);
     void layout(int x, int y, int w, int h);
     void load();
     void handleEvents();
     void update();
     void draw();
+    void restoreDefaultValue();
+    void sync();
 };
 
 #endif // __SRC_DRAWABLE_PREDEFINEDOPTIONITEMDRAWABLE_HPP__

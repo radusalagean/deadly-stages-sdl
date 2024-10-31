@@ -25,6 +25,7 @@ public:
     virtual void handleEvents();
     virtual void update();
     virtual void draw();
+    virtual void restoreDefaultValue();
 };
 
 #endif // __SRC_DRAWABLE_OPTIONITEMDRAWABLE_HPP__

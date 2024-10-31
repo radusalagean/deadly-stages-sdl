@@ -18,6 +18,7 @@ private:
     SDL_Rect sliderFullRect;
     int sliderOutlineThickness;
     float sliderValue;
+    float defaultValue;
     void refreshSliderRectWidth();
     void onSliderValueChangeRequest(float offset);
     Debouncer navigationDebouncer;
@@ -29,12 +30,14 @@ private:
     };
 
 public:
-    SliderOptionItemDrawable(const std::string& text, float currentValue, std::function<void(float)> callback);
+    SliderOptionItemDrawable(const std::string& text, float currentValue, float defaultValue, std::function<void(float)> callback);
     void layout(int x, int y, int w, int h);
     void load();
     void handleEvents();
     void update();
     void draw();
+    void restoreDefaultValue();
+    void sync();
 };
 
 #endif // __SRC_DRAWABLE_SLIDEROPTIONITEMDRAWABLE_HPP__

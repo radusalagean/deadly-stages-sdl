@@ -5,8 +5,9 @@
 #include "../Core/PrimitiveShapeHelper.hpp"
 
 PredefinedOptionItemDrawable::PredefinedOptionItemDrawable(const std::string& text, const std::vector<std::string>& options, 
-    int selectedOptionIndex, std::function<void(int)> callback)
-    : OptionItemDrawable(text), callback(callback), options(options), selectedOptionIndex(selectedOptionIndex)
+    int selectedOptionIndex, int defaultOptionIndex, std::function<void(int)> callback)
+    : OptionItemDrawable(text), callback(callback), options(options), selectedOptionIndex(selectedOptionIndex), 
+    defaultOptionIndex(defaultOptionIndex)
 {
 }
 
@@ -94,6 +95,17 @@ void PredefinedOptionItemDrawable::onNavigationAction(NavigationAction action)
     {
         selectedOptionIndex = (selectedOptionIndex + 1) % options.size();
     }
+    sync();
+}
+
+void PredefinedOptionItemDrawable::restoreDefaultValue()
+{
+    selectedOptionIndex = defaultOptionIndex;
+    sync();
+}
+
+void PredefinedOptionItemDrawable::sync()
+{
     valueTextDrawable.setText(options[selectedOptionIndex]);
     refreshValueTextLayout();
     callback(selectedOptionIndex);

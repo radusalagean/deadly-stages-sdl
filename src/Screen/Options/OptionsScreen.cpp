@@ -6,6 +6,7 @@
 #include "../../Drawable/SliderOptionItemDrawable.hpp"
 #include "../../Drawable/BooleanOptionItemDrawable.hpp"
 #include "../../Drawable/PredefinedOptionItemDrawable.hpp"
+#include "../../Drawable/ClickableOptionItemDrawable.hpp"
 #include "../../Level/Camera.hpp"
 #include "../../Core/Constants.hpp"
 #include "../../Core/Config.hpp"
@@ -13,42 +14,47 @@
 OptionsScreen::OptionsScreen()
 {
     // SFX volume
-    optionsItemDrawables.push_back(new SliderOptionItemDrawable("SFX volume", Game::audioManager.getSoundVolumeUnitInterval(), [](float value) {
+    optionsItemDrawables.push_back(new SliderOptionItemDrawable("SFX volume", Game::audioManager.getSoundVolumeUnitInterval(), DefaultOptions::SFX_VOLUME, [](float value) {
         Game::audioManager.setSoundVolume(value);
     }));
 
     // Music volume
-    optionsItemDrawables.push_back(new SliderOptionItemDrawable("Music volume", Game::audioManager.getMusicVolumeUnitInterval(), [](float value) {
+    optionsItemDrawables.push_back(new SliderOptionItemDrawable("Music volume", Game::audioManager.getMusicVolumeUnitInterval(), DefaultOptions::MUSIC_VOLUME, [](float value) {
         Game::audioManager.setMusicVolume(value);
     }));
 
     // Aim assist
     #ifdef SUPPORTS_AIM_ASSIST
-    optionsItemDrawables.push_back(new BooleanOptionItemDrawable("Aim assist", Game::control.aimAssist, [](bool value) {
+    optionsItemDrawables.push_back(new BooleanOptionItemDrawable("Aim assist", Game::control.aimAssist, DefaultOptions::AIM_ASSIST, [](bool value) {
         Game::control.aimAssist = value;
     }));
     #endif
 
     // Controller rumble
     #ifdef PLATFORM_GROUP_COMPUTER
-    optionsItemDrawables.push_back(new BooleanOptionItemDrawable("Controller rumble", Game::control.controllerRumble, [](bool value) {
+    optionsItemDrawables.push_back(new BooleanOptionItemDrawable("Controller rumble", Game::control.controllerRumble, DefaultOptions::CONTROLLER_RUMBLE, [](bool value) {
         Game::control.controllerRumble = value;
     }));
     #endif
 
     // Framerate limit
-    optionsItemDrawables.push_back(new PredefinedOptionItemDrawable("Framerate limit", Game::framerateLimitOptionLabels, Game::getFramerateLimitIndex(), [](int value) {
+    optionsItemDrawables.push_back(new PredefinedOptionItemDrawable("Framerate limit", Game::framerateLimitOptionLabels, DefaultOptions::FRAMERATE_LIMIT_INDEX, Game::getFramerateLimitIndex(), [](int value) {
         Game::setFramerateLimitIndex(value);
     }));
 
     // Show framerate
-    optionsItemDrawables.push_back(new BooleanOptionItemDrawable("Show framerate", Game::showFramerate, [](bool value) {
+    optionsItemDrawables.push_back(new BooleanOptionItemDrawable("Show framerate", Game::showFramerate, DefaultOptions::SHOW_FRAMERATE, [](bool value) {
         Game::showFramerate = value;
     }));
 
     // Default camera zoom
-    optionsItemDrawables.push_back(new PredefinedOptionItemDrawable("Default camera zoom", Camera::zoomOptionLabels, Camera::defaultZoomIndex, [](int value) {
+    optionsItemDrawables.push_back(new PredefinedOptionItemDrawable("Default camera zoom", Camera::zoomOptionLabels, DefaultOptions::DEFAULT_CAMERA_ZOOM_INDEX, Camera::defaultZoomIndex, [](int value) {
         Camera::defaultZoomIndex = value;
+    }));
+
+    // Restore defaults
+    optionsItemDrawables.push_back(new ClickableOptionItemDrawable("Restore defaults", [this]() {
+        restoreDefaults();
     }));
 }
 
@@ -127,5 +133,13 @@ void OptionsScreen::render()
     for (auto& optionItemDrawable : optionsItemDrawables)
     {
         optionItemDrawable->draw();
+    }
+}
+
+void OptionsScreen::restoreDefaults()
+{
+    for (auto& optionItemDrawable : optionsItemDrawables)
+    {
+        optionItemDrawable->restoreDefaultValue();
     }
 }

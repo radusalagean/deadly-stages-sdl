@@ -59,3 +59,7 @@ void OptionItemDrawable::draw()
     }
     textDrawable->draw();
 }
+
+void OptionItemDrawable::restoreDefaultValue()
+{
+}

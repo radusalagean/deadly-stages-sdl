@@ -5,8 +5,8 @@
 #include "../Core/PrimitiveShapeHelper.hpp"
 #include <algorithm>
 
-BooleanOptionItemDrawable::BooleanOptionItemDrawable(const std::string& text, bool currentValue, std::function<void(bool)> callback)
-    : OptionItemDrawable(text), callback(callback), currentValue(currentValue)
+BooleanOptionItemDrawable::BooleanOptionItemDrawable(const std::string& text, bool currentValue, bool defaultValue, std::function<void(bool)> callback)
+    : OptionItemDrawable(text), callback(callback), currentValue(currentValue), defaultValue(defaultValue)
 {
 }
 
@@ -58,5 +58,11 @@ void BooleanOptionItemDrawable::draw()
 void BooleanOptionItemDrawable::toggle()
 {
     currentValue = !currentValue;
+    callback(currentValue);
+}
+
+void BooleanOptionItemDrawable::restoreDefaultValue()
+{
+    currentValue = defaultValue;
     callback(currentValue);
 }

@@ -14,15 +14,17 @@ private:
     SDL_Rect checkboxRect;
     int checkboxOutlineThickness;
     bool currentValue;
+    bool defaultValue;
     void toggle();
 
 public:
-    BooleanOptionItemDrawable(const std::string& text, bool currentValue, std::function<void(bool)> callback);
+    BooleanOptionItemDrawable(const std::string& text, bool currentValue, bool defaultValue, std::function<void(bool)> callback);
     void layout(int x, int y, int w, int h);
     void load();
     void handleEvents();
     void update();
     void draw();
+    void restoreDefaultValue();
 };
 
 #endif // __SRC_DRAWABLE_BOOLEANOPTIONITEMDRAWABLE_HPP__
