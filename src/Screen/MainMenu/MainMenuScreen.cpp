@@ -6,6 +6,7 @@
 #include "../../Core/Constants.hpp"
 #include "../../Drawable/MenuItemDrawable.hpp"
 #include "../LevelSelect/LevelSelectScreen.hpp"
+#include "../Options/OptionsScreen.hpp"
 #include "../Credits/CreditsScreen.hpp"
 #include "../../Core/Macros.hpp"
 
@@ -23,7 +24,7 @@ MainMenuScreen::MainMenuScreen() : Screen::Screen()
 
 MainMenuScreen::~MainMenuScreen()
 {
-    for (auto drawable : drawables)
+    for (auto& drawable : drawables)
     {
         delete drawable;
     }
@@ -45,7 +46,7 @@ void MainMenuScreen::handleEvents()
 
 void MainMenuScreen::loadAssets()
 {
-    for (auto drawable : drawables)
+    for (auto& drawable : drawables)
     {
         drawable->load();
     }
@@ -64,7 +65,7 @@ void MainMenuScreen::loadMenuItems()
 
 void MainMenuScreen::update()
 {
-    for (auto drawable : drawables)
+    for (auto& drawable : drawables)
     {
         drawable->update();
     }
@@ -73,7 +74,7 @@ void MainMenuScreen::update()
 void MainMenuScreen::render()
 {
     
-    for (auto drawable : drawables)
+    for (auto& drawable : drawables)
     {
         drawable->draw();
     }
@@ -126,7 +127,7 @@ void MainMenuScreen::menuStartGame()
 
 void MainMenuScreen::menuOptions()
 {
-    logd("Options");
+    Game::screenManager.pushScreen(new OptionsScreen());
 }
 
 void MainMenuScreen::menuCredits()

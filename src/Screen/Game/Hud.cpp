@@ -29,7 +29,7 @@ Hud::Hud(Level& level) : level(level)
 
 Hud::~Hud()
 {
-    for (auto drawable : drawables)
+    for (auto& drawable : drawables)
     {
         delete drawable;
     }
@@ -38,7 +38,7 @@ Hud::~Hud()
 
 void Hud::load()
 {
-    for (auto drawable : drawables)
+    for (auto& drawable : drawables)
     {
         drawable->load();
     }
@@ -171,7 +171,7 @@ void Hud::update()
         enemiesLeftTextDrawable->setText(buildEnemiesLeftText());
         lastProcessedEnemiesLeft = level.getEnemiesLeft();
     }
-    for (auto drawable : drawables)
+    for (auto& drawable : drawables)
     {
         drawable->update();
     }
@@ -181,7 +181,7 @@ void Hud::update()
 
 void Hud::render()
 {
-    for (auto drawable : drawables)
+    for (auto& drawable : drawables)
     {
         drawable->draw();
     }

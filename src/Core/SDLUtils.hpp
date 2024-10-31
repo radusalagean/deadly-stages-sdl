@@ -14,6 +14,7 @@ namespace SDLUtils
     extern SDL_Color tempColor;
     void pushTempRendererDrawColor();
     void popTempRendererDrawColor();
+    bool areColorsEqual(const SDL_Color& color1, const SDL_Color& color2);
 }
 
 #endif // __SRC_CORE_SDLUTILS_HPP__

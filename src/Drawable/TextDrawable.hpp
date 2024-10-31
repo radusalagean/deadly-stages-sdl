@@ -6,6 +6,7 @@
 #include <string>
 
 #include "Drawable.hpp"
+#include "../Core/Constants.hpp"
 
 class TextDrawable : public Drawable
 {
@@ -19,7 +20,7 @@ private:
     void refreshTexture();
 
 public:
-    TextDrawable(const std::string& text, const SDL_Color& color = {255, 255, 255, 255}, 
+    TextDrawable(const std::string& text, const SDL_Color& color = Constants::COLOR_WHITE, 
         const std::string& fontFileName = "PressStart2P.ttf");
     ~TextDrawable();
 
@@ -28,7 +29,9 @@ public:
     void update();
     void draw();
     void setText(const std::string& text);
+    void setColor(const SDL_Color& color);
     inline std::string getText() const { return text; }
+    inline SDL_Color getColor() const { return color; }
 };
 
 #endif // __SRC_DRAWABLE_TEXTDRAWABLE_HPP__

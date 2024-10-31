@@ -4,6 +4,7 @@
 #include "../../Drawable/Drawable.hpp"
 #include <SDL.h>
 #include "../../Core/Vector2D.hpp"
+#include "../../Core/Constants.hpp"
 
 class HudHealthBar : public Drawable
 {
@@ -20,9 +21,9 @@ public:
 private:
     const float innerCellHeightUnitInterval = 25.0f / 35.0f;
     const float borderWidthUnitInterval = 1.0f / 35.0f;
-    SDL_Color borderColor = {0, 0, 0, 255};
-    SDL_Color backgroundColor = {255, 255, 255, 255};
-    SDL_Color healthColor = {255, 0, 0, 255};
+    SDL_Color borderColor = Constants::COLOR_BLACK;
+    SDL_Color backgroundColor = Constants::COLOR_WHITE;
+    SDL_Color healthColor = Constants::COLOR_RED;
 
     const int numCells;
     int& filledCells;

@@ -1,6 +1,7 @@
 #include "BloodPoolManager.hpp"
 #include "../Game.hpp"
 #include <random>
+#include "../Core/Constants.hpp"
 
 BloodPoolManager::BloodPoolManager()
 {
@@ -12,7 +13,7 @@ BloodPoolManager::BloodPoolManager()
         int radius = radiusDis(gen);
         int diameter = radius * 2;
 
-        SDL_Color color = {255, 0, 0, 255};
+        SDL_Color color = Constants::COLOR_RED;
         SDL_Surface* surface = SDL_CreateRGBSurfaceWithFormat(0, diameter, diameter, 32, SDL_PIXELFORMAT_ARGB8888);
 
         SDL_LockSurface(surface);

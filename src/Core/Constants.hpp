@@ -2,6 +2,7 @@
 #define __SRC_CORE_CONSTANTS_HPP__
 
 #include <SDL.h>
+#include <string>
 
 namespace Constants
 {
@@ -10,9 +11,12 @@ namespace Constants
     const float UI_SCALE = 0.8f;
     const int FPS_LIMIT = 60;
     const int MIN_MILLIS_PER_FRAME = 1000 / FPS_LIMIT;
+    const SDL_Color COLOR_RED = {255, 0, 0, 255};
     const SDL_Color COLOR_YELLOW_ACCENT = {240, 208, 26, 255};
+    const SDL_Color COLOR_WHITE = {255, 255, 255, 255};
     const SDL_Color COLOR_LIGHT_GRAY_TEXT = {200, 200, 200, 255};
     const SDL_Color COLOR_DARK_GRAY_TEXT = {150, 150, 150, 255};
+    const SDL_Color COLOR_BLACK = {0, 0, 0, 255};
 }
 
 #endif // __SRC_CORE_CONSTANTS_HPP__

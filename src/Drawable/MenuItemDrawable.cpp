@@ -4,6 +4,7 @@
 #include "../Core/FontManager.hpp"
 #include <cassert>
 #include "../Core/PrimitiveShapeHelper.hpp"
+#include "../Core/Constants.hpp"
 #include <algorithm>
 
 #define SELECTION_RECT_SPACING_FACTOR 0.5
@@ -35,20 +36,29 @@ void MenuItemDrawable::layout(int x, int y, int w, int h)
     selectionRect.y = y;
     selectionRect.w = selctionRectSize;
     selectionRect.h = selctionRectSize;
-    int textX = x + selctionRectSize + float(selctionRectSize * 0.5);
+    int textX = x + selctionRectSize + selctionRectSize * 0.5f;
     int textWidth = h * textDrawable->getAspectRatio();
     textDrawable->layout(textX, y, textWidth, h);
 }
 
 void MenuItemDrawable::update()
 {
+    if (selected)
+    {
+        textDrawable->setColor(Constants::COLOR_YELLOW_ACCENT);
+    }
+    else
+    {
+        textDrawable->setColor(Constants::COLOR_WHITE);
+    }
+    textDrawable->update();
 }
 
 void MenuItemDrawable::draw()
 {
     if (selected)
     {
-        Game::primitiveShapeHelper.drawRect(selectionRect, {255, 255, 255, 255});
+        Game::primitiveShapeHelper.drawRect(selectionRect, Constants::COLOR_YELLOW_ACCENT);
     }
     textDrawable->draw();
 }

@@ -3,6 +3,7 @@
 #include "../../Drawable/MenuDrawable.hpp"
 #include "../../Drawable/MenuItemDrawable.hpp"
 #include "../../Screen/MainMenu/MainMenuScreen.hpp"
+#include "../Options/OptionsScreen.hpp"
 #include "../../Game.hpp"
 #include "../../ScreenManager/ScreenManager.hpp"
 #include "../../Core/PrimitiveShapeHelper.hpp"
@@ -74,7 +75,7 @@ void PauseOverlay::menuContinue()
 
 void PauseOverlay::menuOptions()
 {
-    // TODO
+    Game::screenManager.pushScreen(new OptionsScreen());
 }
 
 void PauseOverlay::menuQuitToMainMenu()

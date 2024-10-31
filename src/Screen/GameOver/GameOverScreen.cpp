@@ -18,7 +18,7 @@ GameOverScreen::GameOverScreen(int score, int wave, const std::string& levelId) 
 
 GameOverScreen::~GameOverScreen()
 {
-    for (auto drawable : drawables)
+    for (auto& drawable : drawables)
     {
         delete drawable;
     }
@@ -33,7 +33,7 @@ void GameOverScreen::init()
 
 void GameOverScreen::loadAssets()
 {
-    for (auto drawable : drawables)
+    for (auto& drawable : drawables)
     {
         drawable->load();
     }
@@ -55,7 +55,7 @@ void GameOverScreen::handleEvents()
 
 void GameOverScreen::update()
 {
-    for (auto drawable : drawables)
+    for (auto& drawable : drawables)
     {
         drawable->update();
     }
@@ -63,7 +63,7 @@ void GameOverScreen::update()
 
 void GameOverScreen::render()
 {
-    for (auto drawable : drawables)
+    for (auto& drawable : drawables)
     {
         drawable->draw();
     }

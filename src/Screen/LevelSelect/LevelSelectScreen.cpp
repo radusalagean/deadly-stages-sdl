@@ -31,7 +31,7 @@ LevelSelectScreen::LevelSelectScreen() : Screen()
 
 LevelSelectScreen::~LevelSelectScreen()
 {
-    for (auto levelPreview : levelPreviews)
+    for (auto& levelPreview : levelPreviews)
     {
         delete levelPreview;
     }
@@ -47,7 +47,7 @@ void LevelSelectScreen::init()
 
 void LevelSelectScreen::loadLevelPreviews()
 {
-    for (auto levelPreview : levelPreviews)
+    for (auto& levelPreview : levelPreviews)
     {
         levelPreview->load();
     }
@@ -182,7 +182,7 @@ void LevelSelectScreen::render()
         loadingIndicatorRendered = true;
         return;
     }
-    for (auto levelPreview : levelPreviews)
+    for (auto& levelPreview : levelPreviews)
     {
         levelPreview->draw();
     }

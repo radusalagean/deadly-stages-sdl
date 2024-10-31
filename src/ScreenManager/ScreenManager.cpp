@@ -7,7 +7,7 @@
 
 ScreenManager::~ScreenManager()
 {
-    for (auto screen : screens) 
+    for (auto& screen : screens) 
     {
         delete screen;
     }
@@ -73,13 +73,13 @@ void ScreenManager::handlePendingTransactions()
 {
     if (clearAllScreens) 
     {
-        for (auto screen : screens)
+        for (auto& screen : screens)
             screensToRemove.push_back(screen);
         clearAllScreens = false;
     }
 
     // Remove screens
-    for (auto screen : screensToRemove) 
+    for (auto& screen : screensToRemove) 
     {
         auto it = std::find(screens.begin(), screens.end(), screen);
         if (it != screens.end()) 
@@ -92,7 +92,7 @@ void ScreenManager::handlePendingTransactions()
     screensToRemove.clear();
 
     // Add new screens
-    for (auto screen : screensToAdd) 
+    for (auto& screen : screensToAdd) 
     {
         Game::control.lock();
         screens.push_back(screen);
@@ -103,6 +103,6 @@ void ScreenManager::handlePendingTransactions()
 
 void ScreenManager::onRendererOutputSizeChanged()
 {
-    for (auto screen : screens)
+    for (auto& screen : screens)
         screen->invalidateLayout();
 }

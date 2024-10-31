@@ -9,7 +9,7 @@
 
 MenuDrawable::~MenuDrawable()
 {
-    for (auto menuItem : menuItems)
+    for (auto& menuItem : menuItems)
     {
         delete menuItem;
     }
@@ -22,7 +22,7 @@ void MenuDrawable::layout(int x, int y, int w, int h)
     int menuItemSpacing = USCALE(menuItemHeight * 0.5);
     int currentY = y;
     int maxMenuItemWidth = 0;
-    for (auto menuItem : menuItems)
+    for (auto& menuItem : menuItems)
     {
         int menuItemWidth = menuItemHeight * menuItem->getAspectRatio();
         if (menuItemWidth > maxMenuItemWidth)
@@ -53,7 +53,7 @@ void MenuDrawable::layout(int x, int y, int w, int h)
 void MenuDrawable::load()
 {
     loadAudio();
-    for (auto menuItem : menuItems)
+    for (auto& menuItem : menuItems)
     {
         menuItem->load();
     }
@@ -70,7 +70,7 @@ void MenuDrawable::update()
 
 void MenuDrawable::draw()
 {
-    for (auto menuItem : menuItems)
+    for (auto& menuItem : menuItems)
     {
         menuItem->draw();
     }

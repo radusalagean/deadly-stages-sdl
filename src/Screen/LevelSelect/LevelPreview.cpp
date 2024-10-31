@@ -2,6 +2,7 @@
 
 #include "../../Game.hpp"
 #include "../../Core/PrimitiveShapeHelper.hpp"
+#include "../../Core/Constants.hpp"
 
 LevelPreview::LevelPreview(const std::string& id, const std::string& name, std::function<void()> callback)
     : id(id), name(name), selected(false), callback(callback)
@@ -28,7 +29,7 @@ void LevelPreview::draw()
 {
     if (selected)
     {
-        Game::primitiveShapeHelper.drawRectOutline(selectionRect, {255, 0, 0, 255}, selectionRectOutlineThickness);
+        Game::primitiveShapeHelper.drawRectOutline(selectionRect, Constants::COLOR_YELLOW_ACCENT, selectionRectOutlineThickness);
     }
     imageDrawable->draw();
 }

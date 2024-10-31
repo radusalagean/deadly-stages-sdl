@@ -97,3 +97,8 @@ void SDLUtils::popTempRendererDrawColor()
 {
     SDL_SetRenderDrawColor(Game::renderer, tempColor.r, tempColor.g, tempColor.b, tempColor.a);
 }
+
+bool SDLUtils::areColorsEqual(const SDL_Color& color1, const SDL_Color& color2)
+{
+    return color1.r == color2.r && color1.g == color2.g && color1.b == color2.b && color1.a == color2.a;
+}

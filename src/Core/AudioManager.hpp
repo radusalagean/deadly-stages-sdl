@@ -71,20 +71,23 @@ public:
     void pauseMusic();
     void resumeMusic();
 
-    void setMusicVolume(int volume);
-    void setSoundVolume(int volume);
+    void setMusicVolume(float volumeUnitInterval);
+    void setSoundVolume(float volumeUnitInterval);
 
     bool loadSoundList(const std::vector<AudioSFXId>& soundList);
 
     void disposeAllLoadedMusic();
+
+    inline float getSoundVolumeUnitInterval() const { return soundVolumeUnitInterval; };
+    inline float getMusicVolumeUnitInterval() const { return musicVolumeUnitInterval; };
 
 private:
     std::unordered_map<AudioSFXId, Mix_Chunk*> sounds;
     std::unordered_map<AudioMusicId, Mix_Music*> predefinedMusic;
     std::unordered_map<std::string, Mix_Music*> customMusic; // Key: path to the music file
 
-    int soundVolume;
-    int musicVolume;
+    float soundVolumeUnitInterval = 0.0f;
+    float musicVolumeUnitInterval = 0.0f;
 };
 
 #endif // __SRC_CORE_AUDIOMANAGER_HPP_

@@ -84,9 +84,9 @@ CreditsScreen::CreditsScreen()
 
 CreditsScreen::~CreditsScreen()
 {
-    for (auto creditSection : drawables)
+    for (auto& creditSection : drawables)
     {
-        for (auto drawable : creditSection)
+        for (auto& drawable : creditSection)
         {
             delete drawable.textDrawable;
         }
@@ -101,9 +101,9 @@ void CreditsScreen::init()
 
 void CreditsScreen::loadAssets()
 {
-    for (auto creditSection : drawables)
+    for (auto& creditSection : drawables)
     {
-        for (auto drawable : creditSection)
+        for (auto& drawable : creditSection)
         {
             drawable.textDrawable->load();
         }
@@ -120,9 +120,9 @@ void CreditsScreen::handleEvents()
 
 void CreditsScreen::update()
 {
-    for (auto creditSection : drawables)
+    for (auto& creditSection : drawables)
     {
-        for (auto drawable : creditSection)
+        for (auto& drawable : creditSection)
         {
             SDL_Rect* dstRect = &drawable.textDrawable->dstRect;
             drawable.textDrawable->setDstRect(dstRect->x, drawable.absoluteY + scrollOffsetPx, dstRect->w, dstRect->h);
@@ -138,9 +138,9 @@ void CreditsScreen::update()
 
 void CreditsScreen::render()
 {
-    for (auto creditSection : drawables)
+    for (auto& creditSection : drawables)
     {
-        for (auto drawable : creditSection)
+        for (auto& drawable : creditSection)
         {
             drawable.textDrawable->draw();
         }

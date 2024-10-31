@@ -3,6 +3,7 @@
 #include "../Game.hpp"
 #include "../Core/FontManager.hpp"
 #include <SDL_ttf.h>
+#include "../Core/SDLUtils.hpp"
 
 TextDrawable::TextDrawable(const std::string& text, const SDL_Color& color, const std::string& fontFileName) 
     : fontFileName(fontFileName), text(text), color(color)
@@ -47,6 +48,14 @@ void TextDrawable::setText(const std::string& text)
     {
         setDstRect(dstRect.x, dstRect.y, newWidth, dstRect.h);
     }
+}
+
+void TextDrawable::setColor(const SDL_Color& color)
+{
+    if (SDLUtils::areColorsEqual(this->color, color)) 
+        return;
+    this->color = color;
+    refreshTexture();
 }
 
 void TextDrawable::refreshTexture()

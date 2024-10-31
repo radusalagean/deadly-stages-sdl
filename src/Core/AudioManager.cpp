@@ -39,9 +39,7 @@ const std::unordered_map<const AudioMusicId, AudioConfig> AudioManager::musicCon
     {AudioMusicId::MENUS, {"res/music/menus.ogg"}}
 };
 
-AudioManager::AudioManager() : 
-    soundVolume(MIX_MAX_VOLUME), 
-    musicVolume(MIX_MAX_VOLUME) {}
+AudioManager::AudioManager() {}
 
 AudioManager::~AudioManager() 
 {
@@ -54,6 +52,12 @@ void AudioManager::init()
     {
         logd("SDL_mixer could not initialize! SDL_mixer Error: %s", Mix_GetError());
     }
+
+    // Sync volume
+    int currentSoundVolume = Mix_Volume(-1, -1);
+    int currentMusicVolume = Mix_VolumeMusic(-1);
+    soundVolumeUnitInterval = currentSoundVolume / MIX_MAX_VOLUME;
+    musicVolumeUnitInterval = currentMusicVolume / MIX_MAX_VOLUME;
 }
 
 void AudioManager::dispose() {
@@ -150,15 +154,17 @@ void AudioManager::resumeMusic()
     Mix_ResumeMusic();
 }
 
-void AudioManager::setMusicVolume(int volume) 
+void AudioManager::setMusicVolume(float volumeUnitInterval) 
 {
-    musicVolume = volume;
+    musicVolumeUnitInterval = volumeUnitInterval;
+    int musicVolume = floor(volumeUnitInterval * MIX_MAX_VOLUME);
     Mix_VolumeMusic(musicVolume);
 }
 
-void AudioManager::setSoundVolume(int volume) 
+void AudioManager::setSoundVolume(float volumeUnitInterval) 
 {
-    soundVolume = volume;
+    soundVolumeUnitInterval = volumeUnitInterval;
+    int soundVolume = floor(volumeUnitInterval * MIX_MAX_VOLUME);
     Mix_Volume(-1, soundVolume);
 }
 
