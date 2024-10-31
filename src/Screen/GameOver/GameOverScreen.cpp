@@ -29,6 +29,7 @@ void GameOverScreen::init()
 {
     loadMenuItems();
     loadAssets();
+    Game::audioManager.loadAndStartMusic(AudioMusicId::MENUS);
 }
 
 void GameOverScreen::loadAssets()

@@ -35,8 +35,7 @@ void MainMenuScreen::init()
 {
     loadMenuItems();
     loadAssets();
-    Game::audioManager.loadMusic(AudioMusicId::MENUS);
-    Game::audioManager.playMusic(AudioMusicId::MENUS);
+    Game::audioManager.loadAndStartMusic(AudioMusicId::MENUS);
 }
 
 void MainMenuScreen::handleEvents()

@@ -86,29 +86,24 @@ bool AudioManager::loadSound(const AudioSFXId id)
     return true;
 }
 
-bool AudioManager::loadMusic(const AudioMusicId id) 
+bool AudioManager::loadAndStartMusic(const AudioMusicId id) 
 {
-    disposeAllLoadedMusic();
-    Mix_Music* music = Mix_LoadMUS(RPATH(musicConfigs.at(id).filename).c_str());
-    if (!music) 
-    {
-        logd("Failed to load music! SDL_mixer Error: %s", Mix_GetError());
-        return false;
-    }
-    predefinedMusic[id] = music;
-    return true;
+    return loadAndStartMusic(musicConfigs.at(id).filename);
 }
 
-bool AudioManager::loadMusic(const std::string path)
+bool AudioManager::loadAndStartMusic(const std::string path)
 {
+    if (music.find(path) != music.end())
+        return true;
     disposeAllLoadedMusic();
-    Mix_Music* music = Mix_LoadMUS(RPATH(path).c_str());
-    if (!music)
+    Mix_Music* loadedMusic = Mix_LoadMUS(RPATH(path).c_str());
+    if (!loadedMusic)
     {
         logd("Failed to load music! SDL_mixer Error: %s", Mix_GetError());
         return false;
     }
-    customMusic[path] = music;
+    music[path] = loadedMusic;
+    Mix_PlayMusic(loadedMusic, -1);
     return true;
 }
 
@@ -118,24 +113,6 @@ void AudioManager::playSound(const AudioSFXId id, int loops)
     if (it != sounds.end()) 
     {
         Mix_PlayChannel(-1, it->second, loops);
-    }
-}
-
-void AudioManager::playMusic(const AudioMusicId id, int loops) 
-{
-    auto it = predefinedMusic.find(id);
-    if (it != predefinedMusic.end()) 
-    {
-        Mix_PlayMusic(it->second, loops);
-    }
-}
-
-void AudioManager::playMusic(const std::string path, int loops)
-{
-    auto it = customMusic.find(path);
-    if (it != customMusic.end())
-    {
-        Mix_PlayMusic(it->second, loops);
     }
 }
 
@@ -183,15 +160,9 @@ bool AudioManager::loadSoundList(const std::vector<AudioSFXId>& soundList)
 
 void AudioManager::disposeAllLoadedMusic()
 {
-    for (auto& music : predefinedMusic) 
+    for (auto& music : music) 
     {
         Mix_FreeMusic(music.second);
     }
-    predefinedMusic.clear();
-
-    for (auto& music : customMusic) 
-    {
-        Mix_FreeMusic(music.second);
-    }
-    customMusic.clear();
+    music.clear();
 }

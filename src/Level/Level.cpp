@@ -502,6 +502,5 @@ void Level::loadAudio()
     };
 
     Game::audioManager.loadSoundList(levelSounds);
-    Game::audioManager.loadMusic(levelMusicPath);
-    Game::audioManager.playMusic(levelMusicPath);
+    Game::audioManager.loadAndStartMusic(levelMusicPath);
 }

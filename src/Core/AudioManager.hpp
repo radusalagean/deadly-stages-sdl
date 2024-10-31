@@ -60,8 +60,8 @@ public:
     void dispose();
 
     bool loadSound(const AudioSFXId id);
-    bool loadMusic(const AudioMusicId id);
-    bool loadMusic(const std::string path);
+    bool loadAndStartMusic(const AudioMusicId id);
+    bool loadAndStartMusic(const std::string path);
 
     void playSound(const AudioSFXId id, int loops = 0);
     void playMusic(const AudioMusicId id, int loops = -1);
@@ -83,8 +83,7 @@ public:
 
 private:
     std::unordered_map<AudioSFXId, Mix_Chunk*> sounds;
-    std::unordered_map<AudioMusicId, Mix_Music*> predefinedMusic;
-    std::unordered_map<std::string, Mix_Music*> customMusic; // Key: path to the music file
+    std::unordered_map<std::string, Mix_Music*> music; // Key: path to the music file
 
     float soundVolumeUnitInterval = 0.0f;
     float musicVolumeUnitInterval = 0.0f;
