@@ -3,7 +3,6 @@
 
 #include "../Screen.hpp"
 #include "../../Drawable/OptionItemDrawable.hpp"
-#include "../../Drawable/SliderOptionItemDrawable.hpp"
 #include "../../Core/Debouncer.hpp"
 #include <vector>
 

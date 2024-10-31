@@ -5,10 +5,8 @@
 #include "../Core/PrimitiveShapeHelper.hpp"
 
 SliderOptionItemDrawable::SliderOptionItemDrawable(const std::string& text, float currentValue, std::function<void(float)> callback)
-    : OptionItemDrawable(text)
+    : OptionItemDrawable(text), callback(callback), sliderValue(currentValue)
 {
-    this->callback = callback;
-    this->sliderValue = currentValue;
 }
 
 void SliderOptionItemDrawable::layout(int x, int y, int w, int h)

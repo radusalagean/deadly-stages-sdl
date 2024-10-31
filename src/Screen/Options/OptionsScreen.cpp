@@ -3,7 +3,10 @@
 #include "../../Game.hpp"
 #include "../../ScreenManager/ScreenManager.hpp"
 #include "../../Drawable/OptionItemDrawable.hpp"
+#include "../../Drawable/SliderOptionItemDrawable.hpp"
+#include "../../Drawable/BooleanOptionItemDrawable.hpp"
 #include "../../Core/Constants.hpp"
+#include "../../Core/Config.hpp"
 
 OptionsScreen::OptionsScreen()
 {
@@ -12,6 +15,19 @@ OptionsScreen::OptionsScreen()
     }));
     optionsItemDrawables.push_back(new SliderOptionItemDrawable("Music Volume", Game::audioManager.getMusicVolumeUnitInterval(), [](float value) {
         Game::audioManager.setMusicVolume(value);
+    }));
+    #ifdef SUPPORTS_AIM_ASSIST
+    optionsItemDrawables.push_back(new BooleanOptionItemDrawable("Aim assist", Game::control.aimAssist, [](bool value) {
+        Game::control.aimAssist = value;
+    }));
+    #endif
+    #ifdef PLATFORM_GROUP_COMPUTER
+    optionsItemDrawables.push_back(new BooleanOptionItemDrawable("Controller rumble", Game::control.controllerRumble, [](bool value) {
+        Game::control.controllerRumble = value;
+    }));
+    #endif
+    optionsItemDrawables.push_back(new BooleanOptionItemDrawable("Show framerate", Game::showFramerate, [](bool value) {
+        Game::showFramerate = value;
     }));
 }
 
@@ -66,8 +82,8 @@ void OptionsScreen::layoutPass()
 {
     int currentY = 4 * Constants::WINDOW_PADDING_PX;
     int optionItemWidth = Game::width - Constants::WINDOW_PADDING_PX * 2;
-    int optionItemHeight = Game::height * 0.05f;
-    int optionItemSpacing = optionItemHeight * 0.3f;
+    int optionItemHeight = Game::height * 0.045f;
+    int optionItemSpacing = optionItemHeight * 0.4f;
     for (auto& optionItemDrawable : optionsItemDrawables)
     {
         optionItemDrawable->layout(Constants::WINDOW_PADDING_PX, currentY, optionItemWidth, optionItemHeight);

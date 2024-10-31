@@ -1,7 +1,6 @@
 #include "FramerateIndicator.hpp"
 
 #include "../Game.hpp"
-#include "Options.hpp"
 #include "Constants.hpp"
 #include "Macros.hpp"
 
@@ -23,7 +22,7 @@ void FramerateIndicator::init()
 
 void FramerateIndicator::update()
 {
-    if (!Game::options.showFramerate)
+    if (!Game::showFramerate)
         return;
 
     int deltaTimeMs = Game::latestLoopDeltaTimeMs;
@@ -57,7 +56,7 @@ void FramerateIndicator::update()
 
 void FramerateIndicator::render()
 {
-    if (!Game::options.showFramerate)
+    if (!Game::showFramerate)
         return;
     framerateTextDrawable->draw();
 }

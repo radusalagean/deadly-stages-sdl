@@ -109,7 +109,7 @@ void Player::handleEvents(Level& level)
     }
     if (scanDirection != 0)
     {
-        if (Game::options.aimAssist)
+        if (Game::control.aimAssist)
         {
             assignTargetToNearestEnemy(level, scanDirection);
         }

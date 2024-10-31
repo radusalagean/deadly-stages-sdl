@@ -7,7 +7,6 @@
 #include "Screen/MainMenu/MainMenuScreen.hpp"
 #include "Debug/Logger.hpp"
 #include "Control/Control.hpp"
-#include "Core/Options.hpp"
 #include "Core/FramerateIndicator.hpp"
 #include "Core/AudioManager.hpp"
 #include <string>
@@ -34,13 +33,15 @@ namespace Game
     extern FontManager fontManager;
     extern ScreenManager screenManager;
     extern PrimitiveShapeHelper primitiveShapeHelper;
-    extern Options options;
     extern FramerateIndicator framerateIndicator;
     extern AudioManager audioManager;
 
     // Time
     extern float latestLoopDeltaTimeMs;
     extern float latestLoopDeltaTimeSeconds;
+
+    // Debug
+    extern bool showFramerate;
 
     void init();
 

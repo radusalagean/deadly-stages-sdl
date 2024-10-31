@@ -350,7 +350,7 @@ void Control::onControllerAxisMotion(const SDL_ControllerAxisEvent& axisEvent, S
 
 void Control::rumbleCurrentControllerIfActive(ControllerRumbleConfig config)
 {
-    if (currentGameController == nullptr || currentControlSource != CS_CONTROLLER)
+    if (!controllerRumble || currentGameController == nullptr || currentControlSource != CS_CONTROLLER)
         return;
     ControllerRumbleTrigger trigger = config.trigger;
     if (trigger == RUMBLE_TRIGGER && !SDL_GameControllerHasRumbleTriggers(currentGameController))

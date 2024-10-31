@@ -22,12 +22,13 @@ namespace Game
     FontManager fontManager;
     ScreenManager screenManager;
     PrimitiveShapeHelper primitiveShapeHelper;
-    Options options;
     AudioManager audioManager;
     FramerateIndicator framerateIndicator;
 
     float latestLoopDeltaTimeMs = 0;
     float latestLoopDeltaTimeSeconds = 0;
+
+    bool showFramerate = false;
 
     void init()
     {

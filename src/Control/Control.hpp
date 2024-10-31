@@ -201,6 +201,11 @@ private:
     }
 
 public:
+    #ifdef SUPPORTS_AIM_ASSIST
+    bool aimAssist = true;
+    #endif
+    bool controllerRumble = true;
+
     void init();
     void initGameController(int index);
     void disposeGameController(SDL_JoystickID instanceId, bool removeFromMap = true);
