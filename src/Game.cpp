@@ -72,6 +72,9 @@ namespace Game
         );
 
         SDL_SetWindowMinimumSize(window, MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT);
+        #ifdef SUPPORTS_MOUSE_POINTER
+        SDL_ShowCursor(SDL_DISABLE);
+        #endif
 
         #ifdef PLATFORM_GROUP_COMPUTER
         // SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP); // TODO

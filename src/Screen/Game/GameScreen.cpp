@@ -21,7 +21,6 @@ GameScreen::~GameScreen()
 
 #ifdef SUPPORTS_MOUSE_POINTER
     SDL_DestroyTexture(cursorTexture);
-    SDL_ShowCursor(SDL_ENABLE);
 #endif
 }
 
@@ -34,7 +33,6 @@ void GameScreen::init()
     pauseOverlay.load();
 
 #ifdef SUPPORTS_MOUSE_POINTER
-    SDL_ShowCursor(SDL_DISABLE);
     cursorTexture = SDLUtils::loadTexture("res/image/crosshair.png");
     SDL_QueryTexture(cursorTexture, nullptr, nullptr, &cursorWidth, &cursorHeight);
 #endif
