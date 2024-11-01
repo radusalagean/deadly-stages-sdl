@@ -3,7 +3,7 @@
 source "$(dirname "${BASH_SOURCE[0]}")/../../parse-build-type.sh"
 source "$(dirname "${BASH_SOURCE[0]}")/../../pre-run.sh"
 
-FINAL_RES_DIR="build/psp-$BUILD_TYPE/res"
+FINAL_RES_DIR="build/linux-x86_64-$BUILD_TYPE/res"
 
 mkdir -p $FINAL_RES_DIR
 rsync -av --exclude '*.tiled-*' \
@@ -17,22 +17,21 @@ rsync -av --exclude '*.tiled-*' \
 for dir in res/level/*; do
     if [ -d "$dir" ]; then
         level_name=$(basename "$dir")
-        if [ -f "$dir/preview_128.png" ]; then
-            cp "$dir/preview_128.png" "$FINAL_RES_DIR/level/$level_name/preview.png"
+        if [ -f "$dir/preview_512.png" ]; then
+            cp "$dir/preview_512.png" "$FINAL_RES_DIR/level/$level_name/preview.png"
         fi
     fi
 done
 
 # Music
-for file in res/music/*_psp.wav; do
-    cp "$file" "$FINAL_RES_DIR/music/$(basename "$file" | sed 's/_psp//')"
+for file in res/music/*_pc.ogg; do
+    cp "$file" "$FINAL_RES_DIR/music/$(basename "$file" | sed 's/_pc//')"
 done
 for dir in res/level/*; do
     if [ -d "$dir" ]; then
         level_name=$(basename "$dir")
-        if [ -f "$dir/music_psp.wav" ]; then
-            cp "$dir/music_psp.wav" "$FINAL_RES_DIR/level/$level_name/music.wav"
+        if [ -f "$dir/music_pc.ogg" ]; then
+            cp "$dir/music_pc.ogg" "$FINAL_RES_DIR/level/$level_name/music.ogg"
         fi
     fi
 done
-

@@ -5,7 +5,13 @@
         {
             "label": "copy-res-debug",
             "type": "shell",
-            "command": "${workspaceFolder:Linux}/scripts/copy-res-debug.sh",
+            "command": "${workspaceFolder:Linux}/scripts/copy-res.sh debug",
+            "problemMatcher": []
+        },
+        {
+            "label": "copy-res-release",
+            "type": "shell",
+            "command": "${workspaceFolder:Linux}/scripts/copy-res.sh release",
             "problemMatcher": []
         },
 
@@ -13,17 +19,31 @@
         {
             "label": "compile-debug",
             "type": "shell",
-            "command": "${workspaceFolder:Linux}/scripts/compile-debug.sh",
+            "command": "${workspaceFolder:Linux}/scripts/compile.sh debug",
             "group": "build",
             "problemMatcher": []
         },
+        {
+            "label": "compile-release",
+            "type": "shell",
+            "command": "${workspaceFolder:Linux}/scripts/compile.sh release",
+            "problemMatcher": []
+        },
+
         // Clean
         {
             "label": "clean-debug",
             "type": "shell",
-            "command": "${workspaceFolder:Linux}/scripts/clean-debug.sh",
+            "command": "${workspaceFolder:Linux}/scripts/clean.sh debug",
             "problemMatcher": []
         },
+        {
+            "label": "clean-release",
+            "type": "shell",
+            "command": "${workspaceFolder:Linux}/scripts/clean.sh release",
+            "problemMatcher": []
+        },
+
         // Debug
         {
             "label": "print-env-variables",

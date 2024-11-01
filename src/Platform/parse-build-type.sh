@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# This script is meant to be used only from another script. Don't use it directly.
+
 set -e
 
 if [ $# -eq 0 ]; then
