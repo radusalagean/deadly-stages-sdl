@@ -1,5 +1,6 @@
 # Deadly Stages Remix
-A multi-platform SDL reimplementation of the original 2015 Deadly Stages Demo from @XtremePrime and @popica23
+
+A multi-platform remake of the original 2015 Deadly Stages Demo from @XtremePrime and @popica23
 
 ## New features
 
@@ -28,7 +29,23 @@ Behavior:
 	- Shadows
 	- Landing from a jump will shake the camera
 
-## PSP
+## Build instructions
+
+### Linux target (from Linux environment)
+- TODO
+
+### Windows target (from Windows environment)
+- Dev environmnent setup on Ubuntu Linux:
+    - Install the required dependencies:
+        ```bash
+        sudo apt install g++-mingw-w64-x86-64
+        ```
+- TODO Continue
+
+### macOS target (from macOS environment)
+- TODO
+
+### PSP target (from Linux environment)
 - Dev environmnent setup on Ubuntu Linux:
     - Install the required dependencies:
         ```bash

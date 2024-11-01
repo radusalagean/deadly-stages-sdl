@@ -1,0 +1,55 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        // Copy res
+        {
+            "label": "copy-res-debug",
+            "type": "shell",
+            "command": "${workspaceFolder:Windows}/scripts/copy-res.sh debug",
+            "problemMatcher": []
+        },
+        {
+            "label": "copy-res-release",
+            "type": "shell",
+            "command": "${workspaceFolder:Windows}/scripts/copy-res.sh release",
+            "problemMatcher": []
+        },
+
+        // Compile
+        {
+            "label": "compile-debug",
+            "type": "shell",
+            "command": "${workspaceFolder:Windows}/scripts/compile.sh debug",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "compile-release",
+            "type": "shell",
+            "command": "${workspaceFolder:Windows}/scripts/compile.sh release",
+            "problemMatcher": []
+        },
+
+        // Clean
+        {
+            "label": "clean-debug",
+            "type": "shell",
+            "command": "${workspaceFolder:Windows}/scripts/clean.sh debug",
+            "problemMatcher": []
+        },
+        {
+            "label": "clean-release",
+            "type": "shell",
+            "command": "${workspaceFolder:Windows}/scripts/clean.sh release",
+            "problemMatcher": []
+        },
+
+        // Debug
+        {
+            "label": "print-env-variables",
+            "type": "shell",
+            "command": "env",
+            "problemMatcher": []
+        }
+    ]
+}

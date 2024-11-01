@@ -3,6 +3,7 @@
 
 #include "../Screen.hpp"
 #include "../../Drawable/TextDrawable.hpp"
+#include <cfloat>
 
 class CreditsScreen : public Screen
 {
