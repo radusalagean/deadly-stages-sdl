@@ -5,27 +5,27 @@
         {
             "label": "copy-res-debug",
             "type": "shell",
-            "command": "${workspaceFolder:PSP}/scripts/copy-res-debug.sh",
+            "command": "${workspaceFolder:PSP}/scripts/copy-res.sh debug",
             "problemMatcher": []
         },
         {
             "label": "copy-res-release",
             "type": "shell",
-            "command": "${workspaceFolder:PSP}/scripts/copy-res-release.sh",
+            "command": "${workspaceFolder:PSP}/scripts/copy-res.sh release",
             "problemMatcher": []
         },
         // Compile
         {
             "label": "compile-debug",
             "type": "shell",
-            "command": "${workspaceFolder:PSP}/scripts/compile-debug.sh",
+            "command": "${workspaceFolder:PSP}/scripts/compile.sh debug",
             "group": "build",
             "problemMatcher": []
         },
         {
             "label": "compile-release",
             "type": "shell",
-            "command": "${workspaceFolder:PSP}/scripts/compile-release.sh",
+            "command": "${workspaceFolder:PSP}/scripts/compile.sh release",
             "group": "build",
             "problemMatcher": []
         },
@@ -33,13 +33,13 @@
         {
             "label": "clean-debug",
             "type": "shell",
-            "command": "${workspaceFolder:PSP}/scripts/clean-debug.sh",
+            "command": "${workspaceFolder:PSP}/scripts/clean.sh debug",
             "problemMatcher": []
         },
         {
             "label": "clean-release",
             "type": "shell",
-            "command": "${workspaceFolder:PSP}/scripts/clean-release.sh",
+            "command": "${workspaceFolder:PSP}/scripts/clean.sh release",
             "problemMatcher": []
         },
         // Debug

@@ -32,12 +32,12 @@ Behavior:
 - Dev environmnent setup on Ubuntu Linux:
     - Install the required dependencies:
         ```bash
-        bash <(curl -s https://raw.githubusercontent.com/pspdev/pspdev/v20241001/prepare.sh)
+        bash <(curl -s https://raw.githubusercontent.com/pspdev/pspdev/v20241031/prepare.sh)
         ```
         ```bash
         sudo apt install make cmake genisoimage
         ```
-    - Get the [`v20241001`](https://github.com/pspdev/pspdev/releases/tag/v20241001) `pspdev-ubuntu-latest-x86_64.tar.gz` archive from the releases page and extract it
+    - Get the [`v20241031`](https://github.com/pspdev/pspdev/releases/tag/v20241031) `pspdev-ubuntu-latest-x86_64.tar.gz` archive from the releases page and extract it
     - Move the `pspdev` directory to `~/pspdev`
     - Add in `~/.bashrc`:
         ```bash
@@ -52,3 +52,12 @@ Behavior:
         ```
         pspsh -e ./DeadlyStagesRemix.prx
         ```
+- For creating a PSP Release ISO, you need to have the `PARAM.SFO` file. As of the current `v20241031` PSP SDK version, there is a post-build Cmake command that removes `PARAM.SFO` after the build is complete. To avoid this, before creating a release build, you can remove the following lines from the `$PSPDEV/psp/share/CreatePBP.cmake` file:
+    ```cmake
+    add_custom_command(
+      TARGET ${ARG_TARGET} POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E remove
+      ${ARG_OUTPUT_DIR}/PARAM.SFO
+      COMMENT "Cleaning up PARAM.SFO for target ${ARG_TARGET}"
+    )
+    ```

@@ -2,6 +2,7 @@
 #include <iostream>
 #include "../Debug/Logger.hpp"
 #include "Macros.hpp"
+#include "Config.hpp"
 
 const std::unordered_map<const AudioSFXId, AudioConfig> AudioManager::audioConfigs =
 {
@@ -36,7 +37,7 @@ const std::unordered_map<const AudioSFXId, AudioConfig> AudioManager::audioConfi
 
 const std::unordered_map<const AudioMusicId, AudioConfig> AudioManager::musicConfigs =
 {
-    {AudioMusicId::MENUS, {"res/music/menus.ogg"}}
+    {AudioMusicId::MENUS, {std::string("res/music/menus.") + MUSIC_FILE_EXT}}
 };
 
 AudioManager::AudioManager() {}

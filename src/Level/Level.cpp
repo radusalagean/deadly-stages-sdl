@@ -14,11 +14,12 @@
 #include "../GameEntity/BloodPool.hpp"
 #include "../GameEntity/Pickup.hpp"
 #include "../Core/AudioManager.hpp"
+#include "../Core/Config.hpp"
 
 Level::Level(std::string id)
 {
     this->id = id;
-    levelMusicPath = RPATH("res/level/" + id + "/music.ogg");
+    levelMusicPath = RPATH("res/level/" + id + "/music." + MUSIC_FILE_EXT);
 }
 
 Level::~Level()

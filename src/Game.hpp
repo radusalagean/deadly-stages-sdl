@@ -44,6 +44,7 @@ namespace Game
     extern std::vector<int> framerateLimitOptions;
     extern std::vector<std::string> framerateLimitOptionLabels;
     extern bool showFramerate;
+    extern float minSecondsPerFrame;
     void setFramerateLimitIndex(int index);
     const int getFramerateLimitIndex();
 

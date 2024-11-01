@@ -5,6 +5,7 @@
 #include <chrono>
 #include "../Core/FloatAnimator.hpp"
 #include <vector>
+#include <string>
 
 #define GSCALE(value) (value * Constants::GAMEPLAY_SCALE)
 

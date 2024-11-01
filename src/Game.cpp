@@ -33,6 +33,7 @@ namespace Game
     std::vector<std::string> framerateLimitOptionLabels = { "30 FPS", "60 FPS" };
     int framerateLimitIndex = 1;
     int minMillisPerFrame = 0;
+    float minSecondsPerFrame = 0.0f;
     bool showFramerate = false;
     
     void setFramerateLimitIndex(int index)
@@ -40,6 +41,7 @@ namespace Game
         framerateLimitIndex = index;
         int currentFramerateLimit = framerateLimitOptions[framerateLimitIndex];
         minMillisPerFrame = currentFramerateLimit > 0 ? 1000 / currentFramerateLimit : 0;
+        minSecondsPerFrame = minMillisPerFrame / 1000.0f;
     }
 
     const int getFramerateLimitIndex()
