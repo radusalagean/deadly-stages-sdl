@@ -13,7 +13,7 @@ TextDrawable::TextDrawable(const std::string& text, const SDL_Color& color, cons
 
 TextDrawable::~TextDrawable()
 {
-    SDL_DestroyTexture(texture);
+        SDL_DestroyTexture(texture);
 }
 
 void TextDrawable::load()

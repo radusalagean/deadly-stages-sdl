@@ -22,7 +22,8 @@
 			"cinttypes": "cpp",
 			"cstdint": "cpp",
 			"cstdio": "cpp",
-			"cwchar": "cpp"
+			"cwchar": "cpp",
+			"new": "cpp"
 		}
 	}
 }

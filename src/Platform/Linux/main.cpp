@@ -1,6 +1,5 @@
 #include "../../Game.hpp"
-
-#include "../../Platform/Common/SaveDataHelper.hpp"
+#include "../Common/SaveDataHelper.hpp"
 
 std::string resDirPathPrefix = "";
 

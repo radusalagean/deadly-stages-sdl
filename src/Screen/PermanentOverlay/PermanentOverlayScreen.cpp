@@ -12,10 +12,6 @@ PermanentOverlayScreen::PermanentOverlayScreen()
 
 PermanentOverlayScreen::~PermanentOverlayScreen()
 {
-    for (auto& drawable : drawables)
-    {
-        delete drawable;
-    }
     drawables.clear();
 }
 
