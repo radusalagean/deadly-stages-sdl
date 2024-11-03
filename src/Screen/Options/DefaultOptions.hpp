@@ -9,6 +9,7 @@ struct DefaultOptions
     static constexpr bool CONTROLLER_RUMBLE = true;
     static constexpr int FRAMERATE_LIMIT_INDEX = 1;
     static constexpr bool SHOW_FRAMERATE = false;
+    static constexpr bool FULLSCREEN = true;
     static constexpr int DEFAULT_CAMERA_ZOOM_INDEX = 1;
 };
 

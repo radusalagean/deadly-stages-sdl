@@ -47,6 +47,13 @@ OptionsScreen::OptionsScreen()
         Game::showFramerate = value;
     }));
 
+    // Fullscreen
+    #ifdef PLATFORM_GROUP_COMPUTER
+    optionsItemDrawables.push_back(new BooleanOptionItemDrawable("Fullscreen", Game::fullscreen, DefaultOptions::FULLSCREEN, [](bool value) {
+        Game::fullscreen = value;
+    }));
+    #endif
+
     // Default camera zoom
     optionsItemDrawables.push_back(new PredefinedOptionItemDrawable("Default camera zoom", Camera::zoomOptionLabels, DefaultOptions::DEFAULT_CAMERA_ZOOM_INDEX, Camera::defaultZoomIndex, [](int value) {
         Camera::defaultZoomIndex = value;

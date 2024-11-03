@@ -36,7 +36,12 @@ namespace Game
     int minMillisPerFrame = 0;
     float minSecondsPerFrame = 0.0f;
     bool showFramerate = false;
-    
+
+    #ifdef PLATFORM_GROUP_COMPUTER
+    bool fullscreen = false;
+    bool fullscreenChangeFailed = false;
+    #endif
+
     void setFramerateLimitIndex(int index)
     {
         framerateLimitIndex = index;
@@ -77,10 +82,6 @@ namespace Game
         SDL_SetWindowMinimumSize(window, MINIMUM_WINDOW_WIDTH, MINIMUM_WINDOW_HEIGHT);
         #ifdef SUPPORTS_MOUSE_POINTER
         SDL_ShowCursor(SDL_DISABLE);
-        #endif
-
-        #ifdef PLATFORM_GROUP_COMPUTER
-        // SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP); // TODO
         #endif
 
         renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -136,6 +137,25 @@ namespace Game
     void update()
     {
         screenManager.update();
+
+        #ifdef PLATFORM_GROUP_COMPUTER
+        if (!fullscreenChangeFailed)
+        {
+            int result = 0;
+            if (fullscreen && !(SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN))
+            {
+                result = SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+            } 
+            else if (!fullscreen && (SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN))
+            {
+                result = SDL_SetWindowFullscreen(window, 0);
+            }
+            if (result != 0)
+            {
+                fullscreenChangeFailed = true; // Because we don't want to be stuck in a loop if something goes wrong
+            }
+        }
+        #endif
     }   
 
     void render()

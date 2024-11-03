@@ -32,7 +32,7 @@
     #define SUPPORTS_SHADOWS
     #define SUPPORTS_MOUSE_POINTER
     #define SUPPORTS_CONTROLLER_RUMBLE
-    #define PRINT_LOGS_TO_FILE
+    // #define PRINT_LOGS_TO_FILE
 
     #define MUSIC_FILE_EXT "ogg"
 #endif

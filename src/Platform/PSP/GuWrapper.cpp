@@ -7,7 +7,7 @@
 #define SCR_WIDTH (480)
 #define SCR_HEIGHT (272)
 
-namespace GuWrapper
+namespace GuWrapper // TODO Remove if not needed anymore
 {
     static unsigned int __attribute__((aligned(16))) list[1024];
 

@@ -51,6 +51,12 @@ namespace Game
     void setFramerateLimitIndex(int index);
     const int getFramerateLimitIndex();
 
+    #ifdef PLATFORM_GROUP_COMPUTER
+    // Fullscreen
+    extern bool fullscreen;
+    extern bool fullscreenChangeFailed;
+    #endif
+
     void init();
 
     void loop();

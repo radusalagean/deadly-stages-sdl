@@ -6,7 +6,7 @@
 
 using namespace tinyxml2;
 
-namespace XMLSerializer
+namespace XMLSerializer // TODO Rename to OptionsAdapter
 {
     std::string serializeOptions()
     {
@@ -51,6 +51,13 @@ namespace XMLSerializer
             printer.PushText(Game::showFramerate);
             printer.CloseElement();
         }
+        #ifdef PLATFORM_GROUP_COMPUTER
+        {
+            printer.OpenElement("fullscreen");
+            printer.PushText(Game::fullscreen);
+            printer.CloseElement();
+        }
+        #endif
         {
             printer.OpenElement("default_camera_zoom_index");
             printer.PushText(Camera::defaultZoomIndex);
