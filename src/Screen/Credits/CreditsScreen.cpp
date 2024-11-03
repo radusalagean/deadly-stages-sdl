@@ -97,6 +97,7 @@ CreditsScreen::~CreditsScreen()
 void CreditsScreen::init()
 {
     loadAssets();
+    Game::isLoading = false;
 }
 
 void CreditsScreen::loadAssets()

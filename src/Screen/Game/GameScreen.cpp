@@ -36,6 +36,8 @@ void GameScreen::init()
     cursorTexture = SDLUtils::loadTexture("res/image/crosshair.png");
     SDL_QueryTexture(cursorTexture, nullptr, nullptr, &cursorWidth, &cursorHeight);
 #endif
+
+    Game::isLoading = false;
 }
 
 void GameScreen::handleEvents()

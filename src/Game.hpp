@@ -7,7 +7,6 @@
 #include "Screen/MainMenu/MainMenuScreen.hpp"
 #include "Debug/Logger.hpp"
 #include "Control/Control.hpp"
-#include "Core/FramerateIndicator.hpp"
 #include "Core/AudioManager.hpp"
 #include <string>
 
@@ -24,6 +23,8 @@ namespace Game
 {
     // Flags
     extern bool isRunning;
+    extern bool isLoading;
+    extern bool isSaving;
 
     // SDL
     extern SDL_Window* window;
@@ -36,7 +37,6 @@ namespace Game
     extern FontManager fontManager;
     extern ScreenManager screenManager;
     extern PrimitiveShapeHelper primitiveShapeHelper;
-    extern FramerateIndicator framerateIndicator;
     extern AudioManager audioManager;
 
     // Time

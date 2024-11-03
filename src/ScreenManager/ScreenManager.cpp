@@ -12,6 +12,12 @@ ScreenManager::~ScreenManager()
         delete screen;
     }
     screens.clear();
+
+    if (permanentOverlayScreen != nullptr)
+    {
+        delete permanentOverlayScreen;
+        permanentOverlayScreen = nullptr;
+    }
 }
 
 void ScreenManager::pushScreen(Screen* screen) 
@@ -44,7 +50,9 @@ void ScreenManager::init()
 void ScreenManager::handleEvents() 
 {
     if (!screens.empty())
+    {
         screens.back()->handleEvents();
+    }
 }
 
 void ScreenManager::update() 
@@ -59,14 +67,27 @@ void ScreenManager::update()
         currentScreen->update();
     }
 
-    handlePendingTransactions();
+    if (permanentOverlayScreen != nullptr)
+    {
+        if (permanentOverlayScreen->isLayoutInvalidated())
+        {
+            permanentOverlayScreen->layoutPass();
+        }
+        permanentOverlayScreen->update();
+    }
 }
 
 void ScreenManager::render() 
 {
-    if (screens.empty())
-        return;
-    screens.back()->render();
+    if (!screens.empty())
+    {
+        screens.back()->render();
+    }
+
+    if (permanentOverlayScreen != nullptr)
+    {
+        permanentOverlayScreen->render();
+    }
 }
 
 void ScreenManager::handlePendingTransactions() 
@@ -99,10 +120,23 @@ void ScreenManager::handlePendingTransactions()
         screen->init();
     }
     screensToAdd.clear();
+
+    if (permanentOverlayScreen == nullptr)
+    {
+        permanentOverlayScreen = new PermanentOverlayScreen();
+        permanentOverlayScreen->init();
+    }
 }
 
 void ScreenManager::onRendererOutputSizeChanged()
 {
     for (auto& screen : screens)
+    {
         screen->invalidateLayout();
+    }
+
+    if (permanentOverlayScreen != nullptr)
+    {
+        permanentOverlayScreen->invalidateLayout();
+    }
 }

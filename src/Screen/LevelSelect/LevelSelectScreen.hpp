@@ -22,9 +22,6 @@ private:
     
     std::vector<LevelPreview*> levelPreviews{};
     TextDrawable levelNameTextDrawable = TextDrawable("");
-    TextDrawable loadingTextDrawable = TextDrawable("Loading...", {255, 0, 0, 255});
-    bool loadingIndicatorRendered = false;
-    std::string pendingLevelLoadId = "";
 
     void layoutText();
 

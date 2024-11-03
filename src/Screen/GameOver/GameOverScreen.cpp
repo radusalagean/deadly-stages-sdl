@@ -102,6 +102,7 @@ void GameOverScreen::layoutPass()
 
 void GameOverScreen::menuContinue()
 {
+    Game::isLoading = true;
     Game::screenManager.setScreen(new GameScreen(levelId));
 }
 

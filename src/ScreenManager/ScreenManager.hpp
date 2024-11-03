@@ -2,6 +2,8 @@
 #define __SRC_SCREENMANAGER_SCREENMANAGER_HPP__
 
 #include <vector>
+#include "../Screen/PermanentOverlay/PermanentOverlayScreen.hpp"
+
 
 class Screen;
 
@@ -12,9 +14,8 @@ private:
     std::vector<Screen*> screensToAdd{};
     std::vector<Screen*> screensToRemove{};
     bool clearAllScreens = false;
-
-    void handlePendingTransactions();
-
+    PermanentOverlayScreen* permanentOverlayScreen = nullptr;
+    
 public:
     ~ScreenManager();
 
@@ -27,6 +28,7 @@ public:
     void handleEvents();
     void update();
     void render();
+    void handlePendingTransactions();
 
     void onRendererOutputSizeChanged();
 };

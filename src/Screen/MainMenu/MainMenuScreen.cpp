@@ -131,6 +131,7 @@ void MainMenuScreen::menuOptions()
 
 void MainMenuScreen::menuCredits()
 {
+    Game::isLoading = true;
     Game::screenManager.pushScreen(new CreditsScreen());
 }
 

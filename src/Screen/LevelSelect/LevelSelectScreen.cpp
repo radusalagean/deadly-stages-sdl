@@ -42,7 +42,6 @@ void LevelSelectScreen::init()
 {
     loadLevelPreviews();
     levelNameTextDrawable.load();
-    loadingTextDrawable.load();
 }
 
 void LevelSelectScreen::loadLevelPreviews()
@@ -54,10 +53,7 @@ void LevelSelectScreen::loadLevelPreviews()
 }
 
 void LevelSelectScreen::handleEvents()
-{
-    if (!pendingLevelLoadId.empty()) 
-        return;
-    
+{   
     if (Game::control.isActionDown(CA_MENUS_BACK))
     {
         Game::screenManager.popScreen();
@@ -90,7 +86,8 @@ void LevelSelectScreen::handleEvents()
 
 void LevelSelectScreen::selectLevel(const std::string& id)
 {
-    pendingLevelLoadId = id;
+    Game::isLoading = true;
+    Game::screenManager.setScreen(new GameScreen(id));
 }
 
 void LevelSelectScreen::previousLevel()
@@ -131,16 +128,6 @@ void LevelSelectScreen::layoutPass()
 
     layoutText();
 
-    { // Loading...
-        int textHeight = USCALE(Game::height * 0.045);
-        int textWidth = textHeight * loadingTextDrawable.getAspectRatio();
-        loadingTextDrawable.layout(
-            Game::width / 2 - textWidth / 2, 
-            Game::height / 2 - textHeight / 2,
-            textWidth, 
-            textHeight
-        );
-    }
     layoutInvalidated = false;
 }
 
@@ -155,11 +142,6 @@ void LevelSelectScreen::layoutText()
 
 void LevelSelectScreen::update()
 {
-    if (!pendingLevelLoadId.empty() && loadingIndicatorRendered)
-    {
-        Game::screenManager.setScreen(new GameScreen(pendingLevelLoadId));
-        return;
-    }
     for (unsigned i = 0; i < levelPreviews.size(); i++)
     {
         levelPreviews[i]->selected = i == selectedIndex;
@@ -171,17 +153,10 @@ void LevelSelectScreen::update()
         layoutText();
     }
     levelNameTextDrawable.update();
-    loadingTextDrawable.update();
 }
 
 void LevelSelectScreen::render()
 {
-    if (!pendingLevelLoadId.empty())
-    {
-        loadingTextDrawable.draw();
-        loadingIndicatorRendered = true;
-        return;
-    }
     for (auto& levelPreview : levelPreviews)
     {
         levelPreview->draw();

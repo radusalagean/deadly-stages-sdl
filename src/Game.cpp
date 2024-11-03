@@ -11,6 +11,8 @@
 namespace Game
 {
     bool isRunning = true;
+    bool isLoading = false;
+    bool isSaving = false;
 
     SDL_Window* window = nullptr;
     SDL_Renderer* renderer = nullptr;
@@ -23,7 +25,6 @@ namespace Game
     ScreenManager screenManager;
     PrimitiveShapeHelper primitiveShapeHelper;
     AudioManager audioManager;
-    FramerateIndicator framerateIndicator;
 
     float latestLoopDeltaTimeMs = 0;
     float latestLoopDeltaTimeSeconds = 0;
@@ -89,7 +90,6 @@ namespace Game
         logd("Renderer size on init: %dx%d", width, height);
 
         screenManager.init();
-        framerateIndicator.init();
         audioManager.init();
     }
 
@@ -100,6 +100,7 @@ namespace Game
         handleEvents();
         update();
         render();
+        screenManager.handlePendingTransactions();
 
         Uint32 effectiveDeltaTimeMs = SDL_GetTicks() - start;
         if (effectiveDeltaTimeMs < minMillisPerFrame) {
@@ -135,14 +136,12 @@ namespace Game
     void update()
     {
         screenManager.update();
-        framerateIndicator.update();
     }   
 
     void render()
     {
         SDL_RenderClear(renderer);
         screenManager.render();
-        framerateIndicator.render();
         SDL_RenderPresent(renderer);
     }
 

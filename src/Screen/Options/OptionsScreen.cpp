@@ -64,6 +64,8 @@ OptionsScreen::~OptionsScreen()
     {
         delete optionItemDrawable;
     }
+    platformSaveOptions();
+    Game::isSaving = false;
 }
 
 void OptionsScreen::init()
@@ -100,7 +102,7 @@ void OptionsScreen::handleEvents()
     }
     if (Game::control.isActionDown(CA_MENUS_BACK))
     {
-        platformSaveOptions();
+        Game::isSaving = true;
         Game::screenManager.popScreen();
     }
     optionsItemDrawables[selectedOptionItemIndex]->handleEvents();
