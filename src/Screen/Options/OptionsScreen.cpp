@@ -31,7 +31,7 @@ OptionsScreen::OptionsScreen()
     #endif
 
     // Controller rumble
-    #ifdef PLATFORM_GROUP_COMPUTER
+    #ifdef SUPPORTS_CONTROLLER_RUMBLE
     optionsItemDrawables.push_back(new BooleanOptionItemDrawable("Controller rumble", Game::control.controllerRumble, DefaultOptions::CONTROLLER_RUMBLE, [](bool value) {
         Game::control.controllerRumble = value;
     }));
@@ -100,6 +100,7 @@ void OptionsScreen::handleEvents()
     }
     if (Game::control.isActionDown(CA_MENUS_BACK))
     {
+        platformSaveOptions();
         Game::screenManager.popScreen();
     }
     optionsItemDrawables[selectedOptionItemIndex]->handleEvents();

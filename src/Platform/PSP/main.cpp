@@ -1,9 +1,12 @@
 #include "../../Game.hpp"
 
+#include "SaveDataHelper.hpp"
+
 std::string resDirPathPrefix = "";
 
 // Reference: https://groups.csail.mit.edu/cag/raw/documents/R4400_Uman_book_Ed2.pdf (page 160 in book - 190 in PDF)
-void disableFPUExceptions() {
+void disableFPUExceptions() 
+{
 
     unsigned int fcsr_before, fcsr_after;
 

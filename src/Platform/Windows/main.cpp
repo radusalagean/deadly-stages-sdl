@@ -1,5 +1,7 @@
 #include "../../Game.hpp"
 
+#include "../../Core/SaveDataHelper.hpp"
+
 std::string resDirPathPrefix = "";
 
 int WinMain()

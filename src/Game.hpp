@@ -13,6 +13,9 @@
 
 extern std::string resDirPathPrefix;
 
+extern void platformSaveOptions();
+extern void platformLoadOptions();
+
 class FontManager;
 class ScreenManager;
 class PrimitiveShapeHelper;

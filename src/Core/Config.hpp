@@ -20,6 +20,10 @@
 
     #define SUPPORTS_AIM_ASSIST
 
+    #if defined(_PSP_FW_VERSION) && _PSP_FW_VERSION >= 200
+        #define PLATFORM_PSP_SUPPORTS_SAVE_DATA_ENCRYPTION
+    #endif
+
     #define MUSIC_FILE_EXT "wav"
 #else
     #define MINIMUM_WINDOW_WIDTH 640
@@ -27,6 +31,7 @@
 
     #define SUPPORTS_SHADOWS
     #define SUPPORTS_MOUSE_POINTER
+    #define SUPPORTS_CONTROLLER_RUMBLE
     #define PRINT_LOGS_TO_FILE
 
     #define MUSIC_FILE_EXT "ogg"
