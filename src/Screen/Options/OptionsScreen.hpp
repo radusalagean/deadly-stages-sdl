@@ -4,7 +4,7 @@
 #include "../Screen.hpp"
 #include "../../Drawable/OptionItemDrawable.hpp"
 #include "../../Core/Debouncer.hpp"
-#include "DefaultOptions.hpp"
+#include "../../Core/DefaultOptions.hpp"
 #include <vector>
 
 class OptionsScreen : public Screen

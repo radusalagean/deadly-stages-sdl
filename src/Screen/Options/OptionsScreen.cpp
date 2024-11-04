@@ -38,7 +38,7 @@ OptionsScreen::OptionsScreen()
     #endif
 
     // Framerate limit
-    optionsItemDrawables.push_back(new PredefinedOptionItemDrawable("Framerate limit", Game::framerateLimitOptionLabels, DefaultOptions::FRAMERATE_LIMIT_INDEX, Game::getFramerateLimitIndex(), [](int value) {
+    optionsItemDrawables.push_back(new PredefinedOptionItemDrawable("Framerate limit", Game::framerateLimitOptionLabels, Game::getFramerateLimitIndex(), DefaultOptions::FRAMERATE_LIMIT_INDEX, [](int value) {
         Game::setFramerateLimitIndex(value);
     }));
 
@@ -55,7 +55,7 @@ OptionsScreen::OptionsScreen()
     #endif
 
     // Default camera zoom
-    optionsItemDrawables.push_back(new PredefinedOptionItemDrawable("Default camera zoom", Camera::zoomOptionLabels, DefaultOptions::DEFAULT_CAMERA_ZOOM_INDEX, Camera::defaultZoomIndex, [](int value) {
+    optionsItemDrawables.push_back(new PredefinedOptionItemDrawable("Default camera zoom", Camera::zoomOptionLabels, Camera::defaultZoomIndex, DefaultOptions::DEFAULT_CAMERA_ZOOM_INDEX, [](int value) {
         Camera::defaultZoomIndex = value;
     }));
 

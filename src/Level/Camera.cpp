@@ -3,17 +3,14 @@
 #include "../Game.hpp"
 #include "../Core/Macros.hpp"
 #include "../GameEntity/GameEntity.hpp"
+#include "../Core/DefaultOptions.hpp"
 #include <algorithm>
 #include <random>
 
 std::vector<float> Camera::zoomOptions = { Camera::ZOOM_0_5, Camera::ZOOM_1_0, Camera::ZOOM_2_0 };
 std::vector<std::string> Camera::zoomOptionLabels = { "0.5x", "1.0x", "2.0x" };
 
-#ifdef PLATFORM_PSP
-int Camera::defaultZoomIndex = 1;
-#else
-int Camera::defaultZoomIndex = 2;
-#endif
+int Camera::defaultZoomIndex = DefaultOptions::DEFAULT_CAMERA_ZOOM_INDEX;
 
 void Camera::update()
 {

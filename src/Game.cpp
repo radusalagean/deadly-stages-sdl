@@ -7,6 +7,7 @@
 #include "Core/PrimitiveShapeHelper.hpp"
 #include "Core/Constants.hpp"
 #include "Core/Config.hpp"
+#include "Core/DefaultOptions.hpp"
 
 namespace Game
 {
@@ -61,7 +62,7 @@ namespace Game
         Logger::init();
 
         // Framerate
-        setFramerateLimitIndex(framerateLimitIndex);
+        setFramerateLimitIndex(DefaultOptions::FRAMERATE_LIMIT_INDEX);
 
         // Init Control
         control.init();

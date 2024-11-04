@@ -1,7 +1,7 @@
 #ifndef __SRC_ADAPTER_OPTIONSMODEL_HPP__
 #define __SRC_ADAPTER_OPTIONSMODEL_HPP__
 
-#include "../Screen/Options/DefaultOptions.hpp"
+#include "../Core/DefaultOptions.hpp"
 #include "../Core/Config.hpp"
 
 struct OptionsModel
