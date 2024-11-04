@@ -4,6 +4,7 @@
 namespace SaveDataHelper
 {
     extern void saveOptions();
+    extern void loadOptions();
 };
 
 #endif // __SAVEDATAHELPER_HPP__

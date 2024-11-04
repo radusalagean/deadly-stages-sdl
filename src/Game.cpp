@@ -92,6 +92,8 @@ namespace Game
 
         screenManager.init();
         audioManager.init();
+
+        platformLoadOptions();
     }
 
     void loop()

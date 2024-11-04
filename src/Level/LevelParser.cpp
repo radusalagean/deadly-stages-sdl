@@ -8,14 +8,15 @@
 #define LEVEL_RELATIVE_PATH "res/level/"
 #define LEVEL_ABSOLUTE_PATH RPATH(LEVEL_RELATIVE_PATH)
 
+using namespace tinyxml2;
 
 Level* LevelParser::parseLevel(std::string levelId)
 {
-    tinyxml2::XMLDocument levelDocument;
+    XMLDocument levelDocument;
     levelDocument.LoadFile((LEVEL_ABSOLUTE_PATH + levelId + "/map.tmx").c_str());
 
     Level* level = new Level(levelId);
-    tinyxml2::XMLElement* root = levelDocument.RootElement();
+    XMLElement* root = levelDocument.RootElement();
 
     level->horizontalTilesCount = root->IntAttribute("width");
     level->verticalTilesCount = root->IntAttribute("height");
@@ -24,7 +25,7 @@ Level* LevelParser::parseLevel(std::string levelId)
     level->widthPx = level->horizontalTilesCount * level->tileWidthPx;
     level->heightPx = level->verticalTilesCount * level->tileHeightPx;
 
-    for (tinyxml2::XMLElement* e = root->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
+    for (XMLElement* e = root->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
     {
         const char* value = e->Value();
         if (value == std::string("tileset"))
@@ -41,10 +42,10 @@ Level* LevelParser::parseLevel(std::string levelId)
 void LevelParser::parseTileset(std::string levelId, const char* tilesetFile, std::map<int, Tile>& tileset)
 {
     std::string tilesetPath = std::string(LEVEL_ABSOLUTE_PATH) + levelId + "/" + tilesetFile;
-    tinyxml2::XMLDocument tilesetDocument;
+    XMLDocument tilesetDocument;
     tilesetDocument.LoadFile(tilesetPath.c_str());
-    tinyxml2::XMLElement* tilesRoot = tilesetDocument.RootElement();
-    for (tinyxml2::XMLElement* rootSubElement = tilesRoot->FirstChildElement(); rootSubElement != nullptr; rootSubElement = rootSubElement->NextSiblingElement())
+    XMLElement* tilesRoot = tilesetDocument.RootElement();
+    for (XMLElement* rootSubElement = tilesRoot->FirstChildElement(); rootSubElement != nullptr; rootSubElement = rootSubElement->NextSiblingElement())
     {
         const char* value = rootSubElement->Value();
         if (value == std::string("tile"))
@@ -54,7 +55,7 @@ void LevelParser::parseTileset(std::string levelId, const char* tilesetFile, std
             int width = 0;
             int height = 0;
             bool collidable = false;
-            for (tinyxml2::XMLElement* tileSubElement = rootSubElement->FirstChildElement(); tileSubElement != nullptr; tileSubElement = tileSubElement->NextSiblingElement())
+            for (XMLElement* tileSubElement = rootSubElement->FirstChildElement(); tileSubElement != nullptr; tileSubElement = tileSubElement->NextSiblingElement())
             {
                 const char* value = tileSubElement->Value();
                 if (value == std::string("image"))
@@ -65,7 +66,7 @@ void LevelParser::parseTileset(std::string levelId, const char* tilesetFile, std
                 }
                 else if (value == std::string("properties"))
                 {
-                    for (tinyxml2::XMLElement* propertySubElement = tileSubElement->FirstChildElement(); propertySubElement != nullptr; propertySubElement = propertySubElement->NextSiblingElement())
+                    for (XMLElement* propertySubElement = tileSubElement->FirstChildElement(); propertySubElement != nullptr; propertySubElement = propertySubElement->NextSiblingElement())
                     {
                         if (propertySubElement->Value() != std::string("property"))
                             continue;
@@ -81,7 +82,7 @@ void LevelParser::parseTileset(std::string levelId, const char* tilesetFile, std
     }
 }
 
-void LevelParser::parseTileLayer(tinyxml2::XMLElement* layerElement, TileLayer& tileLayer,
+void LevelParser::parseTileLayer(XMLElement* layerElement, TileLayer& tileLayer,
     std::map<int, Tile>& tileset)
 {
     int width = layerElement->IntAttribute("width");
@@ -91,7 +92,7 @@ void LevelParser::parseTileLayer(tinyxml2::XMLElement* layerElement, TileLayer& 
     // Parse the tiles from the data element
     std::vector<int> gids(width * height);
     int gidIndex = 0;
-    tinyxml2::XMLElement* dataElement = layerElement->FirstChildElement("data");
+    XMLElement* dataElement = layerElement->FirstChildElement("data");
     if (dataElement)
     {
         const char* csvData = dataElement->GetText();
@@ -128,9 +129,9 @@ void LevelParser::parseTileLayer(tinyxml2::XMLElement* layerElement, TileLayer& 
     }
 }
 
-void LevelParser::parseObjectLayer(tinyxml2::XMLElement* layerElement, Level& level)
+void LevelParser::parseObjectLayer(XMLElement* layerElement, Level& level)
 {
-    for (tinyxml2::XMLElement* e = layerElement->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
+    for (XMLElement* e = layerElement->FirstChildElement(); e != nullptr; e = e->NextSiblingElement())
     {
         const char* value = e->Value();
         if (value == std::string("object"))
