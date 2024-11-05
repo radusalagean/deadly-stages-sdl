@@ -42,7 +42,7 @@ $(TARGET): $(OBJECTS)
 	fi
 
 # Compile each .cpp file to .o, creating directories as needed
-$(FINAL_BUILD_DIR)/%.o: $(WORKING_DIR)/%.cpp
+$(FINAL_BUILD_DIR)/%.o: $(WORKING_DIR)/%.cpp $(WORKING_DIR)/src/Core/Config.hpp
 	mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
