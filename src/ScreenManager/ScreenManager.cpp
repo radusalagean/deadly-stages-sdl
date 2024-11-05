@@ -63,6 +63,7 @@ void ScreenManager::update()
         if (currentScreen->isLayoutInvalidated())
         {
             currentScreen->layoutPass();
+            currentScreen->layoutInvalidated = false;
         }
         currentScreen->update();
     }
@@ -72,6 +73,7 @@ void ScreenManager::update()
         if (permanentOverlayScreen->isLayoutInvalidated())
         {
             permanentOverlayScreen->layoutPass();
+            permanentOverlayScreen->layoutInvalidated = false;
         }
         permanentOverlayScreen->update();
     }

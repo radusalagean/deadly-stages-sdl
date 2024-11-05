@@ -65,7 +65,6 @@ void GameScreen::layoutPass()
 {
     hud->layoutPass();
     pauseOverlay.layoutPass();
-    layoutInvalidated = false;
 }
 
 void GameScreen::update()

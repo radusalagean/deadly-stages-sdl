@@ -18,11 +18,17 @@ namespace OptionsAdapter
 
     static constexpr const char* OPTION_SFX_VOLUME_PERCENT = "sfx_volume_percent";
     static constexpr const char* OPTION_MUSIC_VOLUME_PERCENT = "music_volume_percent";
+    #ifdef SUPPORTS_AIM_ASSIST
     static constexpr const char* OPTION_AIM_ASSIST = "aim_assist";
+    #endif
+    #ifdef SUPPORTS_CONTROLLER_RUMBLE
     static constexpr const char* OPTION_CONTROLLER_RUMBLE = "controller_rumble";
+    #endif
     static constexpr const char* OPTION_FRAMERATE_LIMIT_INDEX = "framerate_limit_index";
     static constexpr const char* OPTION_SHOW_FRAMERATE = "show_framerate";
+    #ifdef PLATFORM_GROUP_COMPUTER
     static constexpr const char* OPTION_FULLSCREEN = "fullscreen";
+    #endif
     static constexpr const char* OPTION_DEFAULT_CAMERA_ZOOM_INDEX = "default_camera_zoom_index";
 
     OptionsModel extractOptionsFromGame()

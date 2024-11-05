@@ -116,7 +116,6 @@ void MainMenuScreen::layoutPass()
         int y = Game::height - height - Constants::WINDOW_PADDING_PX;
         copyrightLabelTextDrawable->layout(x, y, width, height);
     }
-    layoutInvalidated = false;
 }
 
 void MainMenuScreen::menuStartGame()

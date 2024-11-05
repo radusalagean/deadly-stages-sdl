@@ -104,16 +104,17 @@ void LevelSelectScreen::nextLevel()
 
 void LevelSelectScreen::layoutPass()
 {
-    int availableSpacePerLevelPreview = Game::width / levelPreviews.size();
+    int availableSpacePerLevelPreview = (Game::width - 2 * Constants::WINDOW_PADDING_PX) / levelPreviews.size();
     int imageWidth = availableSpacePerLevelPreview * 0.75;
     int imageHeight = imageWidth; // All preview images should be square
     int selectionRectOutlineThickness = (availableSpacePerLevelPreview - imageWidth) * 0.15;
     int selectionRectSpacing = selectionRectOutlineThickness;
     int remainingFreeSpacePerLevelPreview = availableSpacePerLevelPreview - (2 * selectionRectOutlineThickness + 2 * selectionRectSpacing) - imageWidth;
     int freeSpacePerSide = remainingFreeSpacePerLevelPreview / 2;
-    int currentX = freeSpacePerSide;
+    int currentX = Constants::WINDOW_PADDING_PX;
     for (unsigned i = 0; i < levelPreviews.size(); i++)
     {
+        currentX += freeSpacePerSide;
         LevelPreview* levelPreview = levelPreviews[i];
         levelPreview->selectionRect.y = Game::height / 2 - imageHeight / 2 - selectionRectOutlineThickness - selectionRectSpacing;
         levelPreview->selectionRect.x = currentX;
@@ -127,8 +128,6 @@ void LevelSelectScreen::layoutPass()
     }
 
     layoutText();
-
-    layoutInvalidated = false;
 }
 
 void LevelSelectScreen::layoutText()

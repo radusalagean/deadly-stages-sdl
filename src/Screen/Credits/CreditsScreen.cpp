@@ -181,5 +181,4 @@ void CreditsScreen::layoutPass()
         scrollOffsetPx = scrollOffsetPx * heightDiffRatio;
     }
     lastKnownWindowHeightPx = Game::height;
-    layoutInvalidated = false;
 }

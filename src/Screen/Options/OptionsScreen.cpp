@@ -126,7 +126,6 @@ void OptionsScreen::layoutPass()
         optionItemDrawable->layout(Constants::WINDOW_PADDING_PX, currentY, optionItemWidth, optionItemHeight);
         currentY += optionItemHeight + optionItemSpacing;
     }
-    layoutInvalidated = false;
 }
 
 void OptionsScreen::update()

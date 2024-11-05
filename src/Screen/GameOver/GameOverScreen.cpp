@@ -97,7 +97,6 @@ void GameOverScreen::layoutPass()
         int y = statsBottomY;
         menuDrawable->layout(x, y, width, height);
     }
-    layoutInvalidated = false;
 }
 
 void GameOverScreen::menuContinue()

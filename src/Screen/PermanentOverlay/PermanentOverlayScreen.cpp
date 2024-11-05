@@ -60,5 +60,4 @@ void PermanentOverlayScreen::layoutPass()
         int y = Game::height - textHeight - Constants::WINDOW_PADDING_PX;
         savingTextDrawable.layout(x, y, textWidth, textHeight);
     }
-    layoutInvalidated = false;
 }

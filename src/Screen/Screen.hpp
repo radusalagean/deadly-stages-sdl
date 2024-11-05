@@ -13,7 +13,6 @@ protected:
     Screen();
 
     std::vector<Drawable*> drawables{};
-    bool layoutInvalidated = true;
     
 public:
     virtual ~Screen() = default;
@@ -25,6 +24,8 @@ public:
 
     void invalidateLayout() { layoutInvalidated = true; }
     bool isLayoutInvalidated() const { return layoutInvalidated; }
+
+    bool layoutInvalidated = true;
 };
 
 #endif // __SRC_SCREEN_SCREEN_HPP__
