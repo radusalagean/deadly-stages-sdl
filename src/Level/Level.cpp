@@ -15,6 +15,7 @@
 #include "../GameEntity/Pickup.hpp"
 #include "../Core/AudioManager.hpp"
 #include "../Core/Config.hpp"
+#include "../Core/Vector2D.hpp"
 
 Level::Level(std::string id)
 {
@@ -313,6 +314,11 @@ void Level::spawnEnemiesIfNeeded()
         {
             if (enemiesLeftToSpawn <= 0)
                 break;
+            SDL_Rect enemyRect = {static_cast<int>(spawnPoint->x), static_cast<int>(spawnPoint->y), Enemy::ENEMY_SIZE, Enemy::ENEMY_SIZE};
+            if (CollisionManager::rectVsRect(player->positionPlusCollisionRect, enemyRect))
+            {
+                continue;
+            }
             Enemy* enemy = new Enemy();
             enemy->init(*this, *spawnPoint);
             enemies.push_back(enemy);

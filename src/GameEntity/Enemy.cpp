@@ -24,7 +24,7 @@ Enemy::~Enemy()
 void Enemy::init(Level& level, Vector2D& spawnPoint)
 {
     setPosition(spawnPoint);
-    setSize(32, 32);
+    setSize(ENEMY_SIZE, ENEMY_SIZE);
     texturePath = "res/level/" + level.id + "/enemy.png";
     target = &level.player->positionPlusCenter;
     speedPxPerSecond = level.currentEnemySpeed;

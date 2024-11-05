@@ -11,6 +11,8 @@ public:
     Enemy();
     ~Enemy();
 
+    static constexpr int ENEMY_SIZE = 32;
+
     void init(Level& level, Vector2D& spawnPoint);
 
     // Speed
