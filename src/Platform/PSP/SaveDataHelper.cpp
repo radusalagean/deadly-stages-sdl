@@ -26,7 +26,7 @@ void platformLoadOptions()
 
 namespace SaveDataHelper
 {
-    char key[] = "SOMEKEYHERE12345"; // Key to encrypt or decrypt savedata
+    char key[] = SAVE_FILE_ENCRYPTION_KEY;
 
     void saveOptions()
     {

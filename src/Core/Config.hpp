@@ -5,6 +5,8 @@
 
 // #define DEBUG_DRAW_COLLISION_RECTS
 
+#define SAVE_FILE_ENCRYPTION_KEY "ccCYnBBmNkAVoLZ5"
+
 #if defined(WIN32) || defined(__linux__) || defined(__APPLE__)
     #define PLATFORM_GROUP_COMPUTER
 #endif

@@ -21,6 +21,9 @@ namespace Logger
                 if (*format == 'd') {
                     int arg = va_arg(args, int);
                     pos += snprintf(result + pos, sizeof(result) - pos, "%d", arg);
+                } else if (*format == 'u') {
+                    unsigned int arg = va_arg(args, unsigned int);
+                    pos += snprintf(result + pos, sizeof(result) - pos, "%u", arg);
                 } else if (*format == 'f') {
                     double arg = va_arg(args, double);
                     pos += snprintf(result + pos, sizeof(result) - pos, "%f", arg);
