@@ -142,6 +142,17 @@ void LevelParser::parseObjectLayer(XMLElement* layerElement, Level& level)
                 Player* player = new Player();
                 player->setPosition(Vector2D(e->IntAttribute("x"), e->IntAttribute("y")));
                 player->setSize(e->IntAttribute("width"), e->IntAttribute("height"));
+                XMLElement* properties = e->FirstChildElement("properties");
+                if (properties)
+                {
+                    for (XMLElement* property = properties->FirstChildElement(); property != nullptr; property = property->NextSiblingElement())
+                    {
+                        if (property->Value() != std::string("property"))
+                            continue;
+                        if (property->Attribute("name") == std::string("rotation"))
+                            player->rotation = property->IntAttribute("value");
+                    }
+                }
                 level.player = player;
             }
             // SpawnPoint
