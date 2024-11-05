@@ -15,13 +15,7 @@
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
                 }
-            ],
-            // "environment": [
-            //     {
-            //         "name": "SDL_VIDEODRIVER",
-            //         "value": "wayland"
-            //     }
-            // ]
+            ]
         }
     ]
 }
