@@ -114,10 +114,10 @@ void Weapon::update(Level& level)
 {
     if (ownerPosition != nullptr)
     {
-        float offsetX = offset.x * sin(rotation * M_PI / 180.0f);
-        float offsetY = offset.y * cos(rotation * M_PI / 180.0f);
+        rotationOffset.x = offset.x * sin(rotation * M_PI / 180.0f);
+        rotationOffset.y = offset.y * cos(rotation * M_PI / 180.0f);
 
-        setPosition(*ownerPosition + *ownerCenter + Vector2D(offsetX, offsetY));
+        setPosition(*ownerPosition + *ownerCenter + rotationOffset);
     }
 
     if (ownerRotation != nullptr)

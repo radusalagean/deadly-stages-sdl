@@ -110,6 +110,7 @@ private:
     double* ownerRotation = nullptr;
     Vector2D* ownerCenter = nullptr;
     Vector2D offset = Vector2D(20, -20);
+    Vector2D rotationOffset;
 };
 
 #endif // __SRC_GAMEENTITY_WEAPON_HPP__

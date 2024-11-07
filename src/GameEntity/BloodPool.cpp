@@ -12,7 +12,7 @@ BloodPool::BloodPool(const Vector2D& position, SDL_Texture* texture) :
     int width, height;
     SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
     setSize(width, height);
-    setPosition(position - Vector2D(width / 2, height / 2));
+    setPosition(position - center);
 }
 
 BloodPool::~BloodPool()

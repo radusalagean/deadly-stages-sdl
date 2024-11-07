@@ -76,7 +76,8 @@ void GameEntity::setSize(int width, int height)
 {
     this->width = width; 
     this->height = height; 
-    this->center = Vector2D(width / 2, height / 2);
+    this->center.x = width / 2.0f;
+    this->center.y = height / 2.0f;
     this->collisionRect = 
     {
         0,

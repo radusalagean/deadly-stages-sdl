@@ -35,12 +35,16 @@ Projectile::~Projectile()
 
 void Projectile::update(Level& level)
 {
-    this->velocity = Vector2D(cos((rotation - 90) * M_PI / 180.0f), sin((rotation - 90) * M_PI / 180.0f)) * speedPxPerSecond * Game::latestLoopDeltaTimeSeconds;
+    this->velocity.x = cos((rotation - 90) * M_PI / 180.0f);
+    this->velocity.y = sin((rotation - 90) * M_PI / 180.0f);
+    this->velocity = this->velocity * speedPxPerSecond * Game::latestLoopDeltaTimeSeconds;
     GameEntity* firstCollidedEntity = nullptr;
-    CollisionManager::processMovement(*this, velocity, level, &firstCollidedEntity);
-    if (firstCollidedEntity != nullptr)
+    CollisionManager::EntityType firstCollisionEntityType = CollisionManager::EntityType::NONE;
+    CollisionManager::processMovement(*this, CollisionManager::EntityType::PROJECTILE, velocity, level, 
+        &firstCollidedEntity, firstCollisionEntityType, false);
+    if (firstCollidedEntity != nullptr && firstCollisionEntityType == CollisionManager::EntityType::ENEMY)
     {
-        Enemy* enemy = dynamic_cast<Enemy*>(firstCollidedEntity);
+        Enemy* enemy = static_cast<Enemy*>(firstCollidedEntity);
         if (enemy != nullptr)
         {
             enemy->receiveDamage(damageAmount, level);

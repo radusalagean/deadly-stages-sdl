@@ -87,7 +87,7 @@ void Player::handleEvents(Level& level)
         }
         Vector2D velocity = multiplier * speed;
 
-        CollisionManager::processMovement(*this, velocity, level, nullptr, isJumping());
+        CollisionManager::processMovement(*this, CollisionManager::EntityType::PLAYER, velocity, level, isJumping());
         this->velocity = velocity;
     }
     else

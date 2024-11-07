@@ -10,11 +10,21 @@ class GameEntity;
 namespace CollisionManager
 {
 
+    enum class EntityType
+    {
+        NONE,
+        TILE,
+        PLAYER,
+        ENEMY,
+        PROJECTILE
+    };
+
     struct CollisionInfo
     {
         SDL_Rect collidedRect;
         float contactTime;
         GameEntity* collidedEntity = nullptr;
+        EntityType collidedEntityType = EntityType::NONE;
     };
 
     bool rectVsRect(const SDL_Rect& rectA, const SDL_Rect& rectB);
@@ -27,8 +37,11 @@ namespace CollisionManager
     bool lineVsLine(const Line& line1, const Line& line2, Vector2D& intersectionPoint);
     bool sweptRectangleVsLine(const SDL_Rect& rect, const SDL_Rect& proposedRect,
         const Line& targetLine, Vector2D& intersectionPoint, float& contactTime);
-    void processMovement(GameEntity& subjectEntity, Vector2D& proposedVelocity, Level& level, 
-        GameEntity** firstCollidedEntity = nullptr, bool jumping = false);
+    void processMovement(GameEntity& subjectEntity, EntityType subjectEntityType, Vector2D& proposedVelocity, Level& level,
+        bool subjectEntityJumping = false);
+    void processMovement(GameEntity& subjectEntity, EntityType subjectEntityType, Vector2D& proposedVelocity, Level& level, 
+        GameEntity** outFirstCollidedEntity, EntityType& outFirstCollisionEntityType,
+        bool subjectEntityJumping = false);
 }
 
 #endif // __SRC_CORE_COLLISIONMANAGER_HPP__

@@ -227,15 +227,23 @@ namespace CollisionManager
         return false;
     }
 
-    void processMovement(GameEntity& subjectEntity, Vector2D& proposedVelocity, Level& level, GameEntity** firstCollidedEntity, bool jumping)
+    void processMovement(GameEntity& subjectEntity, EntityType subjectEntityType, Vector2D& proposedVelocity, Level& level, 
+        bool subjectEntityJumping)
+    {
+        GameEntity* outFirstCollidedEntity = nullptr;
+        EntityType outFirstCollisionEntityType = EntityType::NONE;
+        processMovement(subjectEntity, subjectEntityType, proposedVelocity, level, &outFirstCollidedEntity, outFirstCollisionEntityType, subjectEntityJumping);
+    }
+
+    void processMovement(GameEntity& subjectEntity, EntityType subjectEntityType, Vector2D& proposedVelocity, Level& level, 
+        GameEntity** outFirstCollidedEntity, EntityType& outFirstCollisionEntityType,
+        bool subjectEntityJumping)
     {
         Vector2D intersectionPoint;
         Vector2D intersectionNormal;
         float tHitNear = 0;
         float tHitFar = 0;
         std::vector<CollisionInfo> collisions;
-
-        bool isSubjectEntityProjectile = dynamic_cast<Projectile*>(&subjectEntity);
 
         SDL_Rect& subjectBoundsRect = subjectEntity.positionPlusCollisionRect;
         SDL_Rect proposedRect = 
@@ -287,7 +295,7 @@ namespace CollisionManager
                     if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, tileRect, &intersectionPoint, &intersectionNormal, tHitNear, tHitFar, tHitNear)) 
                     {
                         SDL_Rect collidedRect = level.buildTileRect(x, y);
-                        CollisionInfo collision = {collidedRect, tHitNear};
+                        CollisionInfo collision = {collidedRect, tHitNear, nullptr, EntityType::TILE};
                         #ifdef DEBUG_DRAW_COLLISION_RECTS
                         level.collidedRects.push_back(collidedRect);
                         #endif
@@ -304,7 +312,7 @@ namespace CollisionManager
             SDL_Rect& playerRect = player->positionPlusCollisionRect;
             if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, playerRect, &intersectionPoint, &intersectionNormal, tHitNear, tHitFar, tHitNear))
             {
-                CollisionInfo collision = {playerRect, tHitNear, player};
+                CollisionInfo collision = {playerRect, tHitNear, player, EntityType::PLAYER};
                 #ifdef DEBUG_DRAW_COLLISION_RECTS
                 level.collidedRects.push_back(playerRect);
                 #endif
@@ -312,7 +320,7 @@ namespace CollisionManager
             }
         }
 
-        if (!jumping)
+        if (!subjectEntityJumping)
         {
             // Check collisions with enemies
             for (Enemy* enemy : level.enemies)
@@ -320,12 +328,12 @@ namespace CollisionManager
                 if (&subjectEntity == enemy)
                     continue;
                 SDL_Rect& enemyRect = enemy->positionPlusCollisionRect;
-                if (isSubjectEntityProjectile)
+                if (subjectEntityType == EntityType::PROJECTILE)
                 {
                     float contactTime = 0.0f;
                     if (sweptRectangleVsLine(subjectBoundsRect, proposedRect, enemy->positionPlusCollisionLine, intersectionPoint, contactTime))
                     {
-                        CollisionInfo collision = {enemyRect, contactTime, enemy};
+                        CollisionInfo collision = {enemyRect, contactTime, enemy, EntityType::ENEMY};
                         collisions.push_back(collision);
                     }
                 }
@@ -334,7 +342,7 @@ namespace CollisionManager
                     float& contactTime = tHitNear;
                     if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, enemyRect, &intersectionPoint, &intersectionNormal, tHitNear, tHitFar, contactTime))
                     {
-                        CollisionInfo collision = {enemyRect, contactTime, enemy};
+                        CollisionInfo collision = {enemyRect, contactTime, enemy, EntityType::ENEMY};
                         #ifdef DEBUG_DRAW_COLLISION_RECTS
                         level.collidedRects.push_back(enemyRect);
                         #endif
@@ -350,13 +358,20 @@ namespace CollisionManager
         });
 
         // Resolve collisions
+        bool firstCollision = true;
         for (const auto& collision : collisions)
         {
-            if (firstCollidedEntity != nullptr && *firstCollidedEntity == nullptr)
+            if (firstCollision)
             {
-                *firstCollidedEntity = collision.collidedEntity;
+                if (outFirstCollidedEntity != nullptr)
+                {
+                    *outFirstCollidedEntity = collision.collidedEntity;
+                    outFirstCollisionEntityType = collision.collidedEntityType;
+                }
+                firstCollision = false;
             }
-            if (isSubjectEntityProjectile)
+            
+            if (subjectEntityType == EntityType::PROJECTILE)
             {
                 subjectEntity.pendingRemoval = true;
                 proposedVelocity.reset();

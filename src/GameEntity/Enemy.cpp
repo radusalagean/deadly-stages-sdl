@@ -38,13 +38,16 @@ void Enemy::update(Level& level)
     {
         rotateToTarget(*target);
     }
-    velocity = Vector2D(cos(rotation * M_PI / 180.0f), sin(rotation * M_PI / 180.0f)) * -speedPxPerSecond * Game::latestLoopDeltaTimeSeconds;
+    velocity.x = cos(rotation * M_PI / 180.0f);
+    velocity.y = sin(rotation * M_PI / 180.0f);
+    velocity = velocity * -speedPxPerSecond * Game::latestLoopDeltaTimeSeconds;
     GameEntity* firstCollidedEntity = nullptr;
-    CollisionManager::processMovement(*this, velocity, level, &firstCollidedEntity);
-    Player* collidedPlayer = dynamic_cast<Player*>(firstCollidedEntity);
-    if (collidedPlayer != nullptr)
+    CollisionManager::EntityType firstCollisionEntityType = CollisionManager::EntityType::NONE;
+    CollisionManager::processMovement(*this, CollisionManager::EntityType::ENEMY, velocity, level, 
+        &firstCollidedEntity, firstCollisionEntityType);
+    if (firstCollidedEntity != nullptr && firstCollisionEntityType == CollisionManager::EntityType::PLAYER)
     {
-        handleContactWithPlayer(collidedPlayer, level);
+        handleContactWithPlayer(level.player, level);
     }
     else
     {
