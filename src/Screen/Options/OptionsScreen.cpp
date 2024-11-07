@@ -10,6 +10,7 @@
 #include "../../Level/Camera.hpp"
 #include "../../Core/Constants.hpp"
 #include "../../Core/Config.hpp"
+#include "../../Core/Macros.hpp"
 
 OptionsScreen::OptionsScreen()
 {
@@ -119,7 +120,7 @@ void OptionsScreen::layoutPass()
 {
     int currentY = 4 * Constants::WINDOW_PADDING_PX;
     int optionItemWidth = Game::width - Constants::WINDOW_PADDING_PX * 2;
-    int optionItemHeight = Game::height * 0.035f;
+    int optionItemHeight = USCALE(Game::height * 0.045f);
     int optionItemSpacing = optionItemHeight * 0.7f;
     for (auto& optionItemDrawable : optionsItemDrawables)
     {
