@@ -1,6 +1,7 @@
 #include "SaveDataHelper.hpp"
 
 #include <string>
+#include <cstdint>
 #include "../../Adapter/OptionsAdapter.hpp"
 #include "../../Core/Config.hpp"
 #include "../../Debug/Logger.hpp"

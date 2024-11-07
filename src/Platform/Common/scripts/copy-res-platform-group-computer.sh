@@ -10,6 +10,7 @@ rsync -av --exclude '*.tiled-*' \
     --exclude 'level/*/preview_*.png' \
     --exclude 'music/*' \
     --exclude 'level/*/music*' \
+    --exclude 'image/control/*' \
     res/ $FINAL_RES_DIR
 
 # Level Previews
@@ -35,4 +36,8 @@ for dir in res/level/*; do
     fi
 done
 
-# TODO Copy only the required control textures
+# Control Images
+cp res/image/control/mouse.png $FINAL_RES_DIR/image/control/mouse.png
+cp res/image/control/kb_light_all.png $FINAL_RES_DIR/image/control/kb_light_all.png
+cp res/image/control/controller_xbox.png $FINAL_RES_DIR/image/control/controller_xbox.png
+cp res/image/control/sticks.png $FINAL_RES_DIR/image/control/sticks.png

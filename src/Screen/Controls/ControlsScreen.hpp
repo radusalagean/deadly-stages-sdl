@@ -17,10 +17,10 @@ private:
         KEYBOARD,
         MOUSE,
         XBOX_CONTROLLER,
-        #elif PLATFORM_PSP
-        PLAYSTATION_CONTROLLER,
+        STICKS,
+        #elif defined(PLATFORM_PSP)
+        SONY_PSP
         #endif
-        STICKS
     };
 
     enum class ControlPageId
@@ -28,8 +28,8 @@ private:
         #ifdef PLATFORM_GROUP_COMPUTER
         KEYBOARD_AND_MOUSE,
         CONTROLLER,
-        #elif PLATFORM_PSP
-        PSP,
+        #elif defined(PLATFORM_PSP)
+        SONY_PSP,
         #endif
     };
     #pragma endregion
@@ -79,10 +79,10 @@ private:
     SDL_Texture* keyboardTexture = nullptr;
     SDL_Texture* mouseTexture = nullptr;
     SDL_Texture* xboxControllerTexture = nullptr;
-    #elif PLATFORM_PSP
-    SDL_Texture* playstationControllerTexture = nullptr;
-    #endif
     SDL_Texture* sticksTexture = nullptr;
+    #elif defined(PLATFORM_PSP)
+    SDL_Texture* pspTexture = nullptr;
+    #endif
 
     std::vector<ControlPage> controlPages{
         #ifdef PLATFORM_GROUP_COMPUTER
@@ -226,65 +226,63 @@ private:
                 }
             }
         },
-        #elif PLATFORM_PSP
+        #elif defined(PLATFORM_PSP)
         {
-            ControlPageId::PSP,
+            ControlPageId::SONY_PSP,
             "",
             {
                 {
-                    {{ControlTextureId::STICKS, 0, 1}}, // Analog Stick
+                    {{ControlTextureId::SONY_PSP, 0, 0}}, // Analog Stick
                     "Move"
                 },
                 {
-                    {{ControlTextureId::PLAYSTATION_CONTROLLER, 4, 0}}, // Cross
+                    {{ControlTextureId::SONY_PSP, 0, 1}}, // Cross
                     "Jump"
                 },
                 {
-                    {{ControlTextureId::PLAYSTATION_CONTROLLER, 6, 0}}, // Circle
+                    {{ControlTextureId::SONY_PSP, 0, 2}}, // Circle
                     "Fire"
                 },
                 {
-                    {{ControlTextureId::PLAYSTATION_CONTROLLER, 2, 0}}, // Square
+                    {{ControlTextureId::SONY_PSP, 0, 3}}, // Square
                     "Reload"
                 },
                 {
-                    {{ControlTextureId::PLAYSTATION_CONTROLLER, 0, 0}}, // Triangle
+                    {{ControlTextureId::SONY_PSP, 0, 4}}, // Triangle
                     "Sprint"
                 },
                 {
-                    {{ControlTextureId::PLAYSTATION_CONTROLLER, 8, 2}}, // DPAD Up
-                    "Cycle Weapons - Previous"
+                    {
+                        {ControlTextureId::SONY_PSP, 0, 5}, // DPAD Up
+                        {ControlTextureId::SONY_PSP, 0, 6}, // DPAD Down
+                    }, 
+                    "Cycle Weapons"
                 },
                 {
-                    {{ControlTextureId::PLAYSTATION_CONTROLLER, 8, 4}}, // DPAD Down
-                    "Cycle Weapons - Next"
-                },
-                {
-                    {{ControlTextureId::PLAYSTATION_CONTROLLER, 19, 0}}, // Select
+                    {{ControlTextureId::SONY_PSP, 0, 7}}, // Select
                     "(SELECT) Camera Zoom"
                 },
                 {
-                    {{ControlTextureId::PLAYSTATION_CONTROLLER, 19, 0}}, // Start
+                    {{ControlTextureId::SONY_PSP, 0, 7}}, // Start
                     "(START) Pause"
                 },
                 {
-                    {{ControlTextureId::PLAYSTATION_CONTROLLER, 24, 0}}, // L1
-                    "Aim - Left"
+                    {
+                        {ControlTextureId::SONY_PSP, 0, 8}, // L1
+                        {ControlTextureId::SONY_PSP, 0, 9}, // R1
+                    },
+                    "Aim"
                 },
                 {
-                    {{ControlTextureId::PLAYSTATION_CONTROLLER, 30, 0}}, // R1
-                    "Aim - Right"
-                },
-                {
-                    {{ControlTextureId::PLAYSTATION_CONTROLLER, 8, 1}}, // DPAD
+                    {{ControlTextureId::SONY_PSP, 0, 10}}, // DPAD
                     "Menu - Navigation"
                 },
                 {
-                    {{ControlTextureId::PLAYSTATION_CONTROLLER, 4, 0}}, // Cross
+                    {{ControlTextureId::SONY_PSP, 0, 1}}, // Cross
                     "Menu - Confirm"
                 },
                 {
-                    {{ControlTextureId::PLAYSTATION_CONTROLLER, 6, 0}}, // Circle
+                    {{ControlTextureId::SONY_PSP, 0, 2}}, // Circle
                     "Menu - Back"
                 }
             }

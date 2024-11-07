@@ -43,12 +43,12 @@ ControlsScreen::~ControlsScreen()
         SDL_DestroyTexture(mouseTexture);
     if (xboxControllerTexture)
         SDL_DestroyTexture(xboxControllerTexture);
-    #elif PLATFORM_PSP
-    if (playstationControllerTexture)
-        SDL_DestroyTexture(playstationControllerTexture);
-    #endif
     if (sticksTexture)
         SDL_DestroyTexture(sticksTexture);
+    #elif defined(PLATFORM_PSP)
+    if (pspTexture)
+        SDL_DestroyTexture(pspTexture);
+    #endif
 }
 
 void ControlsScreen::init()
@@ -57,10 +57,10 @@ void ControlsScreen::init()
     keyboardTexture = SDLUtils::loadTexture("res/image/control/kb_light_all.png");
     mouseTexture = SDLUtils::loadTexture("res/image/control/mouse.png");
     xboxControllerTexture = SDLUtils::loadTexture("res/image/control/controller_xbox.png");
-    #elif PLATFORM_PSP
-    playstationControllerTexture = SDLUtils::loadTexture("res/image/control/controller_ps.png");
-    #endif
     sticksTexture = SDLUtils::loadTexture("res/image/control/sticks.png");
+    #elif defined(PLATFORM_PSP)
+    pspTexture = SDLUtils::loadTexture("res/image/control/psp.png");
+    #endif
 
     for (auto& controlPage : controlPages)
     {
@@ -206,12 +206,12 @@ SDL_Texture* ControlsScreen::getTextureFromControlTextureId(ControlTextureId tex
             return mouseTexture;
         case ControlTextureId::XBOX_CONTROLLER:
             return xboxControllerTexture;
-        #elif PLATFORM_PSP
-        case ControlTextureId::PLAYSTATION_CONTROLLER:
-            return playstationControllerTexture;
-        #endif
         case ControlTextureId::STICKS:
             return sticksTexture;
+        #elif defined(PLATFORM_PSP)
+        case ControlTextureId::SONY_PSP:
+            return pspTexture;
+        #endif
         default:
             return nullptr;
     }

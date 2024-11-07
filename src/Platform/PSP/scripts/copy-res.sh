@@ -11,6 +11,7 @@ rsync -av --exclude '*.tiled-*' \
     --exclude 'level/*/preview_*.png' \
     --exclude 'music/*' \
     --exclude 'level/*/music*' \
+    --exclude 'image/control/*' \
     res/ $FINAL_RES_DIR
 
 # Level Previews
@@ -36,3 +37,5 @@ for dir in res/level/*; do
     fi
 done
 
+# Control Images
+cp res/image/control/psp.png $FINAL_RES_DIR/image/control/psp.png
