@@ -6,6 +6,7 @@
 #include "../../Core/Constants.hpp"
 #include "../../Drawable/MenuItemDrawable.hpp"
 #include "../LevelSelect/LevelSelectScreen.hpp"
+#include "../Controls/ControlsScreen.hpp"
 #include "../Options/OptionsScreen.hpp"
 #include "../Credits/CreditsScreen.hpp"
 #include "../../Core/Macros.hpp"
@@ -55,6 +56,7 @@ void MainMenuScreen::loadMenuItems()
 {
     std::vector<MenuItemDrawable*> menuItems{
         new MenuItemDrawable("START GAME", std::bind(&MainMenuScreen::menuStartGame, this)),
+        new MenuItemDrawable("VIEW CONTROLS", std::bind(&MainMenuScreen::menuViewControls, this)),
         new MenuItemDrawable("OPTIONS", std::bind(&MainMenuScreen::menuOptions, this)),
         new MenuItemDrawable("CREDITS", std::bind(&MainMenuScreen::menuCredits, this)),
         new MenuItemDrawable("EXIT", std::bind(&MainMenuScreen::menuExit, this))
@@ -121,6 +123,11 @@ void MainMenuScreen::layoutPass()
 void MainMenuScreen::menuStartGame()
 {
     Game::screenManager.pushScreen(new LevelSelectScreen());
+}
+
+void MainMenuScreen::menuViewControls()
+{
+    Game::screenManager.pushScreen(new ControlsScreen());
 }
 
 void MainMenuScreen::menuOptions()

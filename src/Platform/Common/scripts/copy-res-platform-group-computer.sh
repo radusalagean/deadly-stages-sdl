@@ -34,3 +34,5 @@ for dir in res/level/*; do
         fi
     fi
 done
+
+# TODO Copy only the required control textures

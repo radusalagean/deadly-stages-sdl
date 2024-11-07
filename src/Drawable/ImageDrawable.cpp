@@ -17,6 +17,9 @@ ImageDrawable::~ImageDrawable()
 {
     if (!externalTexture)
         SDL_DestroyTexture(texture);
+
+    if (srcRect != nullptr)
+        delete srcRect;
 }
 
 void ImageDrawable::load()
@@ -46,6 +49,18 @@ void ImageDrawable::draw()
     Uint8 initialAlpha;
     SDL_GetTextureAlphaMod(texture, &initialAlpha);
     SDL_SetTextureAlphaMod(texture, transparency);
-    SDL_RenderCopy(Game::renderer, texture, nullptr, &dstRect);
+    SDL_RenderCopy(Game::renderer, texture, srcRect, &dstRect);
     SDL_SetTextureAlphaMod(texture, initialAlpha);
+}
+
+void ImageDrawable::setSrcRect(int x, int y, int w, int h)
+{
+    if (srcRect != nullptr)
+        delete srcRect;
+
+    srcRect = new SDL_Rect();
+    srcRect->x = x;
+    srcRect->y = y;
+    srcRect->w = w;
+    srcRect->h = h;
 }

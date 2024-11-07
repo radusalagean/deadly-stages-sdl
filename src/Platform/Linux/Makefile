@@ -41,8 +41,11 @@ $(TARGET): $(OBJECTS)
 		rm -rf $(FINAL_BUILD_DIR)/src $(FINAL_BUILD_DIR)/vendor; \
 	fi
 
+# Find all header files
+HEADERS := $(shell find $(WORKING_DIR)/src -name "*.hpp")
+
 # Compile each .cpp file to .o, creating directories as needed
-$(FINAL_BUILD_DIR)/%.o: $(WORKING_DIR)/%.cpp $(WORKING_DIR)/src/Core/Config.hpp
+$(FINAL_BUILD_DIR)/%.o: $(WORKING_DIR)/%.cpp $(HEADERS)
 	mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 

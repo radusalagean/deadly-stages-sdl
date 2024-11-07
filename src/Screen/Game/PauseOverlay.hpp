@@ -25,6 +25,7 @@ private:
     SDL_Rect backgroundRect;
 
     void menuContinue();
+    void menuViewControls();
     void menuOptions();
     void menuQuitToMainMenu();  
 };

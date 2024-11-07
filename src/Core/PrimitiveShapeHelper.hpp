@@ -13,6 +13,7 @@ public:
     SDL_Rect wrapRects(const SDL_Rect& rect1, const SDL_Rect& rect2);
     void drawInfinitySymbol(SDL_Rect& dstRect, const SDL_Color& color, int thickness);
     void drawLine(const Line& line, const SDL_Color& color);
+    void drawArrowTriangle(SDL_Rect& dstRect, int direction, const SDL_Color& color, int thickness);
 };
 
 #endif // __SRC_CORE_PRIMITIVESHAPEHELPER_HPP__

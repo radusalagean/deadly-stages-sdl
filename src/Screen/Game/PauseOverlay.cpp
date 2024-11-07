@@ -3,6 +3,7 @@
 #include "../../Drawable/MenuDrawable.hpp"
 #include "../../Drawable/MenuItemDrawable.hpp"
 #include "../../Screen/MainMenu/MainMenuScreen.hpp"
+#include "../../Screen/Controls/ControlsScreen.hpp"
 #include "../Options/OptionsScreen.hpp"
 #include "../../Game.hpp"
 #include "../../ScreenManager/ScreenManager.hpp"
@@ -24,6 +25,7 @@ void PauseOverlay::load()
 {
     std::vector<MenuItemDrawable*> menuItems{
         new MenuItemDrawable("CONTINUE", std::bind(&PauseOverlay::menuContinue, this)),
+        new MenuItemDrawable("VIEW CONTROLS", std::bind(&PauseOverlay::menuViewControls, this)),
         new MenuItemDrawable("OPTIONS", std::bind(&PauseOverlay::menuOptions, this)),
         new MenuItemDrawable("QUIT TO MAIN MENU", std::bind(&PauseOverlay::menuQuitToMainMenu, this))
     };
@@ -71,6 +73,12 @@ void PauseOverlay::menuContinue()
 {
     paused = false;
     Game::audioManager.resumeMusic();
+}
+
+
+void PauseOverlay::menuViewControls()
+{
+    Game::screenManager.pushScreen(new ControlsScreen());
 }
 
 void PauseOverlay::menuOptions()

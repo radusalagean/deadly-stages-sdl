@@ -25,6 +25,7 @@ private:
     void loadMenuItems();
 
     void menuStartGame();
+    void menuViewControls();
     void menuOptions();
     void menuCredits();
     void menuExit();

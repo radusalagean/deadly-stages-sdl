@@ -16,6 +16,7 @@ public:
     // First: texture, Second: shadow texture (optional)
     std::pair<SDL_Texture*, SDL_Texture*> loadIfNeededAndGet(const std::string& path, bool attachShadow);
 
+    // Key: path, Value: pair of texture and shadow texture (optional)
     std::map<std::string, std::pair<SDL_Texture*, SDL_Texture*>> textures;
 };
 

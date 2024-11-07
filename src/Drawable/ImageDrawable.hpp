@@ -22,6 +22,9 @@ public:
     
     int transparency = 255;
     bool externalTexture = false;
+
+    SDL_Rect* srcRect = nullptr;
+    void setSrcRect(int x, int y, int w, int h);
     
     void layout(int x, int y, int w, int h);
     void load();

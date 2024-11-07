@@ -99,3 +99,49 @@ void PrimitiveShapeHelper::drawLine(const Line& line, const SDL_Color& color)
 
     SDLUtils::popTempRendererDrawColor();
 }
+
+void PrimitiveShapeHelper::drawArrowTriangle(SDL_Rect& dstRect, int direction, const SDL_Color& color, int thickness)
+{
+    SDL_Renderer* renderer = Game::renderer;
+    SDLUtils::pushTempRendererDrawColor();
+    
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+
+    int arrowSize = dstRect.h / 2;
+    int arrowHeadSize = arrowSize / 2;
+    int arrowBaseSize = arrowSize - arrowHeadSize;
+
+    int centerX = dstRect.x + dstRect.w / 2;
+    int centerY = dstRect.y + dstRect.h / 2;
+
+    // Draw multiple offset lines to create thickness
+    for (int i = -thickness / 2; i <= thickness / 2; i++) 
+    {
+        if (direction == 0) // Up
+        {
+            SDL_RenderDrawLine(renderer, centerX + i, centerY + arrowSize, centerX + i, centerY);
+            SDL_RenderDrawLine(renderer, centerX - arrowHeadSize + i, centerY + arrowBaseSize, centerX + i, centerY + arrowSize);
+            SDL_RenderDrawLine(renderer, centerX + arrowHeadSize + i, centerY + arrowBaseSize, centerX + i, centerY + arrowSize);
+        }
+        else if (direction == 1) // Right
+        {
+            SDL_RenderDrawLine(renderer, centerX, centerY + i, centerX + arrowSize, centerY + i);
+            SDL_RenderDrawLine(renderer, centerX + arrowBaseSize, centerY - arrowHeadSize + i, centerX + arrowSize, centerY + i);
+            SDL_RenderDrawLine(renderer, centerX + arrowBaseSize, centerY + arrowHeadSize + i, centerX + arrowSize, centerY + i);
+        }
+        else if (direction == 2) // Down
+        {
+            SDL_RenderDrawLine(renderer, centerX + i, centerY, centerX + i, centerY + arrowSize);
+            SDL_RenderDrawLine(renderer, centerX - arrowHeadSize + i, centerY + arrowBaseSize, centerX + i, centerY);
+            SDL_RenderDrawLine(renderer, centerX + arrowHeadSize + i, centerY + arrowBaseSize, centerX + i, centerY);
+        }
+        else if (direction == 3) // Left
+        {
+            SDL_RenderDrawLine(renderer, centerX, centerY + i, centerX - arrowSize, centerY + i);
+            SDL_RenderDrawLine(renderer, centerX - arrowBaseSize, centerY - arrowHeadSize + i, centerX - arrowSize, centerY + i);
+            SDL_RenderDrawLine(renderer, centerX - arrowBaseSize, centerY + arrowHeadSize + i, centerX - arrowSize, centerY + i);
+        }
+    }
+
+    SDLUtils::popTempRendererDrawColor();
+}
