@@ -31,8 +31,8 @@ namespace Game
     float latestLoopDeltaTimeSeconds = 0;
 
     // Framerate
-    std::vector<int> framerateLimitOptions = { 30, 60 };
-    std::vector<std::string> framerateLimitOptionLabels = { "30 FPS", "60 FPS" };
+    std::vector<int> framerateLimitOptions = { 30, 60, -1 };
+    std::vector<std::string> framerateLimitOptionLabels = { "30 FPS", "60 FPS", "OFF" };
     int framerateLimitIndex = 1;
     int minMillisPerFrame = 0;
     float minSecondsPerFrame = 0.0f;
@@ -85,7 +85,7 @@ namespace Game
         SDL_ShowCursor(SDL_DISABLE);
         #endif
 
-        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); // TODO | SDL_RENDERER_PRESENTVSYNC
         SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
         SDL_GetRendererOutputSize(renderer, &width, &height);

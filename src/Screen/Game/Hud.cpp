@@ -134,13 +134,6 @@ void Hud::layoutWeaponStats()
     }
     // Available ammo
     layoutAvailableAmmoText();
-    { // Infinite ammo
-        infiniteAmmoRect.h = availableAmmoTextDrawable->dstRect.h;
-        infiniteAmmoRect.w = 2.5 * infiniteAmmoRect.h;
-        infiniteAmmoRect.x = playerHudVisibleTopLeftXPadded - infiniteAmmoRect.w;
-        infiniteAmmoRect.y = availableAmmoTextDrawable->dstRect.y;
-        infiniteAmmoWidth = std::ceil(infiniteAmmoRect.h * 0.1);
-    }
 }
 
 void Hud::layoutAvailableAmmoText()
@@ -186,10 +179,6 @@ void Hud::render()
         drawable->draw();
     }
     Game::primitiveShapeHelper.drawRect(staminaBarRect, Constants::COLOR_YELLOW_ACCENT);
-    if (level.currentPlayerWeapon->hasInfiniteAmmo)
-    {
-        Game::primitiveShapeHelper.drawInfinitySymbol(infiniteAmmoRect, Constants::COLOR_YELLOW_ACCENT, infiniteAmmoWidth);
-    }
 }
 
 void Hud::refreshStaminaBarWidth()
@@ -234,31 +223,37 @@ void Hud::refreshWeaponStats()
     }
     
     // Ammo in weapon
-    std::string ammoInWeaponString = std::to_string(level.currentPlayerWeapon->ammoInWeapon);
-    if (ammoInWeaponTextDrawable == nullptr)
+    if (lastProcessedAmmoInWeapon != level.currentPlayerWeapon->ammoInWeapon)
     {
-        ammoInWeaponTextDrawable = new TextDrawable(ammoInWeaponString);
-        ammoInWeaponTextDrawable->load();
-        drawables.push_back(ammoInWeaponTextDrawable);
-    }
-    else if (lastProcessedAmmoInWeapon != level.currentPlayerWeapon->ammoInWeapon)
-    {
-        ammoInWeaponTextDrawable->setText(ammoInWeaponString);
+        std::string ammoInWeaponString = std::to_string(level.currentPlayerWeapon->ammoInWeapon);
+        if (ammoInWeaponTextDrawable == nullptr)
+        {
+            ammoInWeaponTextDrawable = new TextDrawable(ammoInWeaponString);
+            ammoInWeaponTextDrawable->load();
+            drawables.push_back(ammoInWeaponTextDrawable);
+        }
+        else
+        {
+            ammoInWeaponTextDrawable->setText(ammoInWeaponString);
+        }
     }
     lastProcessedAmmoInWeapon = level.currentPlayerWeapon->ammoInWeapon;
 
     // Ammo in inventory
-    std::string ammoInInventoryString = level.currentPlayerWeapon->hasInfiniteAmmo ? "" : std::to_string(level.currentPlayerWeapon->ammoInInventory);
-    if (availableAmmoTextDrawable == nullptr)
+    if (lastProcessedAvailablAmmo != level.currentPlayerWeapon->ammoInInventory)
     {
-        availableAmmoTextDrawable = new TextDrawable(ammoInInventoryString, Constants::COLOR_YELLOW_ACCENT, "PressStart2P.ttf");
-        availableAmmoTextDrawable->load();
-        drawables.push_back(availableAmmoTextDrawable);
-    }
-    else if (lastProcessedAvailablAmmo != level.currentPlayerWeapon->ammoInInventory)
-    {
-        availableAmmoTextDrawable->setText(ammoInInventoryString);
-        layoutAvailableAmmoText();
+        std::string ammoInInventoryString = level.currentPlayerWeapon->hasInfiniteAmmo ? "inf" : std::to_string(level.currentPlayerWeapon->ammoInInventory);
+        if (availableAmmoTextDrawable == nullptr)
+        {
+            availableAmmoTextDrawable = new TextDrawable(ammoInInventoryString, Constants::COLOR_YELLOW_ACCENT, "PressStart2P.ttf");
+            availableAmmoTextDrawable->load();
+            drawables.push_back(availableAmmoTextDrawable);
+        }
+        else
+        {
+            availableAmmoTextDrawable->setText(ammoInInventoryString);
+            layoutAvailableAmmoText();
+        }
     }
     lastProcessedAvailablAmmo = level.currentPlayerWeapon->ammoInInventory;
 

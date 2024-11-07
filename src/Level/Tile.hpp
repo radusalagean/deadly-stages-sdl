@@ -26,7 +26,7 @@ public:
     int height;
 
     void load();
-    void draw(Camera& camera, int x, int y);
+    void draw(Camera& camera, int x, int y, int scaledWidth, int scaledHeight);
 
     bool isCollidable() const { return collidable; }
 };

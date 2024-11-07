@@ -62,32 +62,6 @@ SDL_Rect PrimitiveShapeHelper::wrapRects(const SDL_Rect& rect1, const SDL_Rect& 
     return wrapped;
 }
 
-
-void PrimitiveShapeHelper::drawInfinitySymbol(SDL_Rect& dstRect, const SDL_Color& color, int thickness)
-{
-    SDL_Renderer* renderer = Game::renderer;
-    SDLUtils::pushTempRendererDrawColor();
-    
-    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-
-    int centerX = dstRect.x + dstRect.w / 2;
-    int centerY = dstRect.y + dstRect.h / 2;
-    int loopRadius = dstRect.h / 2;
-
-    for (int i = 0; i < thickness; ++i)
-    {
-        for (float t = 0; t < 2 * M_PI; t += 0.01)
-        {
-            int drawX = centerX + (dstRect.w / 4) * sin(t);
-            int drawY = centerY + loopRadius * sin(2 * t) / 2;
-            SDL_RenderDrawPoint(renderer, drawX, drawY);
-        }
-        loopRadius--;
-    }
-
-    SDLUtils::popTempRendererDrawColor();
-}
-
 void PrimitiveShapeHelper::drawLine(const Line& line, const SDL_Color& color)
 {
     SDL_Renderer* renderer = Game::renderer;

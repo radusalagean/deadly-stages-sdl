@@ -10,29 +10,35 @@
 void TileLayer::render(Level& level, int renderFlags)
 {
     Camera& camera = level.camera;
-
-    const int windowWidth = Game::width;
-    const int windowHeight = Game::height;
-
-    const int startX = std::max(0, static_cast<int>(camera.position.x / camera.scale(level.tileWidthPx)));
-    const int startY = std::max(0, static_cast<int>(camera.position.y / camera.scale(level.tileHeightPx)));
-    const int endX = std::min(horizontalTilesCount, static_cast<int>((camera.position.x + windowWidth) / camera.scale(level.tileWidthPx)) + 1);
-    const int endY = std::min(verticalTilesCount, static_cast<int>((camera.position.y + windowHeight) / camera.scale(level.tileHeightPx)) + 1);
+    
+    const float scaledTileWidth = camera.scale(level.tileWidthPx);
+    const float scaledTileHeight = camera.scale(level.tileHeightPx);
+    
+    const int startX = std::max(0, static_cast<int>(camera.position.x / scaledTileWidth));
+    const int startY = std::max(0, static_cast<int>(camera.position.y / scaledTileHeight));
+    const int endX = std::min(horizontalTilesCount, static_cast<int>((camera.position.x + Game::width) / scaledTileWidth) + 1);
+    const int endY = std::min(verticalTilesCount, static_cast<int>((camera.position.y + Game::height) / scaledTileHeight) + 1);
+    
+    const float camX = camera.position.x;
+    const float camY = camera.position.y;
+    const bool drawNonCollidable = (renderFlags & RENDER_FLAG_NON_COLLIDABLE_TILES) != 0;
+    const bool drawCollidable = (renderFlags & RENDER_FLAG_COLLIDABLE_TILES) != 0;
 
     for (int y = startY; y < endY; y++)
     {
+        const float baseY = y * scaledTileHeight - camY;
+        const auto& row = tileMap[y];
+        
         for (int x = startX; x < endX; x++)
         {
-            Tile* tile = tileMap[y][x];
+            Tile* tile = row[x];
             if (tile != nullptr)
             {
-                bool canDraw = ((renderFlags & RENDER_FLAG_NON_COLLIDABLE_TILES && !tile->isCollidable())
-                             || (renderFlags & RENDER_FLAG_COLLIDABLE_TILES && tile->isCollidable()));
-                if (canDraw)
+                const bool isCollidable = tile->isCollidable();
+                if ((drawNonCollidable && !isCollidable) || (drawCollidable && isCollidable))
                 {
-                    int drawX = x * camera.scale(level.tileWidthPx) - camera.position.x;
-                    int drawY = y * camera.scale(level.tileHeightPx) - camera.position.y;
-                    tile->draw(camera, drawX, drawY);
+                    const float drawX = x * scaledTileWidth - camX;
+                    tile->draw(camera, drawX, baseY, scaledTileWidth, scaledTileHeight);
                 }
             }
         }
