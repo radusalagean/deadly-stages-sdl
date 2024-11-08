@@ -37,10 +37,17 @@ void Enemy::update(Level& level)
     if (target != nullptr)
     {
         rotateToTarget(*target);
+        float radians = rotation * M_PI / 180.0f;
+        cosRotation = cos(radians);
+        sinRotation = sin(radians);
     }
-    velocity.x = cos(rotation * M_PI / 180.0f);
-    velocity.y = sin(rotation * M_PI / 180.0f);
-    velocity = velocity * -speedPxPerSecond * Game::latestLoopDeltaTimeSeconds;
+    
+    velocity.x = cosRotation;
+    velocity.y = sinRotation;
+    
+    float velocityScale = -speedPxPerSecond * Game::latestLoopDeltaTimeSeconds;
+    velocity = velocity * velocityScale;
+    
     GameEntity* firstCollidedEntity = nullptr;
     CollisionManager::EntityType firstCollisionEntityType = CollisionManager::EntityType::NONE;
     CollisionManager::processMovement(*this, CollisionManager::EntityType::ENEMY, velocity, level, 

@@ -5,7 +5,6 @@
 #include <SDL.h>
 #include "Screen/Screen.hpp"
 #include "Screen/MainMenu/MainMenuScreen.hpp"
-#include "Debug/Logger.hpp"
 #include "Control/Control.hpp"
 #include "Core/AudioManager.hpp"
 #include <string>

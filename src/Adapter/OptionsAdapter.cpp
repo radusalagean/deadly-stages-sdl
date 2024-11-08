@@ -138,7 +138,6 @@ namespace OptionsAdapter
         }
         printer.CloseElement();
         const char* printerText = printer.CStr();
-        logd(printerText); // TODO Remove
         return std::string(printerText);
     }
 
@@ -150,7 +149,7 @@ namespace OptionsAdapter
         doc.Parse(serializedOptions.c_str());
         if (doc.Error())
         {
-            logd("Error parsing options: %s", doc.ErrorStr());
+            printf("Error parsing options: %s\n", doc.ErrorStr());
             return options;
         }
 

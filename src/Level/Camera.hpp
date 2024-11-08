@@ -6,6 +6,7 @@
 #include "../Core/FloatAnimator.hpp"
 #include <vector>
 #include <string>
+#include <SDL.h>
 
 #define GSCALE(value) (value * Constants::GAMEPLAY_SCALE)
 
@@ -36,7 +37,7 @@ public:
     void startShake(unsigned int durationMs, float intensity);
     void updateShake();
     void toggleZoom();
-    bool isTargetVisible(const Vector2D& targetPosition);
+    bool isDstRectVisible(const SDL_Rect& dstRect);
 
 private:
     bool isShaking = false;

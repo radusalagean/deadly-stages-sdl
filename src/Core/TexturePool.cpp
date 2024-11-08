@@ -2,7 +2,6 @@
 
 #include "../Game.hpp"
 #include "SDLUtils.hpp"
-#include "../Debug/Logger.hpp"
 
 TexturePool::TexturePool()
 {

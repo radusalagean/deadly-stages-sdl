@@ -1,6 +1,5 @@
 #include "LevelSelectScreen.hpp"
 
-#include "../../Debug/Logger.hpp"
 #include "LevelPreview.hpp"
 #include "../../Game.hpp"
 #include "../../Control/Control.hpp"

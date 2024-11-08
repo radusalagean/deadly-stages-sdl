@@ -84,12 +84,12 @@ void Camera::toggleZoom()
     currentZoomIndex = (currentZoomIndex + 1) % zoomOptions.size();
 }
 
-bool Camera::isTargetVisible(const Vector2D& targetPosition)
+bool Camera::isDstRectVisible(const SDL_Rect& dstRect)
 {
-    float scaledTargetX = scale(targetPosition.x);
-    float scaledTargetY = scale(targetPosition.y);
-    return scaledTargetX >= position.x && scaledTargetX <= position.x + Game::width && 
-            scaledTargetY >= position.y && scaledTargetY <= position.y + Game::height;
+    return !(dstRect.x + dstRect.w <= 0 || 
+             dstRect.x >= Game::width || 
+             dstRect.y + dstRect.h <= 0 || 
+             dstRect.y >= Game::height);
 }
 
 float Camera::getCurrentZoom() const { return zoomOptions[currentZoomIndex]; }

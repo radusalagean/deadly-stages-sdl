@@ -21,7 +21,7 @@ Projectile::Projectile(Vector2D weaponPosition, ProjectileType projectileType, i
             break;
 
         default:
-            logd("Unknown projectile type: %d", projectileType);
+            printf("Unknown projectile type: %d\n", projectileType);
             break;
     }
     this->load(texturePool);

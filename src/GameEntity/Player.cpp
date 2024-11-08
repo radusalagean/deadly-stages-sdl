@@ -216,6 +216,8 @@ void Player::crushEnemiesIfNeeded(Level& level)
         return;
     for (auto& enemy : level.enemies)
     {
+        if (!level.camera.isDstRectVisible(enemy->dstRect))
+            continue;
         if (CollisionManager::rectVsRect(positionPlusCollisionRect, enemy->positionPlusCollisionRect))
         {
             enemy->crush(level);
@@ -228,6 +230,8 @@ void Player::collectPickupIfNeeded(Level& level)
 {
     for (auto& pickup : level.pickups)
     {
+        if (!level.camera.isDstRectVisible(pickup->dstRect))
+            continue;
         if (CollisionManager::rectVsRect(positionPlusCollisionRect, pickup->positionPlusCollisionRect))
         {
             level.collectPickup(pickup);
@@ -254,7 +258,7 @@ void Player::assignTargetToNearestEnemy(Level& level, const int scanDirection)
     
     for (auto& enemy : level.enemies)
     {
-        if (!level.camera.isTargetVisible(enemy->positionPlusCenter) || enemy == targetEnemy)
+        if (!level.camera.isDstRectVisible(enemy->dstRect) || enemy == targetEnemy)
             continue;
         Vector2D toEnemy = enemy->positionPlusCenter - positionPlusCenter;
         float distance = toEnemy.magnitude();
@@ -284,7 +288,7 @@ void Player::loseTargetIfNotVisible(Level& level)
 {
     if (targetEnemy == nullptr)
         return;
-    if (!level.camera.isTargetVisible(targetEnemy->positionPlusCenter))
+    if (!level.camera.isDstRectVisible(targetEnemy->dstRect))
     {
         targetEnemy = nullptr;
         pendingAimAssistScan = true;

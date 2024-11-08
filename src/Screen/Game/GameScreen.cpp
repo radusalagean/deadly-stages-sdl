@@ -1,6 +1,5 @@
 #include "GameScreen.hpp"
 
-#include "../../Debug/Logger.hpp"
 #include "../../Game.hpp"
 #include <SDL.h>
 #include "../../Level/Level.hpp"

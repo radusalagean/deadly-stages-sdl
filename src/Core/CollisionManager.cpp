@@ -239,6 +239,7 @@ namespace CollisionManager
         GameEntity** outFirstCollidedEntity, EntityType& outFirstCollisionEntityType,
         bool subjectEntityJumping)
     {
+        // return; // TODO
         Vector2D intersectionPoint;
         Vector2D intersectionNormal;
         float tHitNear = 0;
@@ -327,6 +328,9 @@ namespace CollisionManager
             {
                 if (&subjectEntity == enemy)
                     continue;
+                if (!rectVsRect(checkAreaRect, enemy->positionPlusCollisionRect))
+                    continue; // TODO
+
                 SDL_Rect& enemyRect = enemy->positionPlusCollisionRect;
                 if (subjectEntityType == EntityType::PROJECTILE)
                 {

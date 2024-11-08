@@ -10,8 +10,7 @@ SDL_Texture* SDLUtils::loadTexture(const std::string& path)
     SDL_Surface* surface = IMG_Load(fullPath.c_str());
     if (surface == nullptr)
     {
-        logd("Failed to load image at path: %s", fullPath.c_str());
-        logSDLe();
+        printf("Failed to load image at path: %s - %s\n", fullPath.c_str(), SDL_GetError());
         return nullptr;
     }
     SDL_Texture* texture = SDL_CreateTextureFromSurface(Game::renderer, surface);
@@ -36,13 +35,13 @@ SDL_Texture* SDLUtils::createShadowTexture(SDL_Texture* originalTexture)
     SDL_Texture* shadowTexture = SDL_CreateTexture(Game::renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_TARGET, width, height);
     if (!shadowTexture) 
     {
-        logSDLe();
+        printf("Failed to create shadow texture: %s\n", SDL_GetError());
         return nullptr;
     }
 
     // Set the shadow texture as the render target
     if (SDL_SetRenderTarget(Game::renderer, shadowTexture) != 0) {
-        logSDLe();
+        printf("Failed to set shadow texture as render target: %s\n", SDL_GetError());
         SDL_DestroyTexture(shadowTexture);
         return nullptr;
     }
@@ -53,7 +52,7 @@ SDL_Texture* SDLUtils::createShadowTexture(SDL_Texture* originalTexture)
 
     // Copy the original texture to the shadow texture
     if (SDL_RenderCopy(Game::renderer, originalTexture, nullptr, nullptr) != 0) {
-        logSDLe();
+        printf("Failed to copy original texture to shadow texture: %s\n", SDL_GetError());
         SDL_SetRenderTarget(Game::renderer, nullptr);
         SDL_DestroyTexture(shadowTexture);
         return nullptr;
@@ -64,21 +63,21 @@ SDL_Texture* SDLUtils::createShadowTexture(SDL_Texture* originalTexture)
 
     // Set the blend mode to allow alpha blending
     if (SDL_SetTextureBlendMode(shadowTexture, SDL_BLENDMODE_BLEND) != 0) {
-        logSDLe();
+        printf("Failed to set texture blend mode: %s\n", SDL_GetError());
         SDL_DestroyTexture(shadowTexture);
         return nullptr;
     }
 
     // Set the color mod to black
     if (SDL_SetTextureColorMod(shadowTexture, 0, 0, 0) != 0) {
-        logSDLe();
+        printf("Failed to set texture color mod: %s\n", SDL_GetError());
         SDL_DestroyTexture(shadowTexture);
         return nullptr;
     }
 
     // Set the alpha modulation for the shadow effect
     if (SDL_SetTextureAlphaMod(shadowTexture, 64) != 0) {
-        logSDLe();
+        printf("Failed to set texture alpha mod: %s\n", SDL_GetError());
         SDL_DestroyTexture(shadowTexture);
         return nullptr;
     }

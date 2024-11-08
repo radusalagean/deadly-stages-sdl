@@ -424,6 +424,7 @@ void Level::handleGameEntityPendingRemovals()
 
 void Level::createBloodPool(const Vector2D& position)
 {
+    return; // TODO
     BloodPool* bloodPool = new BloodPool(position, bloodPoolManager.getRandomBloodPoolTexture());
     bloodPools.push_back(bloodPool);
 }

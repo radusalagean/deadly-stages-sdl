@@ -1,6 +1,5 @@
 #include "AudioManager.hpp"
 #include <iostream>
-#include "../Debug/Logger.hpp"
 #include "Macros.hpp"
 #include "Config.hpp"
 
@@ -51,7 +50,7 @@ void AudioManager::init()
 {
     if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 2048) < 0) 
     {
-        logd("SDL_mixer could not initialize! SDL_mixer Error: %s", Mix_GetError());
+        printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
     }
 
     // Sync volume
@@ -80,7 +79,7 @@ bool AudioManager::loadSound(const AudioSFXId id)
     Mix_Chunk* sound = Mix_LoadWAV(RPATH(audioConfigs.at(id).filename).c_str());
     if (!sound)
     {
-        logd("Failed to load sound effect! SDL_mixer Error: %s", Mix_GetError());
+        printf("Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError());
         return false;
     }
     sounds[id] = sound;
@@ -100,7 +99,7 @@ bool AudioManager::loadAndStartMusic(const std::string path)
     Mix_Music* loadedMusic = Mix_LoadMUS(RPATH(path).c_str());
     if (!loadedMusic)
     {
-        logd("Failed to load music! SDL_mixer Error: %s", Mix_GetError());
+        printf("Failed to load music! SDL_mixer Error: %s\n", Mix_GetError());
         return false;
     }
     music[path] = loadedMusic;

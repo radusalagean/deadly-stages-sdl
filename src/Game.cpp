@@ -31,8 +31,8 @@ namespace Game
     float latestLoopDeltaTimeSeconds = 0;
 
     // Framerate
-    std::vector<int> framerateLimitOptions = { 30, 60, -1 };
-    std::vector<std::string> framerateLimitOptionLabels = { "30 FPS", "60 FPS", "OFF" };
+    std::vector<int> framerateLimitOptions = { 30, 60, -1 }; // TODO
+    std::vector<std::string> framerateLimitOptionLabels = { "30 FPS", "60 FPS", "OFF" }; // TODO Remove "OFF"
     int framerateLimitIndex = 1;
     int minMillisPerFrame = 0;
     float minSecondsPerFrame = 0.0f;
@@ -58,9 +58,6 @@ namespace Game
 
     void init()
     {
-        // Init Logger
-        Logger::init();
-
         // Framerate
         setFramerateLimitIndex(DefaultOptions::FRAMERATE_LIMIT_INDEX);
 
@@ -89,7 +86,7 @@ namespace Game
         SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
         SDL_GetRendererOutputSize(renderer, &width, &height);
-        logd("Renderer size on init: %dx%d", width, height);
+        printf("Renderer size on init: %dx%d\n", width, height);
 
         screenManager.init();
         audioManager.init();
@@ -128,7 +125,7 @@ namespace Game
                     if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) 
                     {
                         syncRendererOutputSize();
-                        logd("Renderer size changed to %dx%d", width, height);
+                        printf("Renderer size changed to %dx%d\n", width, height);
                     }
                     break;
             }
@@ -179,7 +176,7 @@ namespace Game
         int oldWidth = width;
         int oldHeight = height;
         SDL_GetRendererOutputSize(renderer, &width, &height);
-        logd("Renderer size changed from %dx%d to %dx%d", oldWidth, oldHeight, width, height);
+        printf("Renderer size changed from %dx%d to %dx%d\n", oldWidth, oldHeight, width, height);
         if (width != oldWidth || height != oldHeight)
         {
             screenManager.onRendererOutputSizeChanged();

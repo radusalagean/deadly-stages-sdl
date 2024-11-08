@@ -20,31 +20,30 @@ void Control::initGameController(int index)
 {
     if (SDL_IsGameController(index))
     {
-        logd("Game controller at index %d is supported", index);
+        printf("Game controller at index %d is supported\n", index);
         SDL_GameController* gameController = SDL_GameControllerOpen(index);
         SDL_JoystickID instanceId = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(gameController));
         gameControllers[instanceId] = gameController;
-        logd("Game controller with instance id %d initialized", instanceId);
+        printf("Game controller with instance id %d initialized\n", instanceId);
         if (SDL_GameControllerHasRumble(gameController))
-            logd("Game controller with instance id %d has rumble", instanceId);
+            printf("Game controller with instance id %d has rumble\n", instanceId);
         else
-            logd("Game controller with instance id %d does not have rumble", instanceId);
+            printf("Game controller with instance id %d does not have rumble\n", instanceId);
         if (SDL_GameControllerHasRumbleTriggers(gameController))
-            logd("Game controller with instance id %d has rumble triggers", instanceId);
+            printf("Game controller with instance id %d has rumble triggers\n", instanceId);
         else
-            logd("Game controller with instance id %d does not have rumble triggers", instanceId);
+            printf("Game controller with instance id %d does not have rumble triggers\n", instanceId);
     }
     else
     {
-        logd("Game controller at index %d is not supported", index);
-        logSDLe();
+        printf("Game controller at index %d is not supported: %s\n", index, SDL_GetError());
     }
 }
 
 void Control::disposeGameController(SDL_JoystickID instanceId, bool removeFromMap)
 {
     SDL_GameControllerClose(gameControllers[instanceId]);
-    logd("Game controller with instance id %d disposed", instanceId);
+    printf("Game controller with instance id %d disposed\n", instanceId);
     if (removeFromMap)
         gameControllers.erase(instanceId);
 }

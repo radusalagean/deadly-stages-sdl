@@ -4,6 +4,7 @@
 
 void BloodParticleManager::createParticles(const Vector2D& position, int count) 
 {
+    return; // TODO
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> angleDist(0, 2 * M_PI);

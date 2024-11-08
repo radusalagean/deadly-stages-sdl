@@ -20,7 +20,7 @@ TTF_Font* FontManager::getFont(const std::string& fontFileName, int size) {
         fonts[key] = TTF_OpenFont(path.c_str(), size);
         if (!fonts[key]) 
         {
-            logd("Failed to load font: %s with size %d. TTF_GetError(): %s", fontFileName.c_str(), size, TTF_GetError());
+            printf("Failed to load font: %s with size %d. TTF_GetError(): %s\n", fontFileName.c_str(), size, TTF_GetError());
         }
     }
     return fonts[key];

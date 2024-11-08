@@ -4,7 +4,6 @@
 #include <cstdint>
 #include "../../Adapter/OptionsAdapter.hpp"
 #include "../../Core/Config.hpp"
-#include "../../Debug/Logger.hpp"
 
 void platformSaveOptions()
 {
@@ -85,11 +84,11 @@ namespace SaveDataHelper
 
             if (checksum != storedChecksum) 
             {
-                logd("Options file checksum mismatch");
+                printf("Options file checksum mismatch\n");
             }
             else
             {
-                logd("Loaded options:\n%s\n\n", decrypted.c_str());
+                printf("Loaded options:\n%s\n\n\n", decrypted.c_str());
                 loadedData = decrypted;
             }
         }

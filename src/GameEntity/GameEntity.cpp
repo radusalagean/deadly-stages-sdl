@@ -49,6 +49,11 @@ void GameEntity::draw(Camera& camera)
         dstRect.y = camera.scale(positionPlusCenter.y) - dstRect.h / 2.0f - camera.position.y;
     }
 
+    if (!camera.isDstRectVisible(dstRect))
+    {
+        return;
+    }
+
     if (castShadow && shadowTexture != nullptr)
     {
         float scale = 1.18f;
@@ -96,7 +101,8 @@ void GameEntity::setSize(int width, int height)
 void GameEntity::setRotation(float angle)
 {
     // Only update if the angle has actually changed
-    if (this->rotation != angle) {
+    if (this->rotation != angle) 
+    {
         this->rotation = angle;
 
         // Rotate the collision line based on the entity's rotation
@@ -105,8 +111,10 @@ void GameEntity::setRotation(float angle)
         float sinAngle = sin(radians);
 
         // Reset collision line to its original position
-        collisionLine.start = {width / 2.0f, 0.0f};
-        collisionLine.end = {width / 2.0f, static_cast<float>(height)};
+        collisionLine.start.x = width / 2.0f;
+        collisionLine.start.y = 0.0f;
+        collisionLine.end.x = width / 2.0f;
+        collisionLine.end.y = static_cast<float>(height);
 
         // Rotate the start point of the collision line
         float startX = collisionLine.start.x - center.x;

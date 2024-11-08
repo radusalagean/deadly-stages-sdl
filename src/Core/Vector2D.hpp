@@ -4,8 +4,6 @@
 #include <math.h>
 #include <utility>
 
-#include "../Debug/Logger.hpp"
-
 class Vector2D
 {
 public:

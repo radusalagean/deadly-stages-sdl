@@ -2,6 +2,9 @@
 
 #include "SaveDataHelper.hpp"
 
+#include <pspsdk.h>
+#include "../../Core/Debouncer.hpp"
+
 std::string resDirPathPrefix = "";
 
 // Reference: https://groups.csail.mit.edu/cag/raw/documents/R4400_Uman_book_Ed2.pdf (page 160 in book - 190 in PDF)
@@ -64,6 +67,8 @@ void setResDirPathPrefix(char* argv0) {
     }
 }
 
+Debouncer memPrintDebouncer = Debouncer(1000); // TODO
+
 int main(int argc, char* argv[])
 {
     disableFPUExceptions();
@@ -73,6 +78,11 @@ int main(int argc, char* argv[])
     while (Game::isRunning)
     {
         Game::loop();
+        // if (memPrintDebouncer.canPerformAction())
+        // {
+        //     int freeBytes = pspSdkTotalFreeUserMemSize();
+        //     printf("Free RAM: %d bytes\n", freeBytes);
+        // }
     }
     Game::dispose();
 

@@ -69,7 +69,7 @@ WeaponConfig Weapon::createWeaponConfig(WeaponId id)
             break;
             
         default:
-            logd("Unknown weapon id: %d", id);
+            printf("Unknown weapon id: %d\n", id);
             break;
     }
     return cfg;

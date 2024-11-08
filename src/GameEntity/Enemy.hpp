@@ -34,6 +34,10 @@ public:
     void update(Level& level);
     void draw(Camera& camera);
 
+private:
+    float cosRotation = 1.0f;
+    float sinRotation = 0.0f;
+
 };
 
 #endif // __SRC_GAMEENTITY_ENEMY_HPP__

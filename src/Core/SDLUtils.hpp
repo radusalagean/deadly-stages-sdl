@@ -3,7 +3,6 @@
 
 #include <SDL.h>
 #include <string>
-#include "../Debug/Logger.hpp"
 #include "../Game.hpp"
 
 namespace SDLUtils
