@@ -47,6 +47,7 @@ public:
     SDL_Texture* shadowTexture = nullptr;
     SDL_Rect shadowDstRect;
     float dstRectScale = 1.0f;
+    bool canCollide = true;
 
     virtual void load(TexturePool& texturePool);
     virtual void update(Level& level);

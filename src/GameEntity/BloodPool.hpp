@@ -8,7 +8,7 @@
 class BloodPool : public GameEntity
 {
 public:
-    BloodPool(const Vector2D& position, SDL_Texture* texture);
+    BloodPool(const Vector2D& position, SDL_Texture* texture, int size);
     ~BloodPool();
 };
 

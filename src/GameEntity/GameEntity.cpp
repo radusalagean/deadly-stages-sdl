@@ -83,19 +83,22 @@ void GameEntity::setSize(int width, int height)
     this->height = height; 
     this->center.x = width / 2.0f;
     this->center.y = height / 2.0f;
-    this->collisionRect = 
+    if (canCollide)
     {
-        0,
-        0,
-        width,
-        height
-    };
-    this->collisionLine = 
-    {
-        {width / 2.0f, 0.0f},
-        {width / 2.0f, static_cast<float>(height)}
-    };
-    this->refreshCollisionData();
+        this->collisionRect = 
+        {
+            0,
+            0,
+            width,
+            height
+        };
+        this->collisionLine = 
+        {
+            {width / 2.0f, 0.0f},
+            {width / 2.0f, static_cast<float>(height)}
+        };
+        this->refreshCollisionData();
+    }
 }
 
 void GameEntity::setRotation(float angle)
@@ -132,6 +135,8 @@ void GameEntity::setRotation(float angle)
 
 void GameEntity::refreshCollisionData()
 {
+    if (!canCollide)
+        return;
     positionPlusCollisionRect.x = position.x + collisionRect.x;
     positionPlusCollisionRect.y = position.y + collisionRect.y;
     positionPlusCollisionRect.w = collisionRect.w;

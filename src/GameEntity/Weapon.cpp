@@ -100,6 +100,7 @@ Weapon::Weapon(WeaponConfig config, TexturePool& texturePool) : GameEntity(),
     chamberNeedsManualFill(config.chamberNeedsManualFill),
     chamberManualFillPostFireDelayMillis(config.chamberManualFillPostFireDelayMillis)
 {
+    canCollide = false;
     if (projectilesPerShot > 1 && spreadAngle > 0)
         angleBetweenProjectiles = (2 * spreadAngle) / (projectilesPerShot - 1);
     texturePath = "res/game_entity/" + config.textureFileName;

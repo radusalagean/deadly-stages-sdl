@@ -5,13 +5,12 @@
 #include <algorithm>
 #include "../Core/SDLUtils.hpp"
 
-BloodPool::BloodPool(const Vector2D& position, SDL_Texture* texture) : 
+BloodPool::BloodPool(const Vector2D& position, SDL_Texture* texture, int size) : 
     GameEntity()
 {
+    canCollide = false;
     this->texture = texture;
-    int width, height;
-    SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
-    setSize(width, height);
+    setSize(size, size);
     setPosition(position - center);
 }
 

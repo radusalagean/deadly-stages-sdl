@@ -61,7 +61,7 @@ BloodPoolManager::BloodPoolManager()
         SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
         SDL_FreeSurface(surface);
         
-        bloodPoolTextures.push_back(texture);
+        bloodPoolTextures.push_back(std::make_pair(texture, diameter));
     }
 }
 
@@ -69,12 +69,12 @@ BloodPoolManager::~BloodPoolManager()
 {
     for (auto& texture : bloodPoolTextures)
     {
-        SDL_DestroyTexture(texture);
+        SDL_DestroyTexture(texture.first);
     }
     bloodPoolTextures.clear();
 }
 
-SDL_Texture* BloodPoolManager::getRandomBloodPoolTexture()
+std::pair<SDL_Texture*, int> BloodPoolManager::getRandomBloodPoolTexture()
 {
     int index = rand() % bloodPoolTextures.size();
     return bloodPoolTextures[index];
