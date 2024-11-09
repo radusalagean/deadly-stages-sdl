@@ -9,7 +9,7 @@
 	],
 	"settings": {
 		"C_Cpp.default.forcedInclude": [
-			"${workspaceFolder:PSP}/.vscode/vscode-preinclude.h"
+			"${workspaceFolder:PSP}/.vscode/vscode-preinclude.hpp"
 		],
 		"C_Cpp.default.includePath": [
 			"${workspaceFolder:PSP}/../../**",
