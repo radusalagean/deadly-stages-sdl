@@ -14,6 +14,7 @@ CXXFLAGS := -std=c++17 -Wall $(shell sdl2-config --cflags) -I$(WORKING_DIR)/vend
 LDFLAGS := $(shell sdl2-config --libs) -lSDL2_image -lSDL2_mixer -lSDL2_ttf
 ifeq ($(BUILD_TYPE), release)
     CXXFLAGS += -O2
+    LDFLAGS += -Wl,-rpath,'$$ORIGIN/lib' -Wl,--disable-new-dtags
 else
     CXXFLAGS += -O0 -g
 endif
