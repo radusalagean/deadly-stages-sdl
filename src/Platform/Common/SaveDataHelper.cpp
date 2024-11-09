@@ -3,6 +3,9 @@
 #include <string>
 #include <cstdint>
 #include "../../Adapter/OptionsAdapter.hpp"
+#include "../../Adapter/HighScoresAdapter.hpp"
+#include "../../Adapter/HighScoresModel.hpp"
+#include "../../Game.hpp"
 #include "../../Core/Config.hpp"
 
 void platformSaveOptions()
@@ -15,6 +18,16 @@ void platformLoadOptions()
     SaveDataHelper::loadOptions();
 }
 
+void platformSaveHighScores()
+{
+    SaveDataHelper::saveHighScores();
+}
+
+void platformLoadHighScores()
+{
+    SaveDataHelper::loadHighScores();
+}
+
 namespace SaveDataHelper
 {
     void saveOptions()
@@ -22,23 +35,52 @@ namespace SaveDataHelper
         OptionsModel options = OptionsAdapter::extractOptionsFromGame();
         std::string optionsXml = OptionsAdapter::serializeOptions(options);
         
+        save("OPTIONS.BIN", optionsXml);
+    }
+
+    void loadOptions() 
+    {
+        std::string loadedData = load("OPTIONS.BIN");
+
+        OptionsModel options = OptionsAdapter::deserializeOptions(loadedData);
+        OptionsAdapter::applyOptionsFromModel(options);
+    }
+
+    void saveHighScores()
+    {
+        HighScoresModel highScores = Game::highScores;
+        std::string highScoresXml = HighScoresAdapter::serializeHighScores(highScores);
+
+        save("HIGH_SCORES.BIN", highScoresXml);
+    }
+
+    void loadHighScores()
+    {
+        std::string loadedData = load("HIGH_SCORES.BIN");
+
+        HighScoresModel highScores = HighScoresAdapter::deserializeHighScores(loadedData);
+        Game::highScores = highScores;
+    }
+
+    void save(const std::string& filename, const std::string& data)
+    {
         // Calculate checksum
         uint32_t checksum = 0;
-        for (char c : optionsXml) 
+        for (char c : data) 
         {
             checksum = ((checksum << 5) + checksum) + c;
         }
 
         // Encrypt data with XOR cipher
         const char key[] = SAVE_FILE_ENCRYPTION_KEY;
-        std::string encrypted = optionsXml;
+        std::string encrypted = data;
         for (size_t i = 0; i < encrypted.length(); i++) 
         {
             encrypted[i] ^= key[i % sizeof(key)];
         }
 
         // Write encrypted data and checksum to file
-        FILE* file = fopen("OPTIONS.BIN", "wb");
+        FILE* file = fopen(filename.c_str(), "wb");
         if (file) 
         {
             fwrite(&checksum, sizeof(checksum), 1, file);
@@ -47,10 +89,10 @@ namespace SaveDataHelper
         }
     }
 
-    void loadOptions() 
+    std::string load(const std::string& filename)
     {
         std::string loadedData;
-        FILE* file = fopen("OPTIONS.BIN", "rb");
+        FILE* file = fopen(filename.c_str(), "rb");
         if (file) 
         {
             // Read checksum
@@ -84,17 +126,15 @@ namespace SaveDataHelper
 
             if (checksum != storedChecksum) 
             {
-                printf("Options file checksum mismatch\n");
+                printf("File %s checksum mismatch\n", filename.c_str());
             }
             else
             {
-                printf("Loaded options:\n%s\n\n\n", decrypted.c_str());
+                printf("Loaded %s:\n%s\n\n\n", filename.c_str(), decrypted.c_str());
                 loadedData = decrypted;
             }
         }
 
-        // Parse and apply options
-        OptionsModel options = OptionsAdapter::deserializeOptions(loadedData);
-        OptionsAdapter::applyOptionsFromModel(options);
+        return loadedData;
     }
 };

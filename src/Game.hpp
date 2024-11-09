@@ -7,12 +7,15 @@
 #include "Screen/MainMenu/MainMenuScreen.hpp"
 #include "Control/Control.hpp"
 #include "Core/AudioManager.hpp"
+#include "Adapter/HighScoresModel.hpp"
 #include <string>
 
 extern std::string resDirPathPrefix;
 
 extern void platformSaveOptions();
 extern void platformLoadOptions();
+extern void platformSaveHighScores();
+extern void platformLoadHighScores();
 
 class FontManager;
 class ScreenManager;
@@ -55,6 +58,8 @@ namespace Game
     extern bool fullscreen;
     extern bool fullscreenChangeFailed;
     #endif
+
+    extern HighScoresModel highScores;
 
     void init();
 

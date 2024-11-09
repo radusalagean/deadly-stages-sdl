@@ -6,12 +6,14 @@
 #include "../../Screen/Game/GameScreen.hpp"
 #include "../../Core/Macros.hpp"
 
-GameOverScreen::GameOverScreen(int score, int wave, const std::string& levelId) : levelId(levelId)
+GameOverScreen::GameOverScreen(int score, int wave, const std::string& levelId, bool newHighScore) : levelId(levelId)
 {
     gameOverImageDrawable = new ImageDrawable("game_over.png");
     drawables.push_back(gameOverImageDrawable);
     statsTextDrawable = new TextDrawable("Score: " + std::to_string(score) + " | Wave: " + std::to_string(wave));
     drawables.push_back(statsTextDrawable);
+    newHighScoreTextDrawable = new TextDrawable(newHighScore ? "New High Score!" : "", Constants::COLOR_YELLOW_ACCENT);
+    drawables.push_back(newHighScoreTextDrawable);
     menuDrawable = new MenuDrawable();
     drawables.push_back(menuDrawable);
 }
@@ -30,6 +32,12 @@ void GameOverScreen::init()
     loadMenuItems();
     loadAssets();
     Game::audioManager.loadAndStartMusic(AudioMusicId::MENUS);
+    if (Game::highScores.pendingSave)
+    {
+        platformSaveHighScores();
+        Game::isSaving = false;
+        Game::highScores.pendingSave = false;
+    }
 }
 
 void GameOverScreen::loadAssets()
@@ -79,6 +87,13 @@ void GameOverScreen::layoutPass()
         int y = Game::height / 2 - height / 2;
         statsTextDrawable->layout(x, y, width, height);
     }
+    { // New High Score
+        int height = USCALE(Game::height * 0.06);
+        int width = height * newHighScoreTextDrawable->getAspectRatio();
+        int x = (Game::width - width) / 2;
+        int y = statsTextDrawable->dstRect.y + statsTextDrawable->dstRect.h + height;
+        newHighScoreTextDrawable->layout(x, y, width, height);
+    }
     { // Game Over
         int statsTopY = statsTextDrawable->dstRect.y;
         int spaceAboveStats = statsTopY;
@@ -89,12 +104,11 @@ void GameOverScreen::layoutPass()
         gameOverImageDrawable->layout(x, y, width, height);
     }
     { // Menu
-        int statsBottomY = statsTextDrawable->dstRect.y + statsTextDrawable->dstRect.h;
-        int remainingHeight = Game::height - statsBottomY;
+        int y = newHighScoreTextDrawable->dstRect.y + newHighScoreTextDrawable->dstRect.h;
+        int x = 0;
+        int remainingHeight = Game::height - y;
         int height = remainingHeight;
         int width = Game::width;
-        int x = 0;
-        int y = statsBottomY;
         menuDrawable->layout(x, y, width, height);
     }
 }

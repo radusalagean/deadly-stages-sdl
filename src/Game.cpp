@@ -8,6 +8,7 @@
 #include "Core/Constants.hpp"
 #include "Core/Config.hpp"
 #include "Core/DefaultOptions.hpp"
+#include "Adapter/HighScoresModel.hpp"
 
 namespace Game
 {
@@ -42,6 +43,8 @@ namespace Game
     bool fullscreen = false;
     bool fullscreenChangeFailed = false;
     #endif
+
+    HighScoresModel highScores;
 
     void setFramerateLimitIndex(int index)
     {
@@ -92,6 +95,7 @@ namespace Game
         audioManager.init();
 
         platformLoadOptions();
+        platformLoadHighScores();
     }
 
     void loop()

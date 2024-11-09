@@ -12,7 +12,9 @@ class LevelPreview
 public:
     std::string id;
     std::string name;
+    TextDrawable* highScoreDrawable;
     ImageDrawable* imageDrawable;
+    TextDrawable* nameDrawable;
     bool selected;
     std::function<void()> callback;
     SDL_Rect selectionRect;

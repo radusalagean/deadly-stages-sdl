@@ -18,6 +18,7 @@ private:
     #pragma region Drawables
     ImageDrawable* gameOverImageDrawable = nullptr;
     TextDrawable* statsTextDrawable = nullptr;
+    TextDrawable* newHighScoreTextDrawable = nullptr;
     MenuDrawable* menuDrawable = nullptr;
     #pragma endregion
 
@@ -28,7 +29,7 @@ private:
     void menuEnd();
 
 public:
-    GameOverScreen(int score, int wave, const std::string& levelId);
+    GameOverScreen(int score, int wave, const std::string& levelId, bool newHighScore);
     ~GameOverScreen();
     void init();
     void handleEvents();

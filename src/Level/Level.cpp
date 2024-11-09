@@ -3,6 +3,8 @@
 #include "../Core/Macros.hpp"
 #include "../Core/CollisionManager.hpp"
 #include "../Game.hpp"
+#include "../Adapter/HighScoresAdapter.hpp"
+#include "../Adapter/HighScoresModel.hpp"
 #include "../Core/PrimitiveShapeHelper.hpp"
 #include "../Core/VectorUtils.hpp"
 #include "../Screen/GameOver/GameOverScreen.hpp"
@@ -429,7 +431,15 @@ void Level::handleGameEntityPendingRemovals()
 
     if (player->pendingRemoval)
     {
-        Game::screenManager.setScreen(new GameOverScreen(score, wave, id));
+        int savedHighScore = Game::highScores.getScore(id);
+        bool newHighScore = score > savedHighScore;
+        Game::screenManager.setScreen(new GameOverScreen(score, wave, id, newHighScore));
+        if (newHighScore)
+        {
+            Game::highScores.entries[id].score = score;
+            Game::highScores.pendingSave = true;
+            Game::isSaving = true;
+        }
     }
 }
 

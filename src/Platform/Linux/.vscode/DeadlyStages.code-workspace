@@ -24,7 +24,8 @@
 			"cstdio": "cpp",
 			"cwchar": "cpp",
 			"new": "cpp",
-			"cmath": "cpp"
+			"cmath": "cpp",
+			"atomic": "cpp"
 		}
 	}
 }

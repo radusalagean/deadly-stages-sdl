@@ -21,9 +21,6 @@ private:
     };
     
     std::vector<LevelPreview*> levelPreviews{};
-    TextDrawable levelNameTextDrawable = TextDrawable("");
-
-    void layoutText();
 
     void loadLevelPreviews();
     void selectLevel(const std::string& id);

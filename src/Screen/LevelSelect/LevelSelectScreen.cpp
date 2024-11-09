@@ -40,7 +40,6 @@ LevelSelectScreen::~LevelSelectScreen()
 void LevelSelectScreen::init()
 {
     loadLevelPreviews();
-    levelNameTextDrawable.load();
 }
 
 void LevelSelectScreen::loadLevelPreviews()
@@ -115,6 +114,17 @@ void LevelSelectScreen::layoutPass()
     {
         currentX += freeSpacePerSide;
         LevelPreview* levelPreview = levelPreviews[i];
+
+        // High Score Text
+        {
+            int textHeight = USCALE(Game::height * 0.045);
+            int textWidth = textHeight * levelPreview->highScoreDrawable->getAspectRatio();
+            int textX = Game::width / 2 - textWidth / 2;
+            int textY = Constants::WINDOW_PADDING_PX;
+            levelPreview->highScoreDrawable->layout(textX, textY, textWidth, textHeight);
+        }
+
+        // Preview
         levelPreview->selectionRect.y = Game::height / 2 - imageHeight / 2 - selectionRectOutlineThickness - selectionRectSpacing;
         levelPreview->selectionRect.x = currentX;
         levelPreview->selectionRect.w = 2 * (selectionRectOutlineThickness + selectionRectSpacing) + imageWidth;
@@ -124,18 +134,16 @@ void LevelSelectScreen::layoutPass()
         int imageY = levelPreview->selectionRect.y + selectionRectOutlineThickness + selectionRectSpacing;
         levelPreview->imageDrawable->layout(imageX, imageY, imageWidth, imageHeight);
         currentX += levelPreview->selectionRect.w + freeSpacePerSide;
+
+        // Name Text
+        {
+            int textHeight = USCALE(Game::height * 0.045);
+            int textWidth = textHeight * levelPreview->nameDrawable->getAspectRatio();
+            int textX = Game::width / 2 - textWidth / 2;
+            int textY = Game::height - Constants::WINDOW_PADDING_PX - textHeight;
+            levelPreview->nameDrawable->layout(textX, textY, textWidth, textHeight);
+        } 
     }
-
-    layoutText();
-}
-
-void LevelSelectScreen::layoutText()
-{
-    int textHeight = USCALE(Game::height * 0.045);
-    int textWidth = textHeight * levelNameTextDrawable.getAspectRatio();
-    int textX = Game::width / 2 - textWidth / 2;
-    int textY = Game::height - Constants::WINDOW_PADDING_PX - textHeight;
-    levelNameTextDrawable.layout(textX, textY, textWidth, textHeight);
 }
 
 void LevelSelectScreen::update()
@@ -145,12 +153,6 @@ void LevelSelectScreen::update()
         levelPreviews[i]->selected = i == selectedIndex;
         levelPreviews[i]->update();
     }
-    if (levelNameTextDrawable.getText() != levelPreviews[selectedIndex]->name)
-    {
-        levelNameTextDrawable.setText(levelPreviews[selectedIndex]->name);
-        layoutText();
-    }
-    levelNameTextDrawable.update();
 }
 
 void LevelSelectScreen::render()
@@ -159,5 +161,4 @@ void LevelSelectScreen::render()
     {
         levelPreview->draw();
     }
-    levelNameTextDrawable.draw();
 }
