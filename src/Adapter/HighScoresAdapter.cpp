@@ -27,7 +27,6 @@ namespace HighScoresAdapter
         }
         printer.CloseElement();
         const char* printerText = printer.CStr();
-        printf("Serialized high scores: \n%s\n", printerText);
         return std::string(printerText);
     }
 

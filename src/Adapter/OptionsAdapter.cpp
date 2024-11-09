@@ -149,7 +149,6 @@ namespace OptionsAdapter
         doc.Parse(serializedOptions.c_str());
         if (doc.Error())
         {
-            printf("Error parsing options: %s\n", doc.ErrorStr());
             return options;
         }
 

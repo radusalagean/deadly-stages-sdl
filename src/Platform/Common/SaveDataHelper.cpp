@@ -126,11 +126,11 @@ namespace SaveDataHelper
 
             if (checksum != storedChecksum) 
             {
-                printf("File %s checksum mismatch\n", filename.c_str());
+                // printf("File %s checksum mismatch\n", filename.c_str());
             }
             else
             {
-                printf("Loaded %s:\n%s\n\n\n", filename.c_str(), decrypted.c_str());
+                // printf("Loaded %s:\n%s\n\n\n", filename.c_str(), decrypted.c_str());
                 loadedData = decrypted;
             }
         }

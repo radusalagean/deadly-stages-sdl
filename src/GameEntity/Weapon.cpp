@@ -14,7 +14,6 @@ WeaponConfig Weapon::createWeaponConfig(WeaponId id)
     switch (id)
     {
         case WeaponId::WEAPON_PISTOL:
-            cfg.ammoType = AmmoType::AMMO_TYPE_9MM_BULLET;
             cfg.projectileType = ProjectileType::PROJECTILE_TYPE_9MM_BULLET;
             cfg.damagePerProjectile = 1;
             cfg.maxAmmoCapacity = 8;
@@ -32,7 +31,6 @@ WeaponConfig Weapon::createWeaponConfig(WeaponId id)
             cfg.chamberManualFillPostFireDelayMillis = 0;
             break;
         case WeaponId::WEAPON_SHOTGUN:
-            cfg.ammoType = AmmoType::AMMO_TYPE_00_BUCK_SHELL;
             cfg.projectileType = ProjectileType::PROJECTILE_TYPE_00_BUCK_SHELL_PELLET;
             cfg.damagePerProjectile = 1;
             cfg.maxAmmoCapacity = 5;
@@ -50,7 +48,6 @@ WeaponConfig Weapon::createWeaponConfig(WeaponId id)
             cfg.chamberManualFillPostFireDelayMillis = 150;
             break;
         case WeaponId::WEAPON_SMG:
-            cfg.ammoType = AmmoType::AMMO_TYPE_9MM_BULLET;
             cfg.projectileType = ProjectileType::PROJECTILE_TYPE_9MM_BULLET;
             cfg.damagePerProjectile = 1;
             cfg.maxAmmoCapacity = 30;
@@ -83,8 +80,7 @@ const std::map<int, WeaponConfig> Weapon::weaponConfigs =
 };
 
 Weapon::Weapon(WeaponConfig config, TexturePool& texturePool) : GameEntity(),
-    id(config.id), 
-    ammoType(config.ammoType),
+    id(config.id),
     projectileType(config.projectileType),
     damagePerProjectile(config.damagePerProjectile), 
     maxAmmoCapacity(config.maxAmmoCapacity),

@@ -17,13 +17,6 @@ enum WeaponId
     WEAPON_ENUM_COUNT
 };
 
-enum AmmoType // What gets loaded in the weapon // TODO Remove if not needed
-{
-    AMMO_TYPE_UNDEFINED = -1,
-    AMMO_TYPE_9MM_BULLET,
-    AMMO_TYPE_00_BUCK_SHELL
-};
-
 enum ProjectileType // What gets fired from the weapon
 {
     PROJECTILE_TYPE_UNDEFINED = -1,
@@ -34,7 +27,6 @@ enum ProjectileType // What gets fired from the weapon
 struct WeaponConfig
 {
     WeaponId id = WeaponId::WEAPON_UNDEFINED;
-    AmmoType ammoType = AMMO_TYPE_UNDEFINED;
     ProjectileType projectileType = PROJECTILE_TYPE_UNDEFINED;
     int damagePerProjectile = 0;
     int maxAmmoCapacity = 0;
@@ -66,7 +58,6 @@ public:
 
     // Config
     WeaponId id;
-    AmmoType ammoType;
     ProjectileType projectileType;
     int damagePerProjectile;
     int maxAmmoCapacity;
