@@ -216,8 +216,6 @@ void Player::crushEnemiesIfNeeded(Level& level)
         return;
     for (auto& enemy : level.enemies)
     {
-        if (!level.camera.isDstRectVisible(enemy->dstRect))
-            continue;
         if (CollisionManager::rectVsRect(positionPlusCollisionRect, enemy->positionPlusCollisionRect))
         {
             enemy->crush(level);
@@ -230,8 +228,6 @@ void Player::collectPickupIfNeeded(Level& level)
 {
     for (auto& pickup : level.pickups)
     {
-        if (!level.camera.isDstRectVisible(pickup->dstRect))
-            continue;
         if (CollisionManager::rectVsRect(positionPlusCollisionRect, pickup->positionPlusCollisionRect))
         {
             level.collectPickup(pickup);

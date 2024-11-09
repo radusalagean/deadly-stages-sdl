@@ -292,26 +292,72 @@ namespace CollisionManager
         );
         #endif
 
-        // Step 1: Use fast check to see if there are any collisions
-
-        // Step 1a: Check collisions with tiles
-        bool foundCollision = false;
-        
-        for (int y = startY; y <= endY; ++y) 
+        #ifdef COLLISION_DETECTION_FAST
+        if (subjectEntityType != EntityType::PROJECTILE)
         {
-            for (int x = startX; x <= endX; ++x) 
+            // Step 1: Use fast check to see if there are any collisions
+            // Step 1a: Check collisions with tiles
+            bool foundCollision = false;
+            
+            for (int y = startY; y <= endY; ++y) 
             {
-                Tile* tile = level.tileLayer.tileMap[y][x];
-                if (tile != nullptr && tile->isCollidable()) 
+                for (int x = startX; x <= endX; ++x) 
                 {
-                    SDL_Rect tileRect = level.buildTileRect(x, y);
-                    if (rectVsRect(proposedRect, tileRect))
+                    Tile* tile = level.tileLayer.tileMap[y][x];
+                    if (tile != nullptr && tile->isCollidable()) 
                     {
+                        SDL_Rect tileRect = level.buildTileRect(x, y);
+                        if (rectVsRect(proposedRect, tileRect))
+                        {
+                            // Fast collision solving when enemy is out of camera view
+                            if (subjectEntityType == EntityType::ENEMY && 
+                                !camera.isDstRectVisible(subjectEntity.dstRect))
+                            {
+                                proposedVelocity.reset();
+                                outFirstCollisionEntityType = EntityType::TILE;
+                                return;
+                            }
+                            foundCollision = true;
+                            break;
+                        }
+                    }
+                }
+                if (foundCollision)
+                    break;
+            }
+
+            if (!foundCollision)
+            {
+                // Step 1b: Check collision with player
+                Player* player = level.player;
+                if (&subjectEntity != player)
+                {
+                    SDL_Rect& playerRect = player->positionPlusCollisionRect;
+                    if (rectVsRect(proposedRect, playerRect))
+                    {
+                        foundCollision = true;
+                    }
+                }
+            }
+
+            if (!foundCollision && !subjectEntityJumping)
+            {
+                // Step 1c: Check collision with enemies
+                for (Enemy* enemy : level.enemies)
+                {
+                    if (&subjectEntity == enemy)
+                        continue;
+                    if (!rectVsRect(checkAreaRect, enemy->positionPlusCollisionRect))
+                        continue;
+                    if (rectVsRect(proposedRect, enemy->positionPlusCollisionRect))
+                    {
+                        // Fast collision solving when enemy is out of camera view
                         if (subjectEntityType == EntityType::ENEMY && 
-                            !camera.isDstRectVisible(subjectEntity.dstRect)) // No need for expensive detection in this case
+                            !camera.isDstRectVisible(subjectEntity.dstRect))
                         {
                             proposedVelocity.reset();
-                            outFirstCollisionEntityType = EntityType::TILE;
+                            *outFirstCollidedEntity = enemy;
+                            outFirstCollisionEntityType = EntityType::ENEMY;
                             return;
                         }
                         foundCollision = true;
@@ -319,53 +365,13 @@ namespace CollisionManager
                     }
                 }
             }
-            if (foundCollision)
-                break;
-        }
 
-        if (!foundCollision)
-        {
-            // Step 1b: Check collision with player
-            Player* player = level.player;
-            if (&subjectEntity != player)
+            if (!foundCollision)
             {
-                SDL_Rect& playerRect = player->positionPlusCollisionRect;
-                if (rectVsRect(proposedRect, playerRect))
-                {
-                    foundCollision = true;
-                }
+                return;
             }
         }
-
-        if (!foundCollision && !subjectEntityJumping)
-        {
-            // Step 1c: Check collision with enemies
-            for (Enemy* enemy : level.enemies)
-            {
-                if (&subjectEntity == enemy)
-                    continue;
-                if (!rectVsRect(checkAreaRect, enemy->positionPlusCollisionRect))
-                    continue;
-                if (rectVsRect(proposedRect, enemy->positionPlusCollisionRect))
-                {
-                    if (subjectEntityType == EntityType::ENEMY && 
-                        !camera.isDstRectVisible(subjectEntity.dstRect)) // No need for expensive detection in this case
-                    {
-                        proposedVelocity.reset();
-                        *outFirstCollidedEntity = enemy;
-                        outFirstCollisionEntityType = EntityType::ENEMY;
-                        return;
-                    }
-                    foundCollision = true;
-                    break;
-                }
-            }
-        }
-
-        if (!foundCollision)
-        {
-            return;
-        }
+        #endif // COLLISION_DETECTION_FAST
 
         // Step 2: Accurate collision detection
         Vector2D intersectionPoint;
@@ -423,12 +429,24 @@ namespace CollisionManager
                 SDL_Rect& enemyRect = enemy->positionPlusCollisionRect;
                 if (subjectEntityType == EntityType::PROJECTILE)
                 {
+                    #ifdef COLLISION_DETECTION_FAST
+                    float& contactTime = tHitFar;
+                    if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, enemyRect, &intersectionPoint, &intersectionNormal, tHitNear, tHitFar, contactTime))
+                    {
+                        CollisionInfo collision = {enemyRect, contactTime, enemy, EntityType::ENEMY};
+                        #ifdef DEBUG_DRAW_COLLISION_RECTS
+                        level.collidedRects.push_back(enemyRect);
+                        #endif
+                        collisions.push_back(collision);
+                    }
+                    #else
                     float contactTime = 0.0f;
                     if (sweptRectangleVsLine(subjectBoundsRect, proposedRect, enemy->positionPlusCollisionLine, intersectionPoint, contactTime))
                     {
                         CollisionInfo collision = {enemyRect, contactTime, enemy, EntityType::ENEMY};
                         collisions.push_back(collision);
                     }
+                    #endif
                 }
                 else
                 {

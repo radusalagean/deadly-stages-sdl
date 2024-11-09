@@ -27,6 +27,8 @@
     #endif
 
     #define MUSIC_FILE_EXT "wav"
+
+    #define COLLISION_DETECTION_FAST
 #else
     #define MINIMUM_WINDOW_WIDTH 640
     #define MINIMUM_WINDOW_HEIGHT 480

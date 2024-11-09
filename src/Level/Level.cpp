@@ -319,6 +319,17 @@ void Level::spawnEnemiesIfNeeded()
             {
                 continue;
             }
+            bool enemyIsOverSpawnPoint = false;
+            for (auto& enemy : enemies)
+            {
+                if (CollisionManager::rectVsRect(enemy->positionPlusCollisionRect, enemyRect))
+                {
+                    enemyIsOverSpawnPoint = true;
+                    break;
+                }
+            }
+            if (enemyIsOverSpawnPoint)
+                continue;
             Enemy* enemy = new Enemy();
             enemy->init(*this, *spawnPoint);
             enemies.push_back(enemy);
@@ -424,8 +435,8 @@ void Level::handleGameEntityPendingRemovals()
 
 void Level::createBloodPool(const Vector2D& position)
 {
-    return; // TODO
-    BloodPool* bloodPool = new BloodPool(position, bloodPoolManager.getRandomBloodPoolTexture());
+    auto bloodPoolTexture = bloodPoolManager.getRandomBloodPoolTexture();
+    BloodPool* bloodPool = new BloodPool(position, bloodPoolTexture.first, bloodPoolTexture.second);
     bloodPools.push_back(bloodPool);
 }
 

@@ -67,7 +67,16 @@ void setResDirPathPrefix(char* argv0) {
     }
 }
 
-Debouncer memPrintDebouncer = Debouncer(1000); // TODO
+Debouncer memPrintDebouncer = Debouncer(1000);
+
+void printFreeRam()
+{
+    if (memPrintDebouncer.canPerformAction())
+    {
+        int freeBytes = pspSdkTotalFreeUserMemSize();
+        printf("Free RAM: %d bytes\n", freeBytes);
+    }
+}
 
 int main(int argc, char* argv[])
 {
@@ -78,11 +87,7 @@ int main(int argc, char* argv[])
     while (Game::isRunning)
     {
         Game::loop();
-        // if (memPrintDebouncer.canPerformAction())
-        // {
-        //     int freeBytes = pspSdkTotalFreeUserMemSize();
-        //     printf("Free RAM: %d bytes\n", freeBytes);
-        // }
+        // printFreeRam();
     }
     Game::dispose();
 
