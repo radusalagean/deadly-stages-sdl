@@ -2,48 +2,36 @@
 
 A multi-platform remake of the original 2015 Deadly Stages Demo from @XtremePrime and @popica23
 
-## New features
-
-General:
-    - Multi-platform (Linux, Windows, macOS, Sony PSP)
-    - Controller support
-	- Game Pause state
-	- The game viewport adapts to any size (4:3 or wider aspect ratio highly recommended)
-	- Separate scaling options for both Gameplay and UI
-	- Hud improvements (new layout, more stats displayed)
-
-Behavior:
-	- Improved collision handling
-	- Player has stamina
-	- Player can sprint (stamina-dependent)
-	- Player can jump and crush enemies (stamina-dependent)
-	- Enemies slow down as they get hurt
-	- Enemy bounty is raised as you complete waves
-	- More realistic weapon behavior
-		- Shotguns fire pellets
-		- Reload mechanism
-		- Each shot requires a re-press of the "fire" action for semi-automatic weapons
-	- Player starts receiving damage from an enemy only after being in continuous contact for 300ms
-
-- New visual effects: 
-	- Shadows
-	- Landing from a jump will shake the camera
+## Dependencies (verified versions - known to work)
+- SDL2: 2.30.9
+- SDL_image: 2.8.2
+- SDL_mixer: 2.8.0
+- SDL_ttf: 2.22.2
 
 ## Build instructions
 
 ### Linux target (from Linux environment)
-- TODO
+- Install dependencies using apt:
+    ```bash
+    sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+    ```
 
-### Windows target (from Windows environment)
-- Dev environmnent setup on Ubuntu Linux:
-    - Install the required dependencies:
-        ```bash
-        sudo apt install g++-mingw-w64-x86-64
-        ```
-- TODO Continue
+### Windows target (from Linux environment)
+- Install compiler:
+    ```bash
+    sudo apt install g++-mingw-w64-x86-64
+    ```
+- Get the SDL dependencies for Windows from GitHub Release pages: 
+    - https://github.com/libsdl-org/SDL/releases
+    - https://github.com/libsdl-org/SDL_image/releases
+    - https://github.com/libsdl-org/SDL_mixer/releases
+    - https://github.com/libsdl-org/SDL_ttf/releases
 
 ### macOS target (from macOS environment)
-- TODO
+- Install dependencies using brew:
+    ```bash
+    brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer
+    ```
 
 ### PSP target (from Linux environment)
 - Dev environmnent setup on Ubuntu Linux:
@@ -54,7 +42,7 @@ Behavior:
         ```bash
         sudo apt install make cmake genisoimage
         ```
-    - Get the [`v20241031`](https://github.com/pspdev/pspdev/releases/tag/v20241031) `pspdev-ubuntu-latest-x86_64.tar.gz` archive from the releases page and extract it
+    - Get the [`v20241101`](https://github.com/pspdev/pspdev/releases/tag/v20241101) `pspdev-ubuntu-latest-x86_64.tar.gz` archive from the releases page and extract it
     - Move the `pspdev` directory to `~/pspdev`
     - Add in `~/.bashrc`:
         ```bash
