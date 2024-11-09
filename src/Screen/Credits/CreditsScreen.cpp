@@ -60,7 +60,7 @@ CreditsScreen::CreditsScreen()
         {
             CreditDrawable licenseCreditDrawable {
                 new TextDrawable(credit.license, Constants::COLOR_DARK_GRAY_TEXT),
-                0.03f,
+                0.035f,
                 0.01f,
                 0.0f
             };

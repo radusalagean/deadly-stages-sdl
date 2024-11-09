@@ -38,7 +38,7 @@ private:
         {"Guns by Gary", "", "SFX", "fossilrecords.net", "Licensed under CC BY-SA 3.0"},
         {"Tim Mortimer", "", "SFX", "archive.org/details/TimMortimer", "Licensed under CC BY 3.0"},
         {"pixbay.com", "", "SFX", "", "Licensed under Pixbay Content License"},
-        {"One Man Symphony", "", "Music", "onemansymphony.bandcamp.com", "Reflective District - Licensed under CC BY 4.0"},
+        {"One Man Symphony", "", "Music - Reflective District", "onemansymphony.bandcamp.com", "Licensed under CC BY 4.0"},
         {"Vryell", "", "Control Icons", "vryell.itch.io", "Used under author's agreement"}
     };
     const std::string footerText = "Thanks for playing!";
