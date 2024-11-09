@@ -8,10 +8,10 @@ git clone --recurse-submodules <repository-url>
 ```
 
 ## Dependencies (verified versions - known to work)
-- SDL2: 2.30.9
-- SDL_image: 2.8.2
-- SDL_mixer: 2.8.0
-- SDL_ttf: 2.22.2
+- SDL2: `2.30.9`
+- SDL_image: `2.8.2`
+- SDL_mixer: `2.8.0`
+- SDL_ttf: `2.22.2`
 
 ## Development environment
 - Visual Studio Code
