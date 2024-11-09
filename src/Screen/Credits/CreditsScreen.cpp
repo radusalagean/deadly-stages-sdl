@@ -130,7 +130,21 @@ void CreditsScreen::update()
             drawable.textDrawable->update();
         }
     }
-    scrollOffsetPx -= Game::height * scrollSpeedUnitIntervalPerSecond * Game::minSecondsPerFrame;
+    if (canScroll)
+    {
+        scrollOffsetPx -= Game::height * scrollSpeedUnitIntervalPerSecond * Game::latestLoopDeltaTimeSeconds;
+    }
+    else
+    {
+        if (firstUpdateTimestampMs == 0)
+        {
+            firstUpdateTimestampMs = SDL_GetTicks();
+        }
+        else if (SDL_GetTicks() - firstUpdateTimestampMs > SCROLL_DELAY_MS) 
+        {
+            canScroll = true;
+        }
+    }
     if (scrollOffsetPx + contentHeightPx <= 0)
     {
         Game::screenManager.popScreen();

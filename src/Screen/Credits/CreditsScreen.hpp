@@ -8,6 +8,8 @@
 class CreditsScreen : public Screen
 {
 private:
+    static constexpr const int SCROLL_DELAY_MS = 1000;
+
     struct Credit
     {
         std::string creditOwner;
@@ -47,6 +49,9 @@ private:
     int lastKnownWindowHeightPx = 0;
 
     void loadAssets();
+
+    Uint32 firstUpdateTimestampMs = 0;
+    bool canScroll = false;
 
 public:
     CreditsScreen();
