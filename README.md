@@ -11,7 +11,7 @@ git clone --recurse-submodules <repository-url>
 - SDL2: `2.30.9`
 - SDL_image: `2.8.2`
 - SDL_mixer: `2.8.0`
-- SDL_ttf: `2.22.2`
+- SDL_ttf: `2.22.0`
 
 ## Development environment
 - Visual Studio Code
@@ -33,11 +33,12 @@ git clone --recurse-submodules <repository-url>
     ```bash
     sudo apt install g++-mingw-w64-x86-64
     ```
-- Get the SDL dependencies for Windows from GitHub Release pages: 
+- Get the mingw devel and the runtime win64 SDL dependencies for Windows from GitHub Release pages: 
     - https://github.com/libsdl-org/SDL/releases
     - https://github.com/libsdl-org/SDL_image/releases
     - https://github.com/libsdl-org/SDL_mixer/releases
     - https://github.com/libsdl-org/SDL_ttf/releases
+- Extract them in `~/sdl2-devel-mingw/`
 
 ### macOS target (from macOS environment)
 - Install dependencies using brew:
