@@ -2,11 +2,23 @@
 
 A multi-platform remake of the original 2015 Deadly Stages Demo from @XtremePrime and @popica23
 
+## Clone
+```
+git clone --recurse-submodules <repository-url>
+```
+
 ## Dependencies (verified versions - known to work)
 - SDL2: 2.30.9
 - SDL_image: 2.8.2
 - SDL_mixer: 2.8.0
 - SDL_ttf: 2.22.2
+
+## Development environment
+- Visual Studio Code
+    - Plugins:
+        - C/C++ Extension Pack (`ms-vscode.cpptools-extension-pack`)
+        - CodeLLDB (`vadimcn.vscode-lldb`)
+- Open the project: Open Workspace from File: `src/Platform/{PLATFORM}/.vscode/DeadlyStages.code-workspace`
 
 ## Build instructions
 
@@ -37,7 +49,7 @@ A multi-platform remake of the original 2015 Deadly Stages Demo from @XtremePrim
 - Dev environmnent setup on Ubuntu Linux:
     - Install the required dependencies:
         ```bash
-        bash <(curl -s https://raw.githubusercontent.com/pspdev/pspdev/v20241031/prepare.sh)
+        bash <(curl -s https://raw.githubusercontent.com/pspdev/pspdev/v20241101/prepare.sh)
         ```
         ```bash
         sudo apt install make cmake genisoimage
@@ -57,7 +69,7 @@ A multi-platform remake of the original 2015 Deadly Stages Demo from @XtremePrim
         ```
         pspsh -e ./DeadlyStagesRemix.prx
         ```
-- For creating a PSP Release ISO, you need to have the `PARAM.SFO` file. As of the current `v20241031` PSP SDK version, there is a post-build Cmake command that removes `PARAM.SFO` after the build is complete. To avoid this, before creating a release build, you can remove the following lines from the `$PSPDEV/psp/share/CreatePBP.cmake` file:
+- For creating a PSP Release ISO, you need to have the `PARAM.SFO` file. As of the current `v20241101` PSP SDK version, there is a post-build Cmake command that removes `PARAM.SFO` after the build is complete. To avoid this, before creating a release build, you can remove the following lines from the `$PSPDEV/psp/share/CreatePBP.cmake` file:
     ```cmake
     add_custom_command(
       TARGET ${ARG_TARGET} POST_BUILD
