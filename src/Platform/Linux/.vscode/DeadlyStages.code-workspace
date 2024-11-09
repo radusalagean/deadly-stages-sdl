@@ -23,7 +23,8 @@
 			"cstdint": "cpp",
 			"cstdio": "cpp",
 			"cwchar": "cpp",
-			"new": "cpp"
+			"new": "cpp",
+			"cmath": "cpp"
 		}
 	}
 }

@@ -76,29 +76,34 @@ namespace CollisionManager
             {
                 if (rayDirection.x < 0)
                 {
-                    *intersectionNormal = Vector2D(1, 0);
+                    intersectionNormal->x = 1;
+                    intersectionNormal->y = 0;
                 }
                 else
                 {
-                    *intersectionNormal = Vector2D(-1, 0);
+                    intersectionNormal->x = -1;
+                    intersectionNormal->y = 0;
                 }
             }
             else if (tNear.x < tNear.y)
             {
                 if (invRayDirection.y < 0)
                 {
-                    *intersectionNormal = Vector2D(0, 1);
+                    intersectionNormal->x = 0;
+                    intersectionNormal->y = 1;
                 }
                 else
                 {
-                    *intersectionNormal = Vector2D(0, -1);
+                    intersectionNormal->x = 0;
+                    intersectionNormal->y = -1;
                 }
             }
+            else
+            {
+                intersectionNormal->x = (rayDirection.x < 0) ? 1 : -1;
+                intersectionNormal->y = (rayDirection.y < 0) ? 1 : -1;
+            }
         }
-        
-        // Note if tNear == tFar, collision is in a diagonal.
-        // By returning a intersectionNormal={0,0} even though its
-        // considered a hit, the resolver wont change anything.
 
         return true;
     }
@@ -131,8 +136,8 @@ namespace CollisionManager
 
     bool dynamicRectVsRect(const SDL_Rect& dynamicRect, const Vector2D& proposedVelocity, const SDL_Rect& staticRect)
     {
-        float tHitNear = 0;
-        float tHitFar = 0;
+        float tHitNear = 0.0f;
+        float tHitFar = 0.0f;
         return dynamicRectVsRect(dynamicRect, proposedVelocity, staticRect, nullptr, nullptr, tHitNear, tHitFar, tHitNear);
     }
 
@@ -140,8 +145,8 @@ namespace CollisionManager
     {
         Vector2D intersectionPoint;
         Vector2D intersectionNormal;
-        float tHitNear = 0;
-        float tHitFar = 0;
+        float tHitNear = 0.0f;
+        float tHitFar = 0.0f;
 
         if (dynamicRectVsRect(dynamicRect, proposedVelocity, staticRect, &intersectionPoint, &intersectionNormal, tHitNear, tHitFar, tHitNear))
         {
@@ -239,18 +244,21 @@ namespace CollisionManager
         GameEntity** outFirstCollidedEntity, EntityType& outFirstCollisionEntityType,
         bool subjectEntityJumping)
     {
-        // return; // TODO
-        Vector2D intersectionPoint;
-        Vector2D intersectionNormal;
-        float tHitNear = 0;
-        float tHitFar = 0;
-        std::vector<CollisionInfo> collisions;
-
         SDL_Rect& subjectBoundsRect = subjectEntity.positionPlusCollisionRect;
+        Camera& camera = level.camera;
+
+        int proposedVelocityX = (proposedVelocity.x > 0.0f) ? 
+            static_cast<int>(std::ceil(proposedVelocity.x)) : 
+            static_cast<int>(std::floor(proposedVelocity.x));
+
+        int proposedVelocityY = (proposedVelocity.y > 0.0f) ? 
+            static_cast<int>(std::ceil(proposedVelocity.y)) : 
+            static_cast<int>(std::floor(proposedVelocity.y));
+
         SDL_Rect proposedRect = 
         {
-            subjectBoundsRect.x + static_cast<int>(proposedVelocity.x),
-            subjectBoundsRect.y + static_cast<int>(proposedVelocity.y),
+            subjectBoundsRect.x + proposedVelocityX,
+            subjectBoundsRect.y + proposedVelocityY,
             subjectBoundsRect.w,
             subjectBoundsRect.h
         };
@@ -284,6 +292,88 @@ namespace CollisionManager
         );
         #endif
 
+        // Step 1: Use fast check to see if there are any collisions
+
+        // Step 1a: Check collisions with tiles
+        bool foundCollision = false;
+        
+        for (int y = startY; y <= endY; ++y) 
+        {
+            for (int x = startX; x <= endX; ++x) 
+            {
+                Tile* tile = level.tileLayer.tileMap[y][x];
+                if (tile != nullptr && tile->isCollidable()) 
+                {
+                    SDL_Rect tileRect = level.buildTileRect(x, y);
+                    if (rectVsRect(proposedRect, tileRect))
+                    {
+                        if (subjectEntityType == EntityType::ENEMY && 
+                            !camera.isDstRectVisible(subjectEntity.dstRect)) // No need for expensive detection in this case
+                        {
+                            proposedVelocity.reset();
+                            outFirstCollisionEntityType = EntityType::TILE;
+                            return;
+                        }
+                        foundCollision = true;
+                        break;
+                    }
+                }
+            }
+            if (foundCollision)
+                break;
+        }
+
+        if (!foundCollision)
+        {
+            // Step 1b: Check collision with player
+            Player* player = level.player;
+            if (&subjectEntity != player)
+            {
+                SDL_Rect& playerRect = player->positionPlusCollisionRect;
+                if (rectVsRect(proposedRect, playerRect))
+                {
+                    foundCollision = true;
+                }
+            }
+        }
+
+        if (!foundCollision && !subjectEntityJumping)
+        {
+            // Step 1c: Check collision with enemies
+            for (Enemy* enemy : level.enemies)
+            {
+                if (&subjectEntity == enemy)
+                    continue;
+                if (!rectVsRect(checkAreaRect, enemy->positionPlusCollisionRect))
+                    continue;
+                if (rectVsRect(proposedRect, enemy->positionPlusCollisionRect))
+                {
+                    if (subjectEntityType == EntityType::ENEMY && 
+                        !camera.isDstRectVisible(subjectEntity.dstRect)) // No need for expensive detection in this case
+                    {
+                        proposedVelocity.reset();
+                        *outFirstCollidedEntity = enemy;
+                        outFirstCollisionEntityType = EntityType::ENEMY;
+                        return;
+                    }
+                    foundCollision = true;
+                    break;
+                }
+            }
+        }
+
+        if (!foundCollision)
+        {
+            return;
+        }
+
+        // Step 2: Accurate collision detection
+        Vector2D intersectionPoint;
+        Vector2D intersectionNormal;
+        float tHitNear = 0.0f;
+        float tHitFar = 0.0f;
+        std::vector<CollisionInfo> collisions;
+
         // Check only the relevant tiles
         for (int y = startY; y <= endY; ++y) 
         {
@@ -295,10 +385,9 @@ namespace CollisionManager
                     SDL_Rect tileRect = level.buildTileRect(x, y);
                     if (dynamicRectVsRect(subjectBoundsRect, proposedVelocity, tileRect, &intersectionPoint, &intersectionNormal, tHitNear, tHitFar, tHitNear)) 
                     {
-                        SDL_Rect collidedRect = level.buildTileRect(x, y);
-                        CollisionInfo collision = {collidedRect, tHitNear, nullptr, EntityType::TILE};
+                        CollisionInfo collision = {tileRect, tHitNear, nullptr, EntityType::TILE};
                         #ifdef DEBUG_DRAW_COLLISION_RECTS
-                        level.collidedRects.push_back(collidedRect);
+                        level.collidedRects.push_back(tileRect);
                         #endif
                         collisions.push_back(collision);
                     }
@@ -329,7 +418,7 @@ namespace CollisionManager
                 if (&subjectEntity == enemy)
                     continue;
                 if (!rectVsRect(checkAreaRect, enemy->positionPlusCollisionRect))
-                    continue; // TODO
+                    continue;
 
                 SDL_Rect& enemyRect = enemy->positionPlusCollisionRect;
                 if (subjectEntityType == EntityType::PROJECTILE)
