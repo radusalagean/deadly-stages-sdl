@@ -6,7 +6,7 @@
 
 namespace Constants
 {
-    const std::string VERSION = "1.0.0-dev";
+    const std::string VERSION = "1.0.0";
     const int WINDOW_PADDING_PX = 16;
     const float UI_SCALE = 0.8f;
     
