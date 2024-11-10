@@ -13,7 +13,7 @@ struct DefaultOptions
     #ifdef SUPPORTS_CONTROLLER_RUMBLE
     static constexpr bool CONTROLLER_RUMBLE = true;
     #endif
-    static constexpr int FRAMERATE_LIMIT_INDEX = 1;
+    static constexpr int FRAMERATE_LIMIT_INDEX = 2;
     static constexpr bool SHOW_FRAMERATE = false;
     #ifdef PLATFORM_GROUP_COMPUTER
     static constexpr bool FULLSCREEN = true;
