@@ -26,7 +26,7 @@ if [ "$BUILD_TYPE" = "release" ]; then
     cp "$PROJECT_ROOT_DIR/src/Platform/PSP/PIC1.PNG" ISO_ROOT/PSP_GAME/PIC1.PNG
     cp PARAM.SFO ISO_ROOT/PSP_GAME/PARAM.SFO
     ISO_VOLUME_NAME="DeadlyStagesRemixPSP"
-    ISO_FILE_NAME="$ISO_VOLUME_NAME.iso"
+    ISO_FILE_NAME="DeadlyStagesRemix-$DEADLY_STAGES_VERSION-psp-$BUILD_TYPE.iso"
     PLATFORM_IDENTIFIER="PSP GAME"
     PUBLISHER="Shadowz Games"
     mkisofs -iso-level 4 -xa -A "$PLATFORM_IDENTIFIER" -V "$ISO_VOLUME_NAME" \
@@ -34,7 +34,7 @@ if [ "$BUILD_TYPE" = "release" ]; then
         -o "$ISO_FILE_NAME" ISO_ROOT
 
     echo "Created $ISO_FILE_NAME"
-    find . -mindepth 1 ! -name "DeadlyStagesRemixPSP.iso" -type f -exec rm {} +
+    find . -mindepth 1 ! -name "$ISO_FILE_NAME" -type f -exec rm {} +
     find . -mindepth 1 -type d -empty -delete
     echo "Cleaned up intermediate build files"
 fi
