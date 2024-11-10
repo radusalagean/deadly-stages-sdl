@@ -18,7 +18,10 @@ git clone --recurse-submodules <repository-url>
     - Plugins:
         - C/C++ Extension Pack (`ms-vscode.cpptools-extension-pack`)
         - CodeLLDB (`vadimcn.vscode-lldb`)
-- Open the project: Open Workspace from File: `src/Platform/{PLATFORM}/.vscode/DeadlyStages.code-workspace`
+- Open the project in VS Code - Open Workspace from File: `src/Platform/{PLATFORM}/.vscode/DeadlyStages.code-workspace`
+- There are VS Code tasks defined for each platform in the `tasks.json` file. First call `copy-res-*` task to copy the needed resources to the build directory, then call the `compile-*` task to build the project. 
+- While you are developing, you can directly use the run command from VS Code, which will automatically compile and run the project. Whenever you add new resource files to the `res/` directory, make sure to run the `copy-res-*` task again to sync them to the build directory.
+- The `copy-res-*` task is custom for each platform, as some platforms need different resource files (e.g. PSP vs computer platforms).
 
 ## Build instructions
 
@@ -39,6 +42,7 @@ git clone --recurse-submodules <repository-url>
     - https://github.com/libsdl-org/SDL_mixer/releases
     - https://github.com/libsdl-org/SDL_ttf/releases
 - Extract them in `~/sdl2-devel-mingw/`
+- Look at the compile script to see what's needed and where to put the files.
 
 ### macOS target (from macOS environment)
 - Install dependencies using brew:
