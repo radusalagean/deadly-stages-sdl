@@ -186,4 +186,32 @@ namespace Game
             screenManager.onRendererOutputSizeChanged();
         }
     }
+
+    void handleCriticalError(const std::string& title, const std::string& message)
+    {
+        // Define the message box buttons
+        SDL_MessageBoxButtonData buttons[] = {
+            { SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 0, "Quit" }
+        };
+
+        // Define the message box data
+        SDL_MessageBoxData messageboxdata = {
+            SDL_MESSAGEBOX_ERROR,    // .flags
+            NULL,                    // .window
+            title.c_str(),           // .title
+            message.c_str(),         // .message
+            SDL_arraysize(buttons),  // .numbuttons
+            buttons,                 // .buttons
+            NULL                     // .colorScheme
+        };
+
+        int buttonid;
+        SDL_ShowMessageBox(&messageboxdata, &buttonid);
+
+        // Dispose of game resources before exiting
+        Game::dispose();
+
+        // Exit the program
+        exit(EXIT_FAILURE);
+    }
 }

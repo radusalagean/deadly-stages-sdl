@@ -11,7 +11,11 @@ SDL_Texture* SDLUtils::loadTexture(const std::string& path)
     if (surface == nullptr)
     {
         printf("Failed to load image at path: %s - %s\n", fullPath.c_str(), SDL_GetError());
-        return nullptr;
+
+        Game::handleCriticalError(
+            "Texture Loading Error",
+            "Failed to load image:\n" + fullPath + "\n\n" + SDL_GetError()
+        );
     }
     SDL_Texture* texture = SDL_CreateTextureFromSurface(Game::renderer, surface);
     SDL_FreeSurface(surface);

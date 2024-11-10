@@ -21,6 +21,10 @@ TTF_Font* FontManager::getFont(const std::string& fontFileName, int size) {
         if (!fonts[key]) 
         {
             printf("Failed to load font: %s with size %d. TTF_GetError(): %s\n", fontFileName.c_str(), size, TTF_GetError());
+            Game::handleCriticalError(
+                "Font Loading Error",
+                "Failed to load font:\n" + path + "\n\n" + TTF_GetError()
+            );
         }
     }
     return fonts[key];

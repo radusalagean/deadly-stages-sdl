@@ -71,6 +71,8 @@ namespace Game
     void dispose();
 
     void syncRendererOutputSize();
+
+    void handleCriticalError(const std::string& title, const std::string& message);
 };
 
 #endif // __SRC_GAME_HPP__
