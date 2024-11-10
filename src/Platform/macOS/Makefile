@@ -8,13 +8,19 @@ WORKING_DIR := $(MAKEFILE_DIR)/../../..
 BUILD_TYPE ?= debug
 FINAL_BUILD_DIR := $(WORKING_DIR)/build/macos-arm64-$(BUILD_TYPE)
 
+FRAMEWORK_DIR := $(HOME)/sdl2-mac-frameworks
+
 # Compiler and flags
 CXX := clang++
 CXXFLAGS := -std=c++17 -Wall $(shell sdl2-config --cflags) -I$(WORKING_DIR)/vendor/tinyxml2
-LDFLAGS := $(shell sdl2-config --libs) -lSDL2_image -lSDL2_mixer -lSDL2_ttf
+
 ifeq ($(BUILD_TYPE), release)
+	LDFLAGS := -F$(FRAMEWORK_DIR) \
+           -framework SDL2 -framework SDL2_image -framework SDL2_mixer -framework SDL2_ttf -framework ogg \
+           -rpath @executable_path/../Frameworks
     CXXFLAGS += -DNDEBUG -O2
 else
+	LDFLAGS := $(shell sdl2-config --libs) -lSDL2_image -lSDL2_mixer -lSDL2_ttf
     CXXFLAGS += -O0 -g
 endif
 
