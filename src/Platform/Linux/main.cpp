@@ -10,7 +10,7 @@
 #include "../../Core/Macros.hpp"
 
 std::string resDirPathPrefix = "";
-std::string userDirPathPrefix = std::string(getenv("HOME")) + "/DeadlyStagesRemix-UserData";
+std::string userDirPathPrefix = std::string(getenv("HOME")) + "/.deadlystagesremix/";
 
 int setWorkingDirectory()
 {

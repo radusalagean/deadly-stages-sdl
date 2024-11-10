@@ -15,9 +15,11 @@ if [ "$BUILD_TYPE" = "release" ]; then
 
     cp src/Platform/macOS/Deadly\ Stages\ Remix.icns "$APP_DIR/Contents/Resources/"
     cp src/Platform/macOS/Info.plist "$APP_DIR/Contents/"
-    cp "$BASE_DIR/DeadlyStagesRemix" "$APP_DIR/Contents/MacOS"
-    cp -r "$BASE_DIR/res" "$APP_DIR/Contents/Resources/"
+    mv "$BASE_DIR/DeadlyStagesRemix" "$APP_DIR/Contents/MacOS"
+    mv -r "$BASE_DIR/res" "$APP_DIR/Contents/Resources/"
     cp -r $HOME/sdl2-mac-frameworks/* "$APP_DIR/Contents/Frameworks/"
 
-    zip -r "$BASE_DIR/DeadlyStagesRemix-$DEADLY_STAGES_VERSION-macos-arm64-$BUILD_TYPE.zip" "$APP_DIR"
+    (cd "$BASE_DIR" && zip -r "DeadlyStagesRemix-$DEADLY_STAGES_VERSION-macos-arm64-$BUILD_TYPE.zip" .)
+
+    rm -rf "$APP_DIR"
 fi
