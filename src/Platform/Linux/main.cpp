@@ -3,14 +3,14 @@
 
 #include <iostream>
 #include <unistd.h>
-#include <libgen.h> // for dirname
-#include <limits.h> // for PATH_MAX
+#include <libgen.h>
+#include <limits.h>
 #include <sys/stat.h>
-
+#include <filesystem>
 #include "../../Core/Macros.hpp"
 
 std::string resDirPathPrefix = "";
-std::string userDirPathPrefix = std::string(getenv("HOME")) + "/.deadlystagesremix/";
+std::string userDirPathPrefix = "";
 
 int setWorkingDirectory()
 {
@@ -18,7 +18,8 @@ int setWorkingDirectory()
     char executablePath[PATH_MAX];
 
     // Get the path of the executable
-    if (readlink("/proc/self/exe", executablePath, sizeof(executablePath)) == -1) {
+    if (readlink("/proc/self/exe", executablePath, sizeof(executablePath)) == -1) 
+    {
         std::cerr << "Error: Unable to get executable path\n";
         return 1;
     }
@@ -27,7 +28,8 @@ int setWorkingDirectory()
     char* directoryPath = dirname(executablePath);
 
     // Change the working directory
-    if (chdir(directoryPath) != 0) {
+    if (chdir(directoryPath) != 0) 
+    {
         std::cerr << "Error: Unable to change working directory\n";
         return 1;
     }
@@ -38,11 +40,32 @@ int setWorkingDirectory()
     return 0;
 }
 
-int createUserDataDirectory()
+std::string generateUserDirectoryPath() 
 {
-    std::string userDataDir = UPATH("");
-    std::cout << "Creating user data directory: " << userDataDir << std::endl;
-    return mkdir(userDataDir.c_str(), 0755);
+    const char* home = getenv("HOME");
+    if (!home) 
+    {
+        std::cerr << "Failed to get the HOME environment variable." << std::endl;
+        return "";
+    }
+    return std::string(home) + "/.local/share/DeadlyStagesRemix/";
+}
+
+bool ensureDirectoryExists(const std::string& directoryPath) 
+{
+    try 
+    {
+        if (!std::filesystem::exists(directoryPath)) 
+        {
+            return std::filesystem::create_directories(directoryPath);
+        }
+        return true;
+    } 
+    catch (const std::filesystem::filesystem_error& e) 
+    {
+        std::cerr << "Error creating directory: " << e.what() << std::endl;
+        return false;
+    }
 }
 
 int main(int argc, char* argv[])
@@ -50,9 +73,19 @@ int main(int argc, char* argv[])
     if (setWorkingDirectory() != 0)
         return 1;
 
-    if (createUserDataDirectory() != 0)
+    userDirPathPrefix = generateUserDirectoryPath();
+    if (userDirPathPrefix.empty()) 
     {
-        std::cerr << "Warning: Unable to create user data directory" << std::endl;
+        std::cerr << "Failed to get the user directory path." << std::endl;
+    }
+    if (ensureDirectoryExists(userDirPathPrefix)) 
+    {
+        std::cout << "User directory is ready: " << userDirPathPrefix << std::endl;
+    }
+    else 
+    {
+        std::cerr << "Failed to create user directory: " << userDirPathPrefix << std::endl;
+        userDirPathPrefix = "";
     }
 
     Game::init();

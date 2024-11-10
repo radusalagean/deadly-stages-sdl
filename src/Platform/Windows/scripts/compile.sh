@@ -14,7 +14,7 @@ x86_64-w64-mingw32-g++ --std=c++17 \
     $COMMON_SOURCES \
     $PLATFORM_SPECIFIC_SOURCES \
     vendor/tinyxml2/tinyxml2.cpp \
-    -o $FINAL_BUILD_DIR/DeadlyStagesRemix.exe \
+    -o $FINAL_BUILD_DIR/DeadlyStagesRemix.exe src/Platform/Windows/icon_32.res \
     -Wall \
     $(if [ "$BUILD_TYPE" = "release" ]; then echo "-O2"; else echo "-O0 -g"; fi) \
     -I$HOME/sdl2-devel-mingw/SDL2-devel-2.30.9-mingw/SDL2-2.30.9/x86_64-w64-mingw32/include/SDL2 \
@@ -34,3 +34,18 @@ cp $HOME/sdl2-devel-mingw/SDL2_image-2.8.2-win32-x64/SDL2_image.dll $FINAL_BUILD
 cp $HOME/sdl2-devel-mingw/SDL2_mixer-2.8.0-win32-x64/SDL2_mixer.dll $FINAL_BUILD_DIR/
 cp $HOME/sdl2-devel-mingw/SDL2_mixer-2.8.0-win32-x64/optional/libogg-0.dll $FINAL_BUILD_DIR/
 cp $HOME/sdl2-devel-mingw/SDL2_ttf-2.22.0-win32-x64/SDL2_ttf.dll $FINAL_BUILD_DIR/
+
+if [ "$BUILD_TYPE" = "release" ]; then
+    BASE_DIR=$FINAL_BUILD_DIR
+    APP_DIR="$BASE_DIR/DeadlyStagesRemix-$DEADLY_STAGES_VERSION-windows-x86_64-$BUILD_TYPE"
+
+    mkdir -p "$APP_DIR"
+
+    mv "$BASE_DIR/DeadlyStagesRemix.exe" "$APP_DIR/"
+    mv "$BASE_DIR/res" "$APP_DIR/"
+    mv $BASE_DIR/*.dll "$APP_DIR/"
+
+    (cd "$BASE_DIR" && zip -r "DeadlyStagesRemix-$DEADLY_STAGES_VERSION-windows-x86_64-$BUILD_TYPE.zip" .)
+
+    rm -rf "$APP_DIR"
+fi
