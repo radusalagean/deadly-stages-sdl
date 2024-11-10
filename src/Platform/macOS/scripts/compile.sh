@@ -19,7 +19,7 @@ if [ "$BUILD_TYPE" = "release" ]; then
     mv "$BASE_DIR/res" "$APP_DIR/Contents/Resources/"
     cp -r $HOME/sdl2-mac-frameworks/* "$APP_DIR/Contents/Frameworks/"
 
-    (cd "$BASE_DIR" && zip -r "DeadlyStagesRemix-$DEADLY_STAGES_VERSION-macos-arm64-$BUILD_TYPE.zip" .)
+    (cd "$BASE_DIR" && zip -r "DeadlyStagesRemix-$DEADLY_STAGES_VERSION-macos-arm64-$BUILD_TYPE.zip" . -x "*.DS_Store")
 
     rm -rf "$APP_DIR"
 fi
