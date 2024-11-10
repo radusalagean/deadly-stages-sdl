@@ -64,7 +64,7 @@ std::string generateUserDirectoryPath()
         std::cerr << "Failed to get the HOME environment variable." << std::endl;
         return "";
     }
-    return std::string(home) + "/Library/Application Support/DeadlyStagesRemix/";
+    return std::string(home) + "/Library/Application Support/DeadlyStagesRemix";
 }
 
 bool ensureDirectoryExists(const std::string& directoryPath) 
@@ -94,14 +94,18 @@ int main(int argc, char* argv[])
     {
         std::cerr << "Failed to get the user directory path." << std::endl;
     }
-    if (ensureDirectoryExists(userDirPathPrefix)) 
+    else
     {
-        std::cout << "User directory is ready: " << userDirPathPrefix << std::endl;
-    } 
-    else 
-    {
-        std::cerr << "Failed to create user directory: " << userDirPathPrefix << std::endl;
-        userDirPathPrefix = "";
+        if (ensureDirectoryExists(userDirPathPrefix)) 
+        {
+            std::cout << "User directory is ready: " << userDirPathPrefix << std::endl;
+            userDirPathPrefix += "/";
+        } 
+        else 
+        {
+            std::cerr << "Failed to create user directory: " << userDirPathPrefix << std::endl;
+            userDirPathPrefix = "";
+        }
     }
 
     Game::init();
