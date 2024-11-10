@@ -6,6 +6,7 @@
 #include "../../Core/Debouncer.hpp"
 
 std::string resDirPathPrefix = "";
+std::string userDirPathPrefix = "";
 
 void printFPUExceptionStatus(unsigned int fcsr) 
 {

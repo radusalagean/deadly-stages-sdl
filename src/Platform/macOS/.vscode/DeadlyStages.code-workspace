@@ -76,7 +76,8 @@
 			"forward_list": "cpp",
 			"print": "cpp",
 			"queue": "cpp",
-			"stack": "cpp"
+			"stack": "cpp",
+			"iomanip": "cpp"
 		}
 	}
 }

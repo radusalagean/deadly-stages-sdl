@@ -22,7 +22,7 @@
 Level::Level(std::string id)
 {
     this->id = id;
-    levelMusicPath = RPATH("res/level/" + id + "/music." + MUSIC_FILE_EXT);
+    levelMusicPath = "res/level/" + id + "/music." + MUSIC_FILE_EXT;
 }
 
 Level::~Level()

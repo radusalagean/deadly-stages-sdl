@@ -6,5 +6,6 @@
 
 #define USCALE(value) (value * Constants::UI_SCALE)
 #define RPATH(filePath) (resDirPathPrefix + filePath)
+#define UPATH(filePath) (userDirPathPrefix + filePath)
 
 #endif // __SRC_CORE_MACROS_HPP__

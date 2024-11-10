@@ -80,6 +80,10 @@ bool AudioManager::loadSound(const AudioSFXId id)
     if (!sound)
     {
         printf("Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError());
+        Game::handleCriticalError(
+            "SDL_mixer: Failed to load sound effect",
+            "Failed to load sound effect: " + std::string(audioConfigs.at(id).filename)
+        );
         return false;
     }
     sounds[id] = sound;
@@ -100,6 +104,10 @@ bool AudioManager::loadAndStartMusic(const std::string path)
     if (!loadedMusic)
     {
         printf("Failed to load music! SDL_mixer Error: %s\n", Mix_GetError());
+        Game::handleCriticalError(
+            "SDL_mixer: Failed to load music",
+            "Failed to load music: " + path
+        );
         return false;
     }
     music[path] = loadedMusic;

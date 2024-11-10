@@ -13,7 +13,16 @@ using namespace tinyxml2;
 Level* LevelParser::parseLevel(std::string levelId)
 {
     XMLDocument levelDocument;
-    levelDocument.LoadFile((LEVEL_ABSOLUTE_PATH + levelId + "/map.tmx").c_str());
+    XMLError error = levelDocument.LoadFile((LEVEL_ABSOLUTE_PATH + levelId + "/map.tmx").c_str());
+    if (error != XML_SUCCESS)
+    {
+        printf("Failed to load level %s: %s\n", (LEVEL_ABSOLUTE_PATH + levelId + "/map.tmx").c_str(), levelDocument.ErrorName());
+        Game::handleCriticalError(
+            "XML: Level Loading Error",
+            "Failed to load level:\n" + std::string(LEVEL_ABSOLUTE_PATH) + levelId + "/map.tmx\n\n" + levelDocument.ErrorName()
+        );
+        return nullptr;
+    }
 
     Level* level = new Level(levelId);
     XMLElement* root = levelDocument.RootElement();

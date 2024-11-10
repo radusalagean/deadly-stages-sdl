@@ -7,6 +7,7 @@
 #include "../../Adapter/HighScoresModel.hpp"
 #include "../../Game.hpp"
 #include "../../Core/Config.hpp"
+#include "../../Core/Macros.hpp"
 
 void platformSaveOptions()
 {
@@ -80,7 +81,7 @@ namespace SaveDataHelper
         }
 
         // Write encrypted data and checksum to file
-        FILE* file = fopen(filename.c_str(), "wb");
+        FILE* file = fopen(UPATH(filename).c_str(), "wb");
         if (file) 
         {
             fwrite(&checksum, sizeof(checksum), 1, file);
@@ -92,7 +93,7 @@ namespace SaveDataHelper
     std::string load(const std::string& filename)
     {
         std::string loadedData;
-        FILE* file = fopen(filename.c_str(), "rb");
+        FILE* file = fopen(UPATH(filename).c_str(), "rb");
         if (file) 
         {
             // Read checksum

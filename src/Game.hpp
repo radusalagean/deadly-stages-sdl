@@ -11,6 +11,7 @@
 #include <string>
 
 extern std::string resDirPathPrefix;
+extern std::string userDirPathPrefix;
 
 extern void platformSaveOptions();
 extern void platformLoadOptions();
