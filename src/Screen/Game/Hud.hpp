@@ -53,7 +53,6 @@ private:
     void layoutAvailableAmmoText();
 
     SDL_Rect staminaBarRect;
-    int infiniteAmmoWidth = 0;
 
     std::string buildScoreText();
     std::string buildWaveText();
